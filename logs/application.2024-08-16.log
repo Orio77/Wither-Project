@@ -1,0 +1,32 @@
+2024-08-16 16:43:01 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Starting data collection with 2 threads for query: query
+2024-08-16 16:43:01 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$Ufebl5v3
+2024-08-16 16:43:01 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$Ufebl5v3
+2024-08-16 16:43:01 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Successfully started 2 tasks for data collection
+2024-08-16 16:43:01 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Successfully retrieved data from a data source: [Mock for DataModel, hashCode: 28010264]
+2024-08-16 16:43:01 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Successfully retrieved data from a data source: [Mock for DataModel, hashCode: 957414929]
+2024-08-16 16:43:01 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Executor service shut down
+2024-08-16 16:43:01 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Data collection completed with 2 results
+2024-08-16 16:43:19 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Starting data collection with 2 threads for query: query
+2024-08-16 16:43:19 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$cslApIvy
+2024-08-16 16:43:19 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$cslApIvy
+2024-08-16 16:43:19 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Successfully started 2 tasks for data collection
+2024-08-16 16:43:19 [main] WARN  c.O.w.s.n.d.ParallelSourceProcessorService - Received null data from a data source
+2024-08-16 16:43:19 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Successfully retrieved data from a data source: []
+2024-08-16 16:43:19 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Executor service shut down
+2024-08-16 16:43:19 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Data collection completed with 0 results
+2024-08-16 16:44:14 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Starting data collection with 2 threads for query: query
+2024-08-16 16:44:14 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$z7oDIzAo
+2024-08-16 16:44:14 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$z7oDIzAo
+2024-08-16 16:44:14 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Successfully started 2 tasks for data collection
+2024-08-16 16:44:14 [main] WARN  c.O.w.s.n.d.ParallelSourceProcessorService - Received null or empty data from a data source: null
+2024-08-16 16:44:14 [main] WARN  c.O.w.s.n.d.ParallelSourceProcessorService - Received null or empty data from a data source: []
+2024-08-16 16:44:14 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Executor service shut down
+2024-08-16 16:44:14 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Data collection completed with 0 results
+2024-08-16 16:47:27 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Starting data collection with 2 threads for query: query
+2024-08-16 16:47:27 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$fsoyvFSL
+2024-08-16 16:47:27 [main] DEBUG c.O.w.s.n.d.ParallelSourceProcessorService - Creating task for data source: com.Orio.web_scraping_tool.service.dataGathering.IDataSource$MockitoMock$fsoyvFSL
+2024-08-16 16:47:27 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Successfully started 2 tasks for data collection
+2024-08-16 16:47:27 [main] ERROR c.O.w.s.n.d.ParallelSourceProcessorService - Exception while trying to get data from a data source. Message: java.lang.RuntimeException: Test Exception. Exception: java.util.concurrent.ExecutionException: java.lang.RuntimeException: Test Exception. Data: null
+2024-08-16 16:47:27 [main] WARN  c.O.w.s.n.d.ParallelSourceProcessorService - Received null or empty data from a data source: []
+2024-08-16 16:47:27 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Executor service shut down
+2024-08-16 16:47:27 [main] INFO  c.O.w.s.n.d.ParallelSourceProcessorService - Data collection completed with 0 results
