@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataSaving;
+package com.Orio.web_scraping_tool.service.impl.dataSaving;
 
 import java.util.List;
 import java.util.Objects;

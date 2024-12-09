@@ -11,8 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.Orio.web_scraping_tool.config.OllamaConfig;
 import com.Orio.web_scraping_tool.model.DataModel;
-import com.Orio.web_scraping_tool.service.newImpl.dataProcessing.OllamaQAService;
+import com.Orio.web_scraping_tool.service.impl.dataGathering.JsoupScrapeService;
+import com.Orio.web_scraping_tool.service.impl.dataProcessing.OllamaQAService;
+import com.Orio.web_scraping_tool.service.impl.dataSaving.PostgreSQLService;
 
 @SpringBootTest
 public class OllamaQAServiceTest {
@@ -20,6 +23,12 @@ public class OllamaQAServiceTest {
     @Autowired
     private OllamaQAService ollamaQAService;
     private static List<DataModel> dataList;
+    @Autowired
+    private JsoupScrapeService jsoupScrapeService;
+    @Autowired
+    private OllamaConfig config;
+    @Autowired
+    private PostgreSQLService db;
 
     @BeforeAll
     private static void setUpTestData() {
@@ -108,5 +117,26 @@ public class OllamaQAServiceTest {
             }
         }
         assertTrue(validDataModelCount >= 2, "There should be at least two valid DataModels");
+    }
+
+    @Test
+    public void testVariousLLMsGenerateQuestions() {
+
+        // Create datalist
+        List<String> links = Arrays.asList(
+                "https://www.quora.com/What-is-the-difference-between-Sigmund-Freud-s-id-and-Carl-Jung-s-shadow-Or-does-the-shadow-reside-within-the-Id",
+                "https://www.routledge.com/blog/article/what-is-jungian-psychology?srsltid=AfmBOopN0-_xcwV0U-qvFc2GOECyAmEqOgERoxW28VbkUcnHj8Oq9G25");
+
+        // Create a list of model names (One at first, to test the setter)
+        List<String> models = Arrays.asList("mistral", "llama3.1:8b");
+
+        models.stream().forEach(model -> {
+            config.setModel(model); // TODO Add logging to see if all is working
+            List<DataModel> data = jsoupScrapeService.scrape(links);
+            ollamaQAService.generateQuestions(data);
+            db.save(data);
+        });
+
+        // Assertions (Save the data to a file)
     }
 }

@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataGathering.source;
+package com.Orio.web_scraping_tool.service.impl.dataGathering.source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.Orio.web_scraping_tool.model.DataModel;
 import com.Orio.web_scraping_tool.service.dataGathering.IFileDownloadService;
 import com.Orio.web_scraping_tool.service.dataGathering.IPDFProcessorService;
-import com.Orio.web_scraping_tool.service.dataGathering.search.IWebSearchService;
 import com.Orio.web_scraping_tool.service.dataGathering.source.IDataSource;
+import com.Orio.web_scraping_tool.service.dataGathering.webSearch.IWebSearchService;
 
 import lombok.RequiredArgsConstructor;
 

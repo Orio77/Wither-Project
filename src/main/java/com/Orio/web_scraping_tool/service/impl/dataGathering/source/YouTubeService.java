@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataGathering.source;
+package com.Orio.web_scraping_tool.service.impl.dataGathering.source;
 
 import java.util.List;
 

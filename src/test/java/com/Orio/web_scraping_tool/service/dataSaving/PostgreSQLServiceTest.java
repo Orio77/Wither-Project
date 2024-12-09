@@ -18,7 +18,7 @@ import com.Orio.web_scraping_tool.config.DataBaseConfig;
 import com.Orio.web_scraping_tool.exception.UnauthorizedException;
 import com.Orio.web_scraping_tool.model.DataModel;
 import com.Orio.web_scraping_tool.repository.SQLRepo;
-import com.Orio.web_scraping_tool.service.newImpl.dataSaving.PostgreSQLService;
+import com.Orio.web_scraping_tool.service.impl.dataSaving.PostgreSQLService;
 
 @SpringBootTest
 public class PostgreSQLServiceTest {

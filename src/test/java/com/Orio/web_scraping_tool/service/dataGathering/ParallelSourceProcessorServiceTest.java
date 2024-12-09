@@ -20,7 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.Orio.web_scraping_tool.model.DataModel;
 import com.Orio.web_scraping_tool.service.dataGathering.source.IDataSource;
-import com.Orio.web_scraping_tool.service.newImpl.dataGathering.ParallelSourceProcessorService;
+import com.Orio.web_scraping_tool.service.impl.dataGathering.ParallelSourceProcessorService;
 import com.Orio.web_scraping_tool.util.ThreadUtil;
 
 public class ParallelSourceProcessorServiceTest {

@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataProcessing;
+package com.Orio.web_scraping_tool.service.impl.dataProcessing;
 
 import java.util.List;
 
@@ -33,49 +33,65 @@ public class OllamaQAService implements IAIQAService {
         private static final int DEFAULT_NUM_CTX = 13000;
 
         public void generateQuestions(List<DataModel> dataList) {
+                OllamaOptions options = createOptions();
+                dataList.parallelStream().forEach(dataPiece -> processDataPiece(dataPiece, options));
+        }
 
+        private OllamaOptions createOptions() {
                 OllamaOptions options = new OllamaOptions();
-                options.withTemperature(0.0f).withNumCtx(DEFAULT_NUM_CTX);
+                return options.withTemperature(0.0).withNumCtx(DEFAULT_NUM_CTX);
+        }
 
-                dataList.parallelStream().forEach(dataPiece -> {
+        private void processDataPiece(DataModel dataPiece, OllamaOptions options) {
+                ChatRequest request = createChatRequest(dataPiece, options);
+                ChatResponse response = executeRequest(request);
+                processResponse(dataPiece, response);
+        }
 
-                        ChatRequest request = ChatRequest.builder(ollamaConfig.getModel())
-                                        .withMessages(getQuestionMessages(dataPiece))
-                                        .withFormat("json").withOptions(options).build();
+        private ChatRequest createChatRequest(DataModel dataPiece, OllamaOptions options) {
+                return ChatRequest.builder(ollamaConfig.getModel())
+                                .withMessages(getQuestionMessages(dataPiece))
+                                .withFormat("json")
+                                .withOptions(options)
+                                .build();
+        }
 
-                        logger.info("AI Model: {}", ollamaConfig.getModel());
+        private ChatResponse executeRequest(ChatRequest request) {
+                logger.info("AI Model: {}", ollamaConfig.getModel());
+                return ollamaConfig.getOllamaApi().chat(request);
+        }
 
-                        ChatResponse response = ollamaConfig.getOllamaApi().chat(request);
+        private void processResponse(DataModel dataPiece, ChatResponse response) {
+                String content = response.message().content();
+                logger.info("llm's response {}, to the data {}", content, dataPiece);
 
-                        String content = response.message().content();
-
-                        logger.info("llm's response {}, to the data {}", content, dataPiece);
-
-                        OllamaThreeWordsResponseModel responseModel = parseJson(content);
-                        if (responseModel == null) {
-                                logger.warn("Json wasn't parsed for response: {}", content);
-                                return;
-                        }
-                        String first = responseModel.getFirst_three_words();
-                        String last = responseModel.getLast_three_words();
-                        String question = responseModel.getQuestion();
-
-                        if (first == null || last == null || question == null) {
-                                return;
-                        }
-
-                        String fragment = TextUtil.parse(dataPiece.getContent(), first, last);
-
-                        logger.info("Generated Question: {}, Found fragment: {}", question, fragment);
-
-                        if (fragment == null) {
-                                return;
-                        }
-
-                        dataPiece.setQuestion(question);
-                        dataPiece.setAnswer(fragment);
+                OllamaThreeWordsResponseModel responseModel = parseJson(content);
+                if (responseModel == null) {
+                        logger.warn("Json wasn't parsed for response: {}", content);
                         return;
-                });
+                }
+
+                updateDataModel(dataPiece, responseModel);
+        }
+
+        private void updateDataModel(DataModel dataPiece, OllamaThreeWordsResponseModel responseModel) {
+                String first = responseModel.getFirst_three_words();
+                String last = responseModel.getLast_three_words();
+                String question = responseModel.getQuestion();
+
+                if (first == null || last == null || question == null) {
+                        return;
+                }
+
+                String fragment = TextUtil.parse(dataPiece.getContent(), first, last);
+                logger.info("Generated Question: {}, Found fragment: {}", question, fragment);
+
+                if (fragment == null) {
+                        return;
+                }
+
+                dataPiece.setQuestion(question);
+                dataPiece.setAnswer(fragment);
         }
 
         private OllamaThreeWordsResponseModel parseJson(String content) {
@@ -92,7 +108,7 @@ public class OllamaQAService implements IAIQAService {
 
         private List<Message> getQuestionMessages(DataModel dataPiece) {
                 Message systemBiggerFragment = Message.builder(Role.SYSTEM)
-                                .withContent(
+                                .content(
                                                 """
                                                                 Act as an analyst who examines the text to identify and extract valuable fragments that fully explain ideas.
                                                                 Ignore any text that doesn't encapsulate the idea fully. Ignore any text that doesn't contain a meaningful idea at all.
@@ -105,11 +121,11 @@ public class OllamaQAService implements IAIQAService {
                                 .build();
 
                 Message systemThreeWordsFormat = Message.builder(Role.SYSTEM)
-                                .withContent("Respond in the following json format: {\"analysis\": \"A brief analysis of the text\", \"first_three_words\": \"First three words that indicate where the valuable fragment begins\", \"last_three_words\": \"Last three words that indicate where the valuable fragment ends\", \"question\": \"up-to-5-word question the fragment answers\"}")
+                                .content("Respond in the following json format: {\"analysis\": \"A brief analysis of the text\", \"first_three_words\": \"First three words that indicate where the valuable fragment begins\", \"last_three_words\": \"Last three words that indicate where the valuable fragment ends\", \"question\": \"up-to-5-word question the fragment answers\"}")
                                 .build();
 
                 Message contextMessage = Message.builder(Role.USER)
-                                .withContent(dataPiece.getContent())
+                                .content(dataPiece.getContent())
                                 .build();
 
                 return List.of(systemBiggerFragment, systemThreeWordsFormat, contextMessage);

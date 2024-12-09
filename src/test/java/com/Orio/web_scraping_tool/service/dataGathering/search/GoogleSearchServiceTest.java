@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.web_scraping_tool.exception.RateLimitReachedException;
 import com.Orio.web_scraping_tool.exception.WebSearchException;
-import com.Orio.web_scraping_tool.service.newImpl.dataGathering.search.GoogleSearchService;
+import com.Orio.web_scraping_tool.service.impl.dataGathering.search.GoogleSearchService;
 
 @SpringBootTest
 public class GoogleSearchServiceTest {

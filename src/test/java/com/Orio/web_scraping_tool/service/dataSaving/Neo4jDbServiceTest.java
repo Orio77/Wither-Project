@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.web_scraping_tool.config.DataBaseConfig;
 import com.Orio.web_scraping_tool.model.DataModel;
-import com.Orio.web_scraping_tool.service.newImpl.dataSaving.SpringVectorDbService;
+import com.Orio.web_scraping_tool.service.impl.dataSaving.SpringVectorDbService;
 
 @SpringBootTest // docker run -it --rm --name chroma -p 8000:8000
                 // ghcr.io/chroma-core/chroma:0.4.15

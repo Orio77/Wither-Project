@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.web_scraping_tool.model.DataModel;
-import com.Orio.web_scraping_tool.service.newImpl.dataGathering.JsoupScrapeService;
+import com.Orio.web_scraping_tool.service.impl.dataGathering.JsoupScrapeService;
 
 @SpringBootTest
 public class JsoupScrapeServiceTest {

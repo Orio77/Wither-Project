@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Configuration
 @Getter
+@Setter // TODO Remove
 public class OllamaConfig {
 
     @Bean

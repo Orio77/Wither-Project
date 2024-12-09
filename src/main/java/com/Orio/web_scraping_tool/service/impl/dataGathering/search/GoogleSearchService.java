@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataGathering.search;
+package com.Orio.web_scraping_tool.service.impl.dataGathering.search;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -21,7 +21,7 @@ import com.Orio.web_scraping_tool.exception.RateLimitReachedException;
 import com.Orio.web_scraping_tool.exception.WebSearchException;
 import com.Orio.web_scraping_tool.model.GoogleSearchResponseModel;
 import com.Orio.web_scraping_tool.model.GoogleSearchResponseModel.Item;
-import com.Orio.web_scraping_tool.service.dataGathering.search.IWebSearchService;
+import com.Orio.web_scraping_tool.service.dataGathering.webSearch.IWebSearchService;
 
 import lombok.AllArgsConstructor;
 
@@ -31,6 +31,8 @@ public class GoogleSearchService implements IWebSearchService {
 
     private final GoogleSearchConfig googleSearchConfig;
     private final RestTemplate restTemplate;
+    private final String agent;
+
     private static final Logger logger = getLogger(GoogleSearchService.class);
 
     private static final String NO_ITEMS_FOUND = "No items found in the response";
@@ -61,10 +63,11 @@ public class GoogleSearchService implements IWebSearchService {
         try {
             // Set headers to mimic a browser
             HttpHeaders headers = new HttpHeaders();
-            headers.set("User-Agent",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+            headers.set("User-Agent", agent);
             headers.set("Accept-Language", "en-US,en;q=0.9");
             headers.set("Accept", "application/json");
+
+            logger.debug("Headers constructed: {}", headers);
 
             // Create the HTTP entity with headers
             HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -102,5 +105,4 @@ public class GoogleSearchService implements IWebSearchService {
     public List<String> searchPdfs(String query) {
         return new ArrayList<>();
     }
-
 }

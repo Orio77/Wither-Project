@@ -1,14 +1,14 @@
-package com.Orio.web_scraping_tool.service.newImpl.dataGathering;
+package com.Orio.web_scraping_tool.service.impl.dataGathering.source;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.Orio.web_scraping_tool.model.DataModel;
-import com.Orio.web_scraping_tool.service.dataGathering.IPDFProcessorService;
+import com.Orio.web_scraping_tool.service.dataGathering.source.IDataSource;
 
 @Service
-public class TempFileProcessorService implements IPDFProcessorService {
+public class CoreService implements IDataSource {
 
     @Override
     public List<DataModel> getData(String query) {

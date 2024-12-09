@@ -1,4 +1,4 @@
-package com.Orio.web_scraping_tool.service.newImpl;
+package com.Orio.web_scraping_tool.service.impl;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
