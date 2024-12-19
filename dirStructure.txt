@@ -1,0 +1,94 @@
+C:.
+|   .gitignore
+|   commands.md
+|   dirStructure.ps1
+|   mvnw
+|   mvnw.cmd
+|   pom.xml
+|
++---.mvn
+|   \---wrapper
+|           maven-wrapper.properties
+|
++---src
+|   +---main
+|   |   +---java
+|   |   |   \---com
+|   |   |       \---orio
+|   |   |           \---wither
+|   |   |               |   WitherApplication.java
+|   |   |               |
+|   |   |               +---application
+|   |   |               |   +---controller
+|   |   |               |   |   |   WitherController.java
+|   |   |               |   |   \---query
+|   |   |               |   |           QueryController.java
+|   |   |               |   |
+|   |   |               |   \---config
+|   |   |               |           SecurityConfig.java
+|   |   |               |           WebConfig.java
+|   |   |               |
+|   |   |               +---domain
+|   |   |               |   +---common
+|   |   |               |   |   +---exception
+|   |   |               |   |   |       DataSourceUnavailableException.java
+|   |   |               |   |   |       RateLimitReachedException.java
+|   |   |               |   |   \---util
+|   |   |               |   |           FileUtil.java
+|   |   |               |   |           TextUtil.java
+|   |   |               |   |           ThreadUtil.java
+|   |   |               |   |
+|   |   |               |   +---search
+|   |   |               |   |   +---model
+|   |   |               |   |   +---service
+|   |   |               |   |   \---repository
+|   |   |               |   |
+|   |   |               |   +---content
+|   |   |               |   |   +---model
+|   |   |               |   |   |       DataModel.java
+|   |   |               |   |   +---service
+|   |   |               |   |   \---repository
+|   |   |               |   |           SQLRepo.java
+|   |   |               |   |
+|   |   |               |   \---qa
+|   |   |               |       +---model
+|   |   |               |       |       OllamaResponseModel.java
+|   |   |               |       +---service
+|   |   |               |       \---repository
+|   |   |               |
+|   |   |               \---infrastructure
+|   |   |                   +---persistence
+|   |   |                   |   +---sql
+|   |   |                   |   |       PostgreSQLService.java
+|   |   |                   |   \---vector
+|   |   |                   |           SpringVectorDbService.java
+|   |   |                   |
+|   |   |                   +---integration
+|   |   |                   |   +---google
+|   |   |                   |   |       GoogleSearchService.java
+|   |   |                   |   +---ollama
+|   |   |                   |   |       OllamaQAService.java
+|   |   |                   |   \---youtube
+|   |   |                   |           YouTubeService.java
+|   |   |                   |
+|   |   |                   \---config
+|   |   |                           DataBaseConfig.java
+|   |   |                           GoogleSearchConfig.java
+|   |   |                           OllamaConfig.java
+|   |   |                           VectorDbConfig.java
+|   |   |
+|   |   \---resources
+|   |           application.properties
+|   |           logback.xml
+|   |
+|   \---test
+|       +---java
+|       |   \---com
+|       |       \---orio
+|       |           \---wither
+|       |               // ...test structure mirrors main structure...
+|       |
+|       \---resources
+|
+\---target
+    // ...build output directories...

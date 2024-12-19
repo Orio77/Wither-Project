@@ -13,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.impl.dataGathering.JsoupScrapeService;
-import com.Orio.wither_project.service.impl.dataProcessing.OllamaQAService;
-import com.Orio.wither_project.service.impl.dataSaving.PostgreSQLService;
+import com.Orio.wither_project.service.data.gathering.scraping.impl.JsoupScrapeService;
+import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLService;
+import com.Orio.wither_project.service.data.processing.impl.OllamaQAService;
 
 @SpringBootTest
 public class OllamaQAServiceTest {

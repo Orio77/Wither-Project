@@ -17,14 +17,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.Orio.wither_project.config.DataBaseConfig;
 import com.Orio.wither_project.exception.UnauthorizedException;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.repository.SQLRepo;
-import com.Orio.wither_project.service.impl.dataSaving.PostgreSQLService;
+import com.Orio.wither_project.repository.SQLDataModelRepo;
+import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLService;
 
 @SpringBootTest
 public class PostgreSQLServiceTest {
 
     @Autowired
-    private SQLRepo sqlRepo;
+    private SQLDataModelRepo sqlRepo;
 
     @Autowired
     private DataBaseConfig dbConfig;
