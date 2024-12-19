@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.3.6</version>
+		<relativePath/>
+		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.Orio</groupId>
-	<artifactId>web-scraping-tool</artifactId>
+	<artifactId>wither-project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>web-scraping-tool</name>
-	<description>Web Scraping Project</description>
+	<name>wither-project</name>
+	<description>Wither Project</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -35,7 +36,7 @@
 			<dependency>
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>0.8.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -57,7 +58,6 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-neo4j-store-spring-boot-starter</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -112,19 +112,16 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.vaadin.external.google</groupId>
-					<artifactId>android-json</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-neo4j-store</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-ollama</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -135,7 +132,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.Orio.web_scraping_tool.WebScrapingToolApplication</mainClass>
+					<mainClass>com.Orio.wither_project.WitherProject</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -148,20 +145,23 @@
 	</build>
 	<repositories>
 		<repository>
-		<id>spring-milestones</id>
-		<name>Spring Milestones</name>
-		<url>https://repo.spring.io/milestone</url>
-		<snapshots>
-			<enabled>false</enabled>
-		</snapshots>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
-		<id>spring-snapshots</id>
-		<name>Spring Snapshots</name>
-		<url>https://repo.spring.io/snapshot</url>
-		<releases>
-			<enabled>false</enabled>
-		</releases>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 </project>
