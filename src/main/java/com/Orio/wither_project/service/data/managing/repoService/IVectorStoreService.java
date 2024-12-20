@@ -11,5 +11,7 @@ public interface IVectorStoreService {
 
     List<String> search(String question);
 
+    List<String> search(String question, int topK);
+
     boolean remove(List<String> elementId, String removePassword) throws UnauthorizedException;
 }

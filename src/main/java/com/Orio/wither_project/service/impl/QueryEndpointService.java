@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 import com.Orio.wither_project.exception.InvalidQueryException;
 import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.service.data.managing.handling.IQueryService;
-import com.Orio.wither_project.service.data.managing.repoService.ISQLService;
+import com.Orio.wither_project.service.data.managing.repoService.ISQLDataModelService;
 import com.Orio.wither_project.service.data.managing.repoService.IVectorStoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class QueryEndpointService implements IQueryService {
     private static final int MAX_RESULTS = 100;
 
     private final IVectorStoreService vectorStoreService;
-    private final ISQLService sqlService;
+    private final ISQLDataModelService sqlService;
 
     @Override
     public List<DataModel> handle(String question, int numResults) {
@@ -35,7 +35,7 @@ public class QueryEndpointService implements IQueryService {
         logger.info("Querying data with question: '{}', numResults: {}", question, numResults);
 
         try {
-            List<String> resultQuestions = vectorStoreService.search(question);
+            List<String> resultQuestions = vectorStoreService.search(question, numResults);
             logger.debug("Vector store returned questions: {}", resultQuestions);
 
             List<DataModel> data = sqlService.findByQuestionIn(resultQuestions);

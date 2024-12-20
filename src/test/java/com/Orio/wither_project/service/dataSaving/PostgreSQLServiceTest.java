@@ -18,7 +18,7 @@ import com.Orio.wither_project.config.DataBaseConfig;
 import com.Orio.wither_project.exception.UnauthorizedException;
 import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.repository.SQLDataModelRepo;
-import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLService;
+import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLDataModelService;
 
 @SpringBootTest
 public class PostgreSQLServiceTest {
@@ -29,13 +29,13 @@ public class PostgreSQLServiceTest {
     @Autowired
     private DataBaseConfig dbConfig;
 
-    private PostgreSQLService postgreSQLService;
+    private PostgreSQLDataModelService postgreSQLService;
     private List<DataModel> data;
     private List<Long> ids;
 
     @BeforeEach
     public void setUp() {
-        postgreSQLService = new PostgreSQLService(sqlRepo, dbConfig);
+        postgreSQLService = new PostgreSQLDataModelService(sqlRepo, dbConfig);
         data = Arrays.asList(new DataModel("source1", "data1"), new DataModel("source2", "data2"));
     }
 

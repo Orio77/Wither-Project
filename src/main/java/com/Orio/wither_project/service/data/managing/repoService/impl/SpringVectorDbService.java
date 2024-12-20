@@ -26,6 +26,7 @@ public class SpringVectorDbService implements IVectorStoreService {
     private final VectorStore vectorStore;
     private final VectorDbConfig vectorDbConfig;
 
+    @Override
     public void save(List<DataModel> data) {
 
         if (data == null || data.isEmpty()) {
@@ -44,20 +45,30 @@ public class SpringVectorDbService implements IVectorStoreService {
         logger.debug("Documents saved successfully");
     }
 
+    @Override
     public List<String> search(String question) {
+        return search(question, vectorDbConfig.getTopK());
+    }
+
+    @Override
+    public List<String> search(String question, int topK) {
+        validateQuestion(question);
+        return this.searchDocs(question, topK).stream()
+                .map(Document::getContent).toList();
+    }
+
+    private void validateQuestion(String question) {
         Objects.requireNonNull(question, "Search query must not be null");
         if (question.trim().isEmpty()) {
             throw new IllegalArgumentException("Search query must not be empty");
         }
-        return this.searchDocs(question).stream()
-                .map(Document::getContent).toList();
     }
 
-    public List<Document> searchDocs(String str) {
+    public List<Document> searchDocs(String str, int topK) {
         try {
             return vectorStore.similaritySearch(SearchRequest.defaults()
                     .withQuery(str)
-                    .withTopK(vectorDbConfig.getTopK())
+                    .withTopK(topK)
                     .withSimilarityThreshold(vectorDbConfig.getSimilarityThreshold()));
         } catch (Exception e) {
             logger.error("Error occurred during document search", e);

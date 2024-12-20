@@ -29,13 +29,6 @@ public class QueryController {
 
     private final IQueryService queryService;
 
-    /**
-     * Handles query requests and returns matching data.
-     *
-     * @param question  the search query
-     * @param numResult number of results to return (default: 5)
-     * @return ResponseEntity containing the query results
-     */
     @GetMapping
     public ResponseEntity<List<DataModel>> query(
             @RequestParam(required = true) String question,

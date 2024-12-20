@@ -25,6 +25,7 @@ public class Neo4jDbServiceTest {
     @Autowired
     private DataBaseConfig dbConfig;
     private static List<DataModel> list;
+    private final static int topK = 100;
 
     @BeforeAll
     public static void setUp() {
@@ -40,7 +41,7 @@ public class Neo4jDbServiceTest {
     private void cleanUp() {
         list.stream().forEach(element -> {
             System.out.println("Cleaning up element: " + element);
-            List<Document> searchRes = neo4jService.searchDocs(element.getQuestion());
+            List<Document> searchRes = neo4jService.searchDocs(element.getQuestion(), topK);
             System.out.println("Found search results: " + searchRes);
             if (searchRes == null || searchRes.isEmpty()) {
                 return;

@@ -10,17 +10,17 @@ import com.Orio.wither_project.config.DataBaseConfig;
 import com.Orio.wither_project.exception.UnauthorizedException;
 import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.repository.SQLDataModelRepo;
-import com.Orio.wither_project.service.data.managing.repoService.ISQLService;
+import com.Orio.wither_project.service.data.managing.repoService.ISQLDataModelService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class PostgreSQLService implements ISQLService {
+public class PostgreSQLDataModelService implements ISQLDataModelService {
 
     private final SQLDataModelRepo sqlRepo;
     private final DataBaseConfig dbConfig;
-    private static final Logger logger = LoggerFactory.getLogger(PostgreSQLService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostgreSQLDataModelService.class);
 
     @Override
     public void save(List<DataModel> data) {
