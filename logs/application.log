@@ -2480,3 +2480,4 @@ Caused by: org.springframework.data.mapping.PropertyReferenceException: No prope
 2024-12-19 18:28:39 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Starting WitherProject using Java 17.0.4 with PID 23524 (C:\Users\macie\tools\Wither Project\wither-project-backend\target\classes started by macie in C:\Users\macie\tools\Wither Project\wither-project-backend)
 2024-12-19 18:28:39 [restartedMain] DEBUG c.Orio.wither_project.WitherProject - Running with Spring Boot v3.3.6, Spring v6.1.15
 2024-12-19 18:28:39 [restartedMain] INFO  c.Orio.wither_project.WitherProject - The following 1 profile is active: "development"
+2024-12-19 18:28:40 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Started WitherProject in 0.52 seconds (process running for 1525.75)
