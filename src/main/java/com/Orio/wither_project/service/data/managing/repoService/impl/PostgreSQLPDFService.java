@@ -30,12 +30,12 @@ public class PostgreSQLPDFService implements ISQLPDFService {
 
     @Override
     public Optional<BookModel> getDocumentByName(String fileName) {
-        return pdfDocumentRepo.findByFileName(fileName);
+        return pdfDocumentRepo.findByTitle(fileName);
     }
 
     @Override
     public List<BookModel> searchDocumentsByName(String fileNamePart) {
-        return pdfDocumentRepo.findByFileNameContainingIgnoreCase(fileNamePart);
+        return pdfDocumentRepo.findByTitleContainingIgnoreCase(fileNamePart);
     }
 
     @Override
