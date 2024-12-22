@@ -1,4 +1,4 @@
-package com.Orio.wither_project.service.data.processing.impl;
+package com.Orio.wither_project.service.data.processing.source.impl;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.model.OllamaThreeWordsResponseModel;
-import com.Orio.wither_project.service.data.processing.IAIQAService;
+import com.Orio.wither_project.service.data.processing.source.IAIQAService;
 import com.Orio.wither_project.util.TextUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +29,6 @@ public class OllamaQAService implements IAIQAService {
         private final ObjectMapper objMapper;
         private static final Logger logger = LoggerFactory.getLogger(OllamaQAService.class);
 
-        private static final int DEFAULT_NUM_CTX = 13000;
-        private static final float DEFAULT_TEMPERATURE = 0.0f;
         private static final String JSON_FORMAT = "json";
         private static final String SYSTEM_PROMPT = """
                         Act as an analyst who examines the text to identify and extract valuable fragments that fully explain ideas.
@@ -75,8 +73,8 @@ public class OllamaQAService implements IAIQAService {
 
         private OllamaOptions createOptions() {
                 return new OllamaOptions()
-                                .withTemperature(DEFAULT_TEMPERATURE)
-                                .withNumCtx(DEFAULT_NUM_CTX);
+                                .withTemperature(ollamaConfig.getTemperature())
+                                .withNumCtx(ollamaConfig.getNumCTX());
         }
 
         private void processDataPiece(DataModel dataPiece, OllamaOptions options) {

@@ -11,7 +11,7 @@ import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.service.data.gathering.collecting.ISourceCollectorService;
 import com.Orio.wither_project.service.data.managing.repoService.ISQLDataModelService;
 import com.Orio.wither_project.service.data.managing.repoService.IVectorStoreService;
-import com.Orio.wither_project.service.data.processing.IAIQAService;
+import com.Orio.wither_project.service.data.processing.source.IAIQAService;
 import com.Orio.wither_project.service.data.source.IDataSource;
 
 import lombok.RequiredArgsConstructor;

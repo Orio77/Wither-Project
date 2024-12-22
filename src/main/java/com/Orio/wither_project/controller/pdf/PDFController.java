@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.Orio.wither_project.constants.ApiPaths;
-import com.Orio.wither_project.model.PDFDocument;
+import com.Orio.wither_project.model.BookModel;
 import com.Orio.wither_project.service.impl.PDFEndpointService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,13 +34,13 @@ public class PDFController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<PDFDocument>> getAllPdfDocuments() {
+    public ResponseEntity<List<BookModel>> getAllPdfDocuments() {
         logger.info("Received request to get all PDF documents");
         return ResponseEntity.ok(pdfEndpointService.getAllDocuments());
     }
 
     @GetMapping("/get")
-    public ResponseEntity<PDFDocument> getPdfDocument(@RequestParam String fileName) {
+    public ResponseEntity<BookModel> getPdfDocument(@RequestParam String fileName) {
         logger.info("Received request to get PDF document with fileName: {}", fileName);
         return pdfEndpointService.getDocumentByName(fileName)
                 .map(ResponseEntity::ok)

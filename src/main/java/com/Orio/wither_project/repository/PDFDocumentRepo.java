@@ -6,12 +6,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.Orio.wither_project.model.PDFDocument;
+import com.Orio.wither_project.model.BookModel;
 
 @Repository
-public interface PDFDocumentRepo extends JpaRepository<PDFDocument, Long> {
+public interface PDFDocumentRepo extends JpaRepository<BookModel, Long> {
+    Optional<BookModel> findByTitle(String title);
 
-    Optional<PDFDocument> findByFileName(String fileName);
-
-    List<PDFDocument> findByFileNameContainingIgnoreCase(String fileNamePart);
+    List<BookModel> findByTitleContainingIgnoreCase(String titlePart);
 }

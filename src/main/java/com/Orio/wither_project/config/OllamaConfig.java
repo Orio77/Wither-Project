@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Configuration
+@Getter
 public class OllamaConfig {
 
     @Bean
@@ -16,8 +17,13 @@ public class OllamaConfig {
         return new OllamaApi();
     }
 
-    @Getter
     @Setter
     @Value("${ollama.text.model}")
     private String model;
+
+    @Value("${ollama.text.numCTX}")
+    private int numCTX;
+
+    @Value("${ollama.text.temperature}")
+    private float temperature;
 }

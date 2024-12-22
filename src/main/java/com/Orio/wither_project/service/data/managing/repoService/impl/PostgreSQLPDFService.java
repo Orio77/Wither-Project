@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.model.PDFDocument;
+import com.Orio.wither_project.model.BookModel;
 import com.Orio.wither_project.repository.PDFDocumentRepo;
 import com.Orio.wither_project.service.data.managing.repoService.ISQLPDFService;
 
@@ -18,28 +18,28 @@ public class PostgreSQLPDFService implements ISQLPDFService {
     private final PDFDocumentRepo pdfDocumentRepo;
 
     @Override
-    public boolean saveDocument(PDFDocument document) {
-        PDFDocument savedDocument = pdfDocumentRepo.save(document);
+    public boolean saveDocument(BookModel document) {
+        BookModel savedDocument = pdfDocumentRepo.save(document);
         return savedDocument != null;
     }
 
     @Override
-    public Optional<PDFDocument> getDocumentById(Long id) {
+    public Optional<BookModel> getDocumentById(Long id) {
         return pdfDocumentRepo.findById(id);
     }
 
     @Override
-    public Optional<PDFDocument> getDocumentByName(String fileName) {
+    public Optional<BookModel> getDocumentByName(String fileName) {
         return pdfDocumentRepo.findByFileName(fileName);
     }
 
     @Override
-    public List<PDFDocument> searchDocumentsByName(String fileNamePart) {
+    public List<BookModel> searchDocumentsByName(String fileNamePart) {
         return pdfDocumentRepo.findByFileNameContainingIgnoreCase(fileNamePart);
     }
 
     @Override
-    public List<PDFDocument> getAllDocuments() {
+    public List<BookModel> getAllDocuments() {
         return pdfDocumentRepo.findAll();
     }
 
