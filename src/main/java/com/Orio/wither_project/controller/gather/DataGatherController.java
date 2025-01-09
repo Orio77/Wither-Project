@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.gather.GatherEndpointService;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.impl.GatherEndpointService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

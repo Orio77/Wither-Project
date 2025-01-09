@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.Orio.wither_project.util.ThreadUtil;
-
 public class ThreadUtilTest {
 
     @Test

@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.config.DataBaseConfig;
+import com.Orio.wither_project.gather.storage.vector.service.impl.SpringVectorDbService;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.data.managing.repoService.impl.SpringVectorDbService;
 
 @SpringBootTest
 public class Neo4jDbServiceTest {

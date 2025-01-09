@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Orio.wither_project.constants.ApiPaths;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.data.managing.handling.IQueryService;
+import com.Orio.wither_project.query.IQueryService;
 
 import lombok.RequiredArgsConstructor;
 

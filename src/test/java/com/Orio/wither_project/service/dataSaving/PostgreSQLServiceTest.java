@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.config.DataBaseConfig;
 import com.Orio.wither_project.exception.UnauthorizedException;
+import com.Orio.wither_project.gather.storage.sql.repository.SQLDataModelRepo;
+import com.Orio.wither_project.gather.storage.sql.service.impl.PostgreSQLDataModelService;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.repository.SQLDataModelRepo;
-import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLDataModelService;
 
 @SpringBootTest
 public class PostgreSQLServiceTest {

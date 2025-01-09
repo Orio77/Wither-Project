@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.config.OllamaConfig;
+import com.Orio.wither_project.gather.acquisition.web.scrape.impl.JsoupScrapeService;
+import com.Orio.wither_project.gather.processing.qa.impl.OllamaQAService;
+import com.Orio.wither_project.gather.storage.sql.service.impl.PostgreSQLDataModelService;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.data.gathering.scraping.impl.JsoupScrapeService;
-import com.Orio.wither_project.service.data.managing.repoService.impl.PostgreSQLDataModelService;
-import com.Orio.wither_project.service.data.processing.source.impl.OllamaQAService;
 
 @SpringBootTest
 public class OllamaQAServiceTest {

@@ -18,9 +18,9 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
+import com.Orio.wither_project.gather.acquisition.aggregation.impl.ParallelSourceAggregationService;
+import com.Orio.wither_project.gather.acquisition.source.IDataSource;
 import com.Orio.wither_project.model.DataModel;
-import com.Orio.wither_project.service.data.gathering.collecting.impl.ParallelSourceCollectorService;
-import com.Orio.wither_project.service.data.source.IDataSource;
 import com.Orio.wither_project.util.ThreadUtil;
 
 public class ParallelSourceProcessorServiceTest {
@@ -32,7 +32,7 @@ public class ParallelSourceProcessorServiceTest {
     private IDataSource dataSource2;
 
     @InjectMocks
-    private ParallelSourceCollectorService parallelSourceProcessorService;
+    private ParallelSourceAggregationService parallelSourceProcessorService;
 
     @BeforeEach
     public void setUp() {
