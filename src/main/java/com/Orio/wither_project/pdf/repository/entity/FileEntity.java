@@ -1,5 +1,6 @@
 package com.Orio.wither_project.pdf.repository.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,5 +16,6 @@ public class FileEntity {
 
     private String name;
     private String contentType;
+    @Column(columnDefinition = "bytea")
     private byte[] data;
 }

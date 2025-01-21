@@ -23,51 +23,64 @@ import lombok.RequiredArgsConstructor;
 public class BasicPDFConversionService implements IPDFConversionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BasicPDFConversionService.class);
+    private static final String FILENAME_METADATA_KEY = "FileName";
 
-    private final IPDFContentExtractionService dataExtractionService;
+    private final IPDFContentExtractionService contentExtractionService;
 
     @Override
     public DocumentModel convertToDocumentModel(PDDocument pddoc) {
-        logger.info("Starting conversion to DocumentModel");
+        logger.info("Starting PDF document conversion to DocumentModel");
+        if (pddoc == null) {
+            throw new IllegalArgumentException("PDDocument cannot be null");
+        }
+
         PDDocumentInformation info = pddoc.getDocumentInformation();
+        if (info == null) {
+            info = new PDDocumentInformation();
+        }
 
         String author = info.getAuthor();
         String title = info.getTitle();
-        String fileName = info.getCustomMetadataValue("FileName");
+        String fileName = info.getCustomMetadataValue(FILENAME_METADATA_KEY);
 
-        logger.debug("Extracted Author: {}", author);
-        logger.debug("Extracted Title: {}", title);
-        logger.debug("Extracted FileName: {}", fileName);
+        logger.debug("Extracted metadata - Author: {}, Title: {}, FileName: {}", author, title, fileName);
 
         DocumentModel doc = new DocumentModel();
-
         doc.setAuthor(author);
         doc.setTitle(title);
         doc.setFileName(fileName);
 
-        logger.debug("DocumentModel Author set to: {}", author);
-        logger.debug("DocumentModel Title set to: {}", title);
-        logger.debug("DocumentModel FileName set to: {}", fileName);
-
-        List<ChapterModel> chapters = dataExtractionService.getChapters(pddoc);
+        List<ChapterModel> chapters = contentExtractionService.getChapters(pddoc);
         doc.setChapters(chapters);
 
-        logger.debug("Extracted Chapters: {}", chapters);
-
-        logger.info("Conversion to DocumentModel completed successfully");
+        logger.info("PDF document conversion completed successfully");
         return doc;
     }
 
     @Override
     public PDDocument convertToPdDocument(FileEntity file) throws IOException {
-        logger.info("Starting conversion to PDDocument");
-        try (PDDocument document = Loader.loadPDF(file.getData())) {
-            logger.debug("PDDocument loaded successfully");
-            logger.info("Conversion to PDDocument completed successfully");
+        if (file == null) {
+            throw new IllegalArgumentException("FileEntity cannot be null");
+        }
+
+        byte[] data = file.getData();
+        if (data == null || data.length == 0) {
+            throw new IllegalArgumentException("File data cannot be null or empty");
+        }
+
+        logger.info("Converting file {} to PDDocument", file.getName());
+        try {
+            PDDocument document = Loader.loadPDF(data);
+            String name = file.getName();
+            PDDocumentInformation info = new PDDocumentInformation();
+            info.setCustomMetadataValue(FILENAME_METADATA_KEY, name);
+            document.setDocumentInformation(info);
+
+            logger.info("Successfully converted file to PDDocument");
             return document;
         } catch (IOException e) {
-            logger.error("Error occurred during conversion to PDDocument", e);
-            throw e;
+            logger.error("Failed to convert file to PDDocument: {}", e.getMessage());
+            throw new IOException("Failed to convert file to PDDocument", e);
         }
     }
 

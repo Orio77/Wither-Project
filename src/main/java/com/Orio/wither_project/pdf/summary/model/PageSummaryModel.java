@@ -1,25 +1,30 @@
 package com.Orio.wither_project.pdf.summary.model;
 
 import com.Orio.wither_project.pdf.model.PageModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageSummaryModel extends AbstractSummaryModel {
+public class PageSummaryModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "page_id")
+    @Column(columnDefinition = "text")
+    private String content;
+
+    @JsonBackReference
+    @OneToOne(mappedBy = "summary")
     private PageModel page;
 
     public PageSummaryModel(String content) {
-        super.setContent(content);
+        this.content = content;
     }
 }

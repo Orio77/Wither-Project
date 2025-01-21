@@ -11,26 +11,33 @@ import com.Orio.wither_project.pdf.service.extraction.IPDFMetaDataExtractionServ
 public class ApachePDFBoxMetaDataExtractionService implements IPDFMetaDataExtractionService {
 
     private static final Logger logger = LoggerFactory.getLogger(ApachePDFBoxMetaDataExtractionService.class);
+    private static final String UNKNOWN = "unknown";
+
+    private String getValueOrUnknown(String value) {
+        return value != null ? value : UNKNOWN;
+    }
 
     @Override
     public String getAuthor(PDDocument doc) {
-        String author = doc.getDocumentInformation().getAuthor();
+        String author = getValueOrUnknown(doc.getDocumentInformation().getAuthor());
         logger.info("Extracted author: {}", author);
         return author;
     }
 
     @Override
     public String getTitle(PDDocument doc) {
-        String title = doc.getDocumentInformation().getTitle();
+        String title = getValueOrUnknown(doc.getDocumentInformation().getTitle());
         logger.info("Extracted title: {}", title);
         return title;
     }
 
     @Override
     public String getFileName(PDDocument doc) {
-        String fileName = doc.getDocumentInformation().getCustomMetadataValue("FileName"); // TODO Make this a const
+        String fileName = getValueOrUnknown(doc.getDocumentInformation().getCustomMetadataValue("FileName")); // TODO
+                                                                                                              // Make
+                                                                                                              // this a
+                                                                                                              // const
         logger.info("Extracted file name: {}", fileName);
         return fileName;
     }
-
 }

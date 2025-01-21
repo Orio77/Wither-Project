@@ -1,13 +1,15 @@
 package com.Orio.wither_project.config;
 
-import org.springframework.ai.embedding.EmbeddingClient;
-import org.springframework.ai.ollama.OllamaEmbeddingClient;
+import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -17,9 +19,15 @@ public class EmbeddingModelConfig {
 
     @Bean
     @Primary
-    EmbeddingClient embeddingModel() {
+    EmbeddingModel embeddingModel() {
         OllamaOptions options = new OllamaOptions();
-        options.setModel("nomic-embed-text:latest");
-        return new OllamaEmbeddingClient(ollamaApi).withDefaultOptions(options);
+        options.setModel("nomic-embed-text:latest"); // TODO extract to constants
+
+        ModelManagementOptions modelManagementOptions = ModelManagementOptions.builder().build();
+        ObservationRegistry observationRegistry = ObservationRegistry.create();
+
+        return new OllamaEmbeddingModel(ollamaApi, options, observationRegistry, modelManagementOptions); // TODO Check
+                                                                                                          // if it's
+                                                                                                          // working
     }
 }

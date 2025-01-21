@@ -8,6 +8,7 @@ import org.springframework.ai.ollama.api.OllamaApi.ChatRequest;
 import org.springframework.ai.ollama.api.OllamaApi.ChatResponse;
 import org.springframework.ai.ollama.api.OllamaApi.Message;
 import org.springframework.ai.ollama.api.OllamaApi.Message.Role;
+import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class OllamaQAService implements IAIQAService {
 
         private final OllamaConfig ollamaConfig;
+        private final OllamaApi ollamaApi;
         private final ObjectMapper objMapper;
         private static final Logger logger = LoggerFactory.getLogger(OllamaQAService.class);
 
@@ -102,7 +104,7 @@ public class OllamaQAService implements IAIQAService {
         private ChatResponse executeRequest(ChatRequest request) {
                 logger.debug("Executing request with model: {}", ollamaConfig.getModel());
                 try {
-                        return ollamaConfig.getOllamaApi().chat(request);
+                        return ollamaApi.chat(request);
                 } catch (Exception e) {
                         logger.error("Failed to execute chat request", e);
                         throw new RuntimeException("Failed to execute chat request", e);

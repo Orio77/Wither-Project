@@ -24,8 +24,9 @@ public class DataModel {
     private String source;
     @Transient
     @NonNull
+    @Column(columnDefinition = "text")
     private String content;
     private String question;
-    @Column(length = 20000)
+    @Column(columnDefinition = "text")
     private String answer;
 }

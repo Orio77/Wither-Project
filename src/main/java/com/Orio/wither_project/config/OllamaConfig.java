@@ -1,6 +1,8 @@
 package com.Orio.wither_project.config;
 
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +15,19 @@ import lombok.Setter;
 public class OllamaConfig {
 
     @Bean
-    public OllamaApi getOllamaApi() {
+    OllamaApi getOllamaApi() {
         return new OllamaApi();
+    }
+
+    @Bean
+    OllamaOptions getOllamaOptions() {
+        return OllamaOptions.builder().withModel(this.model).withNumCtx(this.numCTX).withTemperature(this.temperature)
+                .build();
+    }
+
+    @Bean
+    OllamaChatModel getOllamaChatModel() {
+        return OllamaChatModel.builder().withOllamaApi(getOllamaApi()).withDefaultOptions(getOllamaOptions()).build();
     }
 
     @Setter
@@ -25,5 +38,5 @@ public class OllamaConfig {
     private int numCTX;
 
     @Value("${ollama.text.temperature}")
-    private float temperature;
+    private double temperature;
 }

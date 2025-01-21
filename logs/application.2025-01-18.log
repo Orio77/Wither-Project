@@ -1,0 +1,146 @@
+2025-01-18 00:42:17 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Received request to get all PDFs
+2025-01-18 00:42:17 [http-nio-8080-exec-6] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving all PDF files
+2025-01-18 00:42:21 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-9] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-9] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-9] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:21 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:21 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-8] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Articel.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-7] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Articel.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-8] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-8] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:21 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:21 [http-nio-8080-exec-7] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Articel.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-4] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:21 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:21 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-10] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-10] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-10] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:21 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:21 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:21 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:21 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 1
+2025-01-18 00:42:21 [http-nio-8080-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to flush: java.io.IOException: An established connection was aborted by the software in your host machine]
+2025-01-18 00:42:24 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Received request to get all PDFs
+2025-01-18 00:42:24 [http-nio-8080-exec-5] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving all PDF files
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: Ojciec Zapomina.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 1
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-2] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 1
+2025-01-18 00:42:28 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-5] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-5] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 15
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-9] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 1
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-10] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: Articel.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-8] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-9] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 15
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-1] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-7] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-10] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 1
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: corrected_sub_pdf_13.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:28 [http-nio-8080-exec-6] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:28 [http-nio-8080-exec-1] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 15
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-2] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-2] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: modern_man_in_search_of_a_soul.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: man-and-his-symbols.pdf
+2025-01-18 00:42:28 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-4] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:29 [http-nio-8080-exec-4] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0
+2025-01-18 00:42:29 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: [FAILED toString()]
+2025-01-18 00:42:29 [http-nio-8080-exec-2] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 15
+2025-01-18 00:42:29 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Received request to get document with name: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-5] INFO  c.O.w.p.s.s.impl.SQLDocumentService - Retrieving document: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-5] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by title: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-5] WARN  c.O.w.p.s.s.impl.SQLDocumentService - Document not found by file name: man-and-his-symbols.pdf
+2025-01-18 00:42:29 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Retrieved document: null
+2025-01-18 00:42:29 [http-nio-8080-exec-5] INFO  c.O.w.pdf.controller.PDFController - Number of chapters: 0

@@ -1,22 +1,26 @@
 package com.Orio.wither_project.pdf.summary.service;
 
-import com.Orio.wither_project.pdf.model.SummaryType;
+import com.Orio.wither_project.pdf.summary.model.SummaryType;
 
 public interface IPDFSummaryGenerationService {
 
     String summarize(String text, SummaryType type);
 
+    String summarize(String text, String instruction, String responseFormat);
+
     String summarize(String text, String instruction);
+
+    String summarizeProgressively(String text, SummaryType type);
 
     default String summarizePage(String text) {
         return summarize(text, SummaryType.PAGE);
     }
 
     default String summarizeChapter(String text) {
-        return summarize(text, SummaryType.CHAPTER);
+        return summarizeProgressively(text, SummaryType.CHAPTER);
     }
 
     default String summarizeDocument(String text) {
-        return summarize(text, SummaryType.BOOK);
+        return summarizeProgressively(text, SummaryType.BOOK);
     }
 }

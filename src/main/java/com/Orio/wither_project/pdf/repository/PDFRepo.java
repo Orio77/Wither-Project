@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PDFRepo extends JpaRepository<DocumentModel, Long> {
     Optional<DocumentModel> findByTitle(String title);
+
+    Optional<DocumentModel> findByFileName(String fileName);
 }
