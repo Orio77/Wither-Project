@@ -124,3 +124,11 @@
 2025-01-21 16:19:43 [restartedMain] DEBUG c.Orio.wither_project.WitherProject - Running with Spring Boot v3.3.7, Spring v6.1.16
 2025-01-21 16:19:43 [restartedMain] INFO  c.Orio.wither_project.WitherProject - The following 1 profile is active: "development"
 2025-01-21 16:19:44 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Started WitherProject in 1.071 seconds (process running for 63.374)
+2025-01-21 16:22:17 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Starting WitherProject using Java 17.0.4 with PID 15276 (C:\Users\macie\tools\Wither Project\wither-project-backend\target\classes started by macie in C:\Users\macie\tools\Wither Project\wither-project-backend)
+2025-01-21 16:22:17 [restartedMain] DEBUG c.Orio.wither_project.WitherProject - Running with Spring Boot v3.3.7, Spring v6.1.16
+2025-01-21 16:22:17 [restartedMain] INFO  c.Orio.wither_project.WitherProject - The following 1 profile is active: "development"
+2025-01-21 16:22:18 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Started WitherProject in 1.013 seconds (process running for 217.364)
+2025-01-21 16:24:27 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Starting WitherProject using Java 17.0.4 with PID 15276 (C:\Users\macie\tools\Wither Project\wither-project-backend\target\classes started by macie in C:\Users\macie\tools\Wither Project\wither-project-backend)
+2025-01-21 16:24:27 [restartedMain] DEBUG c.Orio.wither_project.WitherProject - Running with Spring Boot v3.3.7, Spring v6.1.16
+2025-01-21 16:24:27 [restartedMain] INFO  c.Orio.wither_project.WitherProject - The following 1 profile is active: "development"
+2025-01-21 16:24:29 [restartedMain] INFO  c.Orio.wither_project.WitherProject - Started WitherProject in 1.161 seconds (process running for 347.755)
