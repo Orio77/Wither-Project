@@ -1,6 +1,9 @@
 package com.Orio.wither_project.pdf.summary.service;
 
 import com.Orio.wither_project.pdf.summary.model.SummaryType;
+import java.util.List;
+import com.Orio.wither_project.pdf.model.PageModel;
+import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
 
 public interface IPDFSummaryGenerationService {
 
@@ -23,4 +26,6 @@ public interface IPDFSummaryGenerationService {
     default String summarizeDocument(String text) {
         return summarizeProgressively(text, SummaryType.BOOK);
     }
+
+    List<PageSummaryModel> generatePageSummaries(List<PageModel> pages);
 }

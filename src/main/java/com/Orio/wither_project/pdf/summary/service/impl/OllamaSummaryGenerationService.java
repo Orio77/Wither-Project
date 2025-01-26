@@ -2,6 +2,7 @@ package com.Orio.wither_project.pdf.summary.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,9 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.stereotype.Service;
 
+import com.Orio.wither_project.pdf.model.PageModel;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
+import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
 import com.Orio.wither_project.pdf.summary.model.SummaryType;
 import com.Orio.wither_project.pdf.summary.service.IPDFSummaryGenerationService;
 
@@ -213,5 +216,18 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         logger.debug("Complete summary built in {}ms. Total length: {} characters",
                 System.currentTimeMillis() - startTime, currentSummary.length());
         return currentSummary.toString();
+    }
+
+    @Override
+    public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
+        logger.info("Generating page summaries sequentially for {} pages", pages.size());
+        return pages.stream().map(page -> {
+            String text = page.getContent();
+            String summaryText = summarize(text, SummaryType.PAGE);
+            PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
+            summaryModel.setPage(page);
+            page.setSummary(summaryModel);
+            return summaryModel;
+        }).collect(Collectors.toList());
     }
 }

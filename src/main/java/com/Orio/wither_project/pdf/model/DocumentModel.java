@@ -20,7 +20,7 @@ public class DocumentModel {
     private String content;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private BookSummaryModel summary;
+    private BookSummaryModel summary; // TODO Resolve name inconsistency
 
     @Column(name = "file_name")
     private String fileName;
