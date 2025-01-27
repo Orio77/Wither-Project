@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.config.OllamaConfig;
+import com.Orio.wither_project.config.TestTextConfiguration;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.service.impl.OllamaSummaryGenerationService;
 

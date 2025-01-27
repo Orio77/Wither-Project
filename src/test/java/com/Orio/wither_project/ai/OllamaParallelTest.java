@@ -26,8 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class OllamaTest {
-    private static final Logger logger = LoggerFactory.getLogger(OllamaTest.class);
+public class OllamaParallelTest {
+    private static final Logger logger = LoggerFactory.getLogger(OllamaParallelTest.class);
 
     @Autowired
     private OllamaChatModel ollamaService;

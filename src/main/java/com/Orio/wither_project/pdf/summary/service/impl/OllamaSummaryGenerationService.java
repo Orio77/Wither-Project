@@ -25,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OllamaSummaryGenerationService implements IPDFSummaryGenerationService { // TODO make multithreaded in
                                                                                       // another class
+    private static final int MAX_RETRIES = 3;
+    private static final long WAIT_TIME_MS = 20000; // 20 seconds
+    private static final String SUMMARIZATION_FAILED_MESSAGE = "Failed to generate a summary. See the log for details";
 
     private static final Logger logger = LoggerFactory.getLogger(OllamaSummaryGenerationService.class);
 
@@ -78,7 +81,30 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
 
     @Override
     public String summarize(String text, String instruction) {
-        return summarize(text, instruction, promptConfig.getSummaryJsonSchema());
+        int attempts = 0;
+
+        while (attempts < MAX_RETRIES) {
+            try {
+                logger.info("Attempt {} of {} to generate summary", attempts + 1, MAX_RETRIES);
+                return summarize(text, instruction, promptConfig.getSummaryJsonSchema());
+            } catch (Exception e) {
+                attempts++;
+                logger.warn("Attempt {} failed, reason: {}", attempts, e.getMessage());
+
+                if (attempts < MAX_RETRIES) {
+                    try {
+                        logger.info("Waiting {} seconds before next retry...", WAIT_TIME_MS / 1000);
+                        Thread.sleep(WAIT_TIME_MS);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException("Retry interrupted", ie);
+                    }
+                }
+            }
+        }
+
+        logger.error("All {} retry attempts failed", MAX_RETRIES);
+        return SUMMARIZATION_FAILED_MESSAGE;
     }
 
     private String getInstructionForType(SummaryType type) {

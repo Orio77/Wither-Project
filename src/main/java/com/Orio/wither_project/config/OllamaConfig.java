@@ -21,7 +21,8 @@ public class OllamaConfig {
 
     @Bean
     OllamaOptions getOllamaOptions() {
-        return OllamaOptions.builder().withModel(this.model).withNumCtx(this.numCTX).withTemperature(this.temperature)
+        return OllamaOptions.builder().withModel(this.model).withNumCtx(this.numCTX)
+                .withTemperature(this.temperature)
                 .build();
     }
 
@@ -30,12 +31,28 @@ public class OllamaConfig {
         return OllamaChatModel.builder().withOllamaApi(getOllamaApi()).withDefaultOptions(getOllamaOptions()).build();
     }
 
+    public OllamaChatModel getOllamaChatModelHighNumCTX() {
+        return OllamaChatModel.builder().withOllamaApi(getOllamaApi())
+                .withDefaultOptions(getOllamaOptions().withNumCtx(numCTXHigh)).build();
+    }
+
+    public OllamaChatModel getOllamaChatModelLowNumCTX() {
+        return OllamaChatModel.builder().withOllamaApi(getOllamaApi())
+                .withDefaultOptions(getOllamaOptions().withNumCtx(numCTXLow)).build();
+    }
+
     @Setter
     @Value("${ollama.text.model}")
     private String model;
 
-    @Value("${ollama.text.numCTX}")
+    @Value("${ollama.text.numCTX.default}")
     private int numCTX;
+
+    @Value("${ollama.text.numCTX.low}")
+    private int numCTXLow;
+
+    @Value("${ollama.text.numCTX.high}")
+    private int numCTXHigh;
 
     @Value("${ollama.text.temperature}")
     private double temperature;
