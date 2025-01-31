@@ -92,9 +92,9 @@ public class PDFController {
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE_ALL)
-    public List<FileEntity> getAllFiles() { // Change return type to match frontend expectations
+    public List<FileEntity> getAllFiles() {
         logger.info("Received request to get all PDFs");
-        return sqlDocumentService.getAllPDFs(); // Implement this method in your service
+        return sqlDocumentService.getAllPDFs(); // TODO name inconsistency
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_DOC)
@@ -109,9 +109,9 @@ public class PDFController {
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_DOC_ALL)
-    public List<DocumentModel> getAllDocs() { // Change return type to match frontend expectations
+    public List<DocumentModel> getAllDocs() {
         logger.info("Received request to get all PDFs");
-        return sqlDocumentService.getAllDocs(); // Implement this method in your service
+        return sqlDocumentService.getAllDocs();
     }
 
 }

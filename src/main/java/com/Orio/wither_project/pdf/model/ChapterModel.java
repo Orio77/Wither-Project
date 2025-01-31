@@ -2,6 +2,8 @@ package com.Orio.wither_project.pdf.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -20,6 +22,7 @@ public class ChapterModel {
     private String content;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private ChapterSummaryModel summary;
 
     @Column(name = "file_name")

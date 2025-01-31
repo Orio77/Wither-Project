@@ -141,19 +141,7 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
         logger.debug("Generating and saving page summaries");
         List<PageModel> pages = extractPages(chapters);
 
-        pages.forEach(page -> {
-            String pageContent = page.getContent();
-            if (pageContent == null || pageContent.trim().isEmpty()) {
-                logger.warn("Empty page content found in document. Setting default content.");
-                pageContent = "No content available";
-                page.setContent(pageContent);
-            }
-
-            String pageSummary = summaryGenerationService.summarizePage(pageContent);
-            PageSummaryModel pageSummaryModel = new PageSummaryModel(pageSummary);
-            pageSummaryModel.setPage(page);
-            page.setSummary(pageSummaryModel);
-        });
+        summaryGenerationService.generatePageSummaries(pages);
 
         // pdfSavingService.savePages(pages);
         logger.debug("Page summaries generated and saved successfully");

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.ToString;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.Orio.wither_project.pdf.summary.model.BookSummaryModel;
 
@@ -20,6 +22,7 @@ public class DocumentModel {
     private String content;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     private BookSummaryModel summary; // TODO Resolve name inconsistency
 
     @Column(name = "file_name")
@@ -38,6 +41,7 @@ public class DocumentModel {
     private String author;
 
     @JsonManagedReference
+    @ToString.Exclude
     @OneToMany(mappedBy = "doc", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChapterModel> chapters;
 }

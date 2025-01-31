@@ -2,6 +2,7 @@ package com.Orio.wither_project.pdf.summary.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -11,11 +12,13 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.Orio.wither_project.pdf.model.PageModel;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
+import com.Orio.wither_project.pdf.summary.model.ProgressUpdateDTO;
 import com.Orio.wither_project.pdf.summary.model.SummaryType;
 import com.Orio.wither_project.pdf.summary.service.IPDFSummaryGenerationService;
 
@@ -34,6 +37,8 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     private final OllamaChatModel ollamaChatModel;
 
     private final SummaryPromptConfig promptConfig;
+
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public String summarize(String text, SummaryType type) {
@@ -58,7 +63,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             UserMessage userMessage = new UserMessage(text);
             Prompt prompt = new Prompt(
                     List.of(promptConfig.getContinuousSummarySystemMessage(), instructionMessage, userMessage),
-                    OllamaOptions.builder().withFormat(responseFormat).build());
+                    OllamaOptions.builder().withFormat("json").build());
 
             logger.debug("Sending request to Ollama model");
             ChatResponse response = ollamaChatModel.call(prompt);
@@ -247,13 +252,36 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     @Override
     public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
         logger.info("Generating page summaries sequentially for {} pages", pages.size());
-        return pages.stream().map(page -> {
-            String text = page.getContent();
+        AtomicInteger i = new AtomicInteger(0);
+
+        // for (int j = 0; j <= 100; j += 10) {
+        // messagingTemplate.convertAndSend("/topic/progress", i);
+        // try {
+        // Thread.sleep(1000);
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
+        // }
+
+        List<PageSummaryModel> summaries = new ArrayList<>();
+        int totalPages = pages.size();
+
+        for (PageModel page : pages) {
+            final int curPage = i.incrementAndGet();
+            String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
             String summaryText = summarize(text, SummaryType.PAGE);
+
             PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
             summaryModel.setPage(page);
             page.setSummary(summaryModel);
-            return summaryModel;
-        }).collect(Collectors.toList());
+
+            ProgressUpdateDTO progressUpdate = new ProgressUpdateDTO(curPage, totalPages);
+            logger.info("Messaging template: " + messagingTemplate);
+            logger.info("Sending progress update: {}", progressUpdate);
+            messagingTemplate.convertAndSend("/topic/progress", progressUpdate);
+
+            summaries.add(summaryModel);
+        }
+        return summaries;
     }
 }

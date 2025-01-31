@@ -16,6 +16,7 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.config.OllamaConfig;
@@ -45,6 +46,9 @@ class PromptModelCombinationTest {
 
         @Autowired
         private OllamaApi ollamaApi;
+
+        @Autowired
+        private SimpMessagingTemplate messagingTemplate;
 
         private static final int GENERATIONS_PER_COMBINATION = 1;
 
@@ -79,7 +83,7 @@ class PromptModelCombinationTest {
                                                                 .withModel(model).withNumCtx(ollamaConfig.getNumCTX()))
                                                 .build();
                                 OllamaSummaryGenerationService service = new OllamaSummaryGenerationService(chatModel,
-                                                promptConfig);
+                                                promptConfig, messagingTemplate);
 
                                 // Test different prompt types
                                 testPromptType(service, "Executive", promptConfig.getExecutiveSummarySystemMessage(),
