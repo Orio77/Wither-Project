@@ -23,6 +23,7 @@ import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.config.TestTextConfiguration;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.service.impl.OllamaSummaryGenerationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import lombok.Data;
@@ -49,6 +50,9 @@ class PromptModelCombinationTest {
 
         @Autowired
         private SimpMessagingTemplate messagingTemplate;
+
+        @Autowired
+        private ObjectMapper objectMapper;
 
         private static final int GENERATIONS_PER_COMBINATION = 1;
 
@@ -83,7 +87,7 @@ class PromptModelCombinationTest {
                                                                 .withModel(model).withNumCtx(ollamaConfig.getNumCTX()))
                                                 .build();
                                 OllamaSummaryGenerationService service = new OllamaSummaryGenerationService(chatModel,
-                                                promptConfig, messagingTemplate);
+                                                promptConfig, messagingTemplate, objectMapper);
 
                                 // Test different prompt types
                                 testPromptType(service, "Executive", promptConfig.getExecutiveSummarySystemMessage(),

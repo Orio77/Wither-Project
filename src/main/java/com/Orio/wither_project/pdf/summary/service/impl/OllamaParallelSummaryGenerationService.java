@@ -103,7 +103,7 @@ public class OllamaParallelSummaryGenerationService implements IPDFParallelSumma
         UserMessage userMessage = new UserMessage(text);
         Prompt prompt = new Prompt(
                 List.of(promptConfig.getContinuousSummarySystemMessage(), instructionMessage, userMessage),
-                OllamaOptions.builder().withFormat(promptConfig.getSummaryJsonSchema()).build());
+                OllamaOptions.builder().withFormat("json").build());
 
         ChatResponse response = ollamaChatModel.call(prompt);
         return response.getResult().getOutput().getContent();

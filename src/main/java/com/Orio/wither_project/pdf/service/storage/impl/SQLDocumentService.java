@@ -155,4 +155,13 @@ public class SQLDocumentService implements ISQLDocumentService {
             return Collections.emptyList();
         }
     }
+
+    @Override
+    public void deleteDoc(String title) {
+        logger.info("Calling repository to delete {}", title);
+        boolean deletedDoc = pdfRepo.deleteByTitleOrFileName(title);
+        logger.info("Successful deletion of the document: {}", deletedDoc);
+        boolean deletedFile = (fileRepo.deleteByName(title) > 0);
+        logger.info("Successful deletion of the file: {}", deletedFile);
+    }
 }
