@@ -26,8 +26,6 @@ public class EmbeddingModelConfig {
         ModelManagementOptions modelManagementOptions = ModelManagementOptions.builder().build();
         ObservationRegistry observationRegistry = ObservationRegistry.create();
 
-        return new OllamaEmbeddingModel(ollamaApi, options, observationRegistry, modelManagementOptions); // TODO Check
-                                                                                                          // if it's
-                                                                                                          // working
+        return new OllamaEmbeddingModel(ollamaApi, options, observationRegistry, modelManagementOptions);
     }
 }

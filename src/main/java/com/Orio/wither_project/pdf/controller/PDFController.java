@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -112,6 +113,14 @@ public class PDFController {
     public List<DocumentModel> getAllDocs() {
         logger.info("Received request to get all PDFs");
         return sqlDocumentService.getAllDocs();
+    }
+
+    @DeleteMapping(ApiPaths.BASE + ApiPaths.PDF_DELETE_DOC)
+    public ResponseEntity<Void> deleteDoc(@RequestParam(required = true) String name) {
+        logger.info("Received request to delete document with name: {}", name);
+        sqlDocumentService.deleteDoc(name);
+        logger.info("Document deleted successfully: {}", name);
+        return ResponseEntity.ok().build();
     }
 
 }

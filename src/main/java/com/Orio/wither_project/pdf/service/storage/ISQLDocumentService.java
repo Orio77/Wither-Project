@@ -29,6 +29,8 @@ public interface ISQLDocumentService {
 
     public DocumentModel getDocument(String title);
 
+    void deleteDoc(String title);
+
     List<DocumentModel> getAllDocs();
 
 }

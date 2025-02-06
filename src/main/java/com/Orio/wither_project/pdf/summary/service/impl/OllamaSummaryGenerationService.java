@@ -3,7 +3,6 @@ package com.Orio.wither_project.pdf.summary.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +18,11 @@ import com.Orio.wither_project.pdf.model.PageModel;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
 import com.Orio.wither_project.pdf.summary.model.ProgressUpdateDTO;
+import com.Orio.wither_project.pdf.summary.model.SummaryResponse;
 import com.Orio.wither_project.pdf.summary.model.SummaryType;
 import com.Orio.wither_project.pdf.summary.service.IPDFSummaryGenerationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,8 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
 
     private final SimpMessagingTemplate messagingTemplate;
 
+    private final ObjectMapper objectMapper;
+
     @Override
     public String summarize(String text, SummaryType type) {
         logger.info("Starting summary generation for type: {}", type);
@@ -53,45 +57,13 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     }
 
     @Override
-    public String summarize(String text, String instruction, String responseFormat) {
-        logger.info("Starting text summarization with custom instruction");
-        logger.debug("Text length: {} characters", text.length());
-        logger.debug("Instruction: {}", instruction);
-
-        try {
-            UserMessage instructionMessage = new UserMessage(instruction);
-            UserMessage userMessage = new UserMessage(text);
-            Prompt prompt = new Prompt(
-                    List.of(promptConfig.getContinuousSummarySystemMessage(), instructionMessage, userMessage),
-                    OllamaOptions.builder().withFormat("json").build());
-
-            logger.debug("Sending request to Ollama model");
-            ChatResponse response = ollamaChatModel.call(prompt);
-
-            if (response != null && response.getResult() != null) {
-                String summary = response.getResult().getOutput().getContent();
-                logger.info("Summary generated successfully. Length: {} characters", summary.length());
-                logger.debug("Generated summary: {}", summary);
-                return summary;
-            } else {
-                logger.warn("Received null response or result from Ollama model");
-                return "Unable to generate summary: no response from model.";
-            }
-
-        } catch (Exception e) {
-            logger.error("Failed to generate summary: {}", e.getMessage(), e);
-            return String.format("Error during summary generation: %s", e.getMessage());
-        }
-    }
-
-    @Override
     public String summarize(String text, String instruction) {
         int attempts = 0;
 
         while (attempts < MAX_RETRIES) {
             try {
                 logger.info("Attempt {} of {} to generate summary", attempts + 1, MAX_RETRIES);
-                return summarize(text, instruction, promptConfig.getSummaryJsonSchema());
+                return summarize(text, instruction, "this argument is to be removed"); // TODO
             } catch (Exception e) {
                 attempts++;
                 logger.warn("Attempt {} failed, reason: {}", attempts, e.getMessage());
@@ -110,6 +82,64 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
 
         logger.error("All {} retry attempts failed", MAX_RETRIES);
         return SUMMARIZATION_FAILED_MESSAGE;
+    }
+
+    // !RETRY
+    // ! Delete the method above and uncomment this one
+    // @Override
+    // public String summarize(String text, String instruction) {
+    // try {
+    // logger.info("Attempting to generate summary");
+    // return summarize(text, instruction, promptConfig.getSummaryJsonSchema());
+    // } catch (Exception e) {
+    // logger.error("Failed to generate summary after multiple retries: {}",
+    // e.getMessage(), e);
+    // return SUMMARIZATION_FAILED_MESSAGE;
+    // }
+    // }
+
+    @Override
+    // !RETRY
+    // ! @Retryable(maxAttempts = MAX_RETRIES, backoff = @Backoff(delay =
+    // WAIT_TIME_MS))
+    public String summarize(String text, String instruction, String responseFormat) {
+        logger.info("Starting text summarization with custom instruction");
+        logger.debug("Text length: {} characters", text.length());
+        logger.debug("Instruction: {}", instruction);
+
+        try {
+            UserMessage instructionMessage = new UserMessage(instruction);
+            UserMessage userMessage = new UserMessage(text);
+            Prompt prompt = new Prompt(
+                    List.of(promptConfig.getContinuousSummarySystemMessage(), promptConfig.getSummaryJsonSchema(),
+                            instructionMessage, userMessage),
+                    OllamaOptions.builder().withFormat("json").build());
+
+            logger.debug("Sending request to Ollama model");
+            ChatResponse response = ollamaChatModel.call(prompt);
+
+            if (response != null && response.getResult() != null) {
+                String jsonResponse = response.getResult().getOutput().getContent();
+                logger.debug("Received JSON response: {}", jsonResponse);
+
+                try {
+                    SummaryResponse summaryResponse = objectMapper.readValue(jsonResponse, SummaryResponse.class);
+                    String summary = summaryResponse.getSummary();
+                    logger.info("Summary extracted successfully. Length: {} characters", summary.length());
+                    return summary;
+                } catch (JsonProcessingException e) {
+                    logger.error("Failed to parse JSON response: {}", e.getMessage());
+                    return "Unable to parse summary from model response.";
+                }
+            } else {
+                logger.warn("Received null response or result from Ollama model");
+                return "Unable to generate summary: no response from model.";
+            }
+
+        } catch (Exception e) {
+            logger.error("Failed to generate summary: {}", e.getMessage(), e);
+            return String.format("Error during summary generation: %s", e.getMessage());
+        }
     }
 
     private String getInstructionForType(SummaryType type) {
@@ -148,7 +178,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     }
 
     private List<String> splitTextIntoParts(String text, int groupSize) {
-        String[] parts = text.split("\n\n\n\n");
+        String[] parts = text.split("\n\n\n\n"); // TODO Extract to constant
         logger.debug("Initial split resulted in {} raw parts", parts.length);
 
         if (parts.length == 0) {

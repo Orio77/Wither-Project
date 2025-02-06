@@ -34,7 +34,7 @@ public class DocumentModel {
     @NotBlank
     @Size(max = 255)
     @Column()
-    private String title;
+    private String title; // TODO Make Unique
 
     @NotBlank
     @Size(max = 255)
