@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(exclude = { "chapter" })
 public class PageModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

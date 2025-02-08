@@ -60,7 +60,7 @@ public class BasicChapterExtractionService implements IPDFChapterExtractionServi
             pages.add(createPage(pageNum, chapter, doc));
         }
 
-        chapter.setPages(pages);
+        chapter.addPages(pages);
         log.debug("Completed chapter {} creation with {} pages", chapterNumber, pages.size());
         return chapter;
     }
@@ -70,7 +70,6 @@ public class BasicChapterExtractionService implements IPDFChapterExtractionServi
 
         final PageModel page = new PageModel();
         page.setPageNumber(pageNum + 1);
-        page.setChapter(chapter);
 
         try {
             PDFTextStripper stripper = new PDFTextStripper();

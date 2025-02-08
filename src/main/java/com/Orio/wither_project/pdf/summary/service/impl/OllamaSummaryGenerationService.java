@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.Orio.wither_project.pdf.model.PageModel;
+import com.Orio.wither_project.pdf.service.storage.ISQLDocumentService;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
 import com.Orio.wither_project.pdf.summary.model.ProgressUpdateDTO;
@@ -43,6 +44,8 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     private final SimpMessagingTemplate messagingTemplate;
 
     private final ObjectMapper objectMapper;
+
+    private final ISQLDocumentService sqlDocumentService;
 
     @Override
     public String summarize(String text, SummaryType type) {
@@ -99,9 +102,6 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     // }
 
     @Override
-    // !RETRY
-    // ! @Retryable(maxAttempts = MAX_RETRIES, backoff = @Backoff(delay =
-    // WAIT_TIME_MS))
     public String summarize(String text, String instruction, String responseFormat) {
         logger.info("Starting text summarization with custom instruction");
         logger.debug("Text length: {} characters", text.length());
@@ -111,7 +111,9 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             UserMessage instructionMessage = new UserMessage(instruction);
             UserMessage userMessage = new UserMessage(text);
             Prompt prompt = new Prompt(
-                    List.of(promptConfig.getContinuousSummarySystemMessage(), promptConfig.getSummaryJsonSchema(),
+                    List.of(promptConfig.getDetailedTechnicalSummarySystemMessage(),
+                            promptConfig.getContinuousSummarySystemMessage(),
+                            promptConfig.getSummaryJsonSchema(),
                             instructionMessage, userMessage),
                     OllamaOptions.builder().withFormat("json").build());
 
@@ -283,27 +285,24 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
         logger.info("Generating page summaries sequentially for {} pages", pages.size());
         AtomicInteger i = new AtomicInteger(0);
-
-        // for (int j = 0; j <= 100; j += 10) {
-        // messagingTemplate.convertAndSend("/topic/progress", i);
-        // try {
-        // Thread.sleep(1000);
-        // } catch (InterruptedException e) {
-        // e.printStackTrace();
-        // }
-        // }
-
         List<PageSummaryModel> summaries = new ArrayList<>();
+        List<PageModel> pagesToSave = new ArrayList<>();
         int totalPages = pages.size();
 
-        for (PageModel page : pages) {
+        for (int j = 0; j < pages.size(); j++) {
+            PageModel page = pages.get(j);
             final int curPage = i.incrementAndGet();
             String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
             String summaryText = summarize(text, SummaryType.PAGE);
 
             PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
-            summaryModel.setPage(page);
-            page.setSummary(summaryModel);
+            summaryModel.addPage(page);
+            pagesToSave.add(page);
+
+            if ((j + 1) % 5 == 0 || j == pages.size() - 1) {
+                sqlDocumentService.savePages(pagesToSave);
+                pagesToSave.clear();
+            }
 
             ProgressUpdateDTO progressUpdate = new ProgressUpdateDTO(curPage, totalPages);
             logger.info("Messaging template: " + messagingTemplate);

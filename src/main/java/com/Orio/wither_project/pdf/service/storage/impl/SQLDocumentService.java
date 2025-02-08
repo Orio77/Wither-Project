@@ -40,7 +40,7 @@ public class SQLDocumentService implements ISQLDocumentService {
             fileEntity.setName(pdf.getOriginalFilename());
             fileEntity.setContentType(pdf.getContentType());
             fileEntity.setData(pdf.getBytes());
-            return fileRepo.save(fileEntity) != null;
+            return fileRepo.saveAndFlush(fileEntity) != null;
         } catch (IOException e) {
             logger.error("Error saving PDF file", e);
             return false;
@@ -76,7 +76,7 @@ public class SQLDocumentService implements ISQLDocumentService {
     @Override
     public boolean savePages(List<PageModel> pages) {
         logger.info("Saving {} pages", pages.size());
-        boolean result = pageRepo.saveAll(pages) != null;
+        boolean result = pageRepo.saveAllAndFlush(pages) != null;
         logger.info("Pages saved: {}", result);
         return result;
     }
@@ -97,7 +97,7 @@ public class SQLDocumentService implements ISQLDocumentService {
     @Override
     public boolean saveChapters(List<ChapterModel> chapters) {
         logger.info("Saving {} chapters", chapters.size());
-        boolean result = chapterRepo.saveAll(chapters) != null;
+        boolean result = chapterRepo.saveAllAndFlush(chapters) != null;
         logger.info("Chapters saved: {}", result);
         return result;
     }
@@ -118,7 +118,7 @@ public class SQLDocumentService implements ISQLDocumentService {
     @Override
     public boolean saveDoc(DocumentModel documentModel) {
         logger.info("Saving document: {}", documentModel.getTitle());
-        boolean result = pdfRepo.save(documentModel) != null;
+        boolean result = pdfRepo.saveAndFlush(documentModel) != null;
         logger.info("Document saved: {}", result);
         return result;
     }

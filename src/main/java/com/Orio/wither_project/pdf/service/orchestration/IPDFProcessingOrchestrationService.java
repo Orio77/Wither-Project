@@ -10,6 +10,8 @@ public interface IPDFProcessingOrchestrationService {
         if (doc == null)
             return false;
 
+        save(doc);
+
         return setMetadata(doc) &&
                 setContents(doc) &&
                 setSummaries(doc);
@@ -22,4 +24,6 @@ public interface IPDFProcessingOrchestrationService {
     boolean setContents(DocumentModel model);
 
     boolean setSummaries(DocumentModel model);
+
+    void save(DocumentModel model);
 }

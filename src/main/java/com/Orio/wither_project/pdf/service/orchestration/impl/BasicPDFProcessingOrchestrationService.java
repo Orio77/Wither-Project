@@ -2,13 +2,13 @@ package com.Orio.wither_project.pdf.service.orchestration.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.Orio.wither_project.pdf.exception.PDFProcessingException;
@@ -48,14 +48,10 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
         try (PDDocument doc = conversionService.convertToPdDocument(file)) {
             DocumentModel docModel = new DocumentModel();
             List<ChapterModel> chapters = contentExtractionService.getChapters(doc);
-            docModel.setChapters(chapters);
+            docModel.addChapters(chapters);
 
-            for (ChapterModel chapterModel : chapters) {
-                chapterModel.setDoc(docModel);
-            }
-
-            docModel.setAuthor(metaDataExtractionService.getAuthor(doc)); // TODO Remove that and put that into
-                                                                          // setMetadata method
+            // TODO Remove that and put that into setMetadata method
+            docModel.setAuthor(metaDataExtractionService.getAuthor(doc));
             docModel.setTitle(metaDataExtractionService.getTitle(doc));
             docModel.setFileName(metaDataExtractionService.getFileName(doc));
 
@@ -75,49 +71,48 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
     }
 
     @Override
-    @Transactional
     public boolean setContents(DocumentModel model) {
-        Assert.notNull(model, "Document model cannot be null");
-        Assert.notNull(model.getChapters(), "Chapters cannot be null");
-
-        logger.info("Setting contents for document: {}", model.getFileName());
-        try {
-            // pdfSavingService.saveDoc(model);
-
-            List<ChapterModel> chapters = model.getChapters();
-            chapters.forEach(chapter -> chapter.setDoc(model));
-            // pdfSavingService.saveChapters(chapters);
-
-            // List<PageModel> pages = extractPages(chapters);
-            // pdfSavingService.savePages(pages);
-
-            logger.info("Contents set successfully for document: {}", model.getFileName());
-            return true;
-        } catch (Exception e) {
-            logger.error("Error setting contents for document: {}", model.getFileName(), e);
-            throw new PDFProcessingException("Failed to set contents", e);
-        }
+        return true;
     }
 
     @Override
-    @Transactional
+    public void save(DocumentModel model) {
+        Assert.notNull(model, "Document model cannot be null");
+        Assert.notNull(model.getChapters(), "Chapters cannot be null");
+        logger.info("Saving document: {}", model.getFileName());
+        pdfSavingService.saveDoc(model);
+        logger.info("Document saved successfully: {}", model.getFileName());
+
+        logger.info("Saving chapters for document: {}", model.getFileName());
+        List<ChapterModel> chapters = model.getChapters();
+        pdfSavingService.saveChapters(chapters);
+        logger.info("{} Chapters saved successfully for document: {}", chapters.size(), model.getFileName());
+
+        AtomicInteger totalPageCount = new AtomicInteger(0);
+
+        chapters.forEach(chapter -> {
+            logger.info("Saving pages for chapter: {}", chapter.getTitle());
+            pdfSavingService.savePages(chapter.getPages());
+            totalPageCount.addAndGet(chapter.getPages().size());
+            logger.info("{} Pages saved successfully for chapter: {}", chapter.getPages().size(), chapter.getTitle());
+        });
+
+        logger.info("{} Pages saved successfully for document: {}", totalPageCount.get(), model.getFileName());
+    }
+
+    @Override
     public boolean setSummaries(DocumentModel model) {
         Assert.notNull(model, "Document model cannot be null");
         Assert.notNull(model.getChapters(), "Chapters cannot be null");
 
         logger.info("Setting summaries for document: {}", model.getFileName());
         try {
-            // pdfSavingService.saveDoc(model);
-
             List<ChapterModel> chapters = model.getChapters();
             if (chapters == null || chapters.isEmpty()) {
                 throw new PDFProcessingException("No chapters found for document");
             }
 
-            chapters.forEach(chapter -> chapter.setDoc(model));
-            // pdfSavingService.saveChapters(chapters);
-
-            generateAndSavePageSummaries(chapters);
+            generateAndSavePageSummaries(extractPages(chapters));
             generateAndSaveChapterSummaries(chapters);
             generateAndSaveBookSummary(model, chapters);
 
@@ -137,13 +132,11 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
                 .collect(Collectors.toList());
     }
 
-    private void generateAndSavePageSummaries(List<ChapterModel> chapters) { // TODO Add pages summarized progress
+    private void generateAndSavePageSummaries(List<PageModel> pages) {
         logger.debug("Generating and saving page summaries");
-        List<PageModel> pages = extractPages(chapters);
 
         summaryGenerationService.generatePageSummaries(pages);
 
-        // pdfSavingService.savePages(pages);
         logger.debug("Page summaries generated and saved successfully");
     }
 
@@ -160,7 +153,6 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
             chapter.setSummary(chapterSummaryModel);
         });
 
-        // pdfSavingService.saveChapters(chapters);
         logger.info("Chapter summaries generated and saved successfully");
     }
 
@@ -169,13 +161,12 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
         String chapterSummaries = chapters.stream()
                 .map(ChapterModel::getSummary)
                 .map(ChapterSummaryModel::getContent)
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining("\n\n\n\n"));
         String bookSummary = summaryGenerationService.summarizeDocument(chapterSummaries);
         BookSummaryModel bookSummaryModel = new BookSummaryModel(bookSummary);
         model.setSummary(bookSummaryModel);
         bookSummaryModel.setBook(model);
 
-        // pdfSavingService.saveDoc(model);
         logger.info("Book summary generated and saved successfully for document: {}", model.getFileName());
     }
 }

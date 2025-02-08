@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.config.TestTextConfiguration;
+import com.Orio.wither_project.pdf.service.storage.impl.SQLDocumentService;
 import com.Orio.wither_project.pdf.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.pdf.summary.service.impl.OllamaSummaryGenerationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,9 @@ class PromptModelCombinationTest {
 
         @Autowired
         private ObjectMapper objectMapper;
+
+        @Autowired
+        private SQLDocumentService sqlDocumentService;
 
         private static final int GENERATIONS_PER_COMBINATION = 1;
 
@@ -87,14 +91,15 @@ class PromptModelCombinationTest {
                                                                 .withModel(model).withNumCtx(ollamaConfig.getNumCTX()))
                                                 .build();
                                 OllamaSummaryGenerationService service = new OllamaSummaryGenerationService(chatModel,
-                                                promptConfig, messagingTemplate, objectMapper);
+                                                promptConfig, messagingTemplate, objectMapper, sqlDocumentService);
 
                                 // Test different prompt types
                                 testPromptType(service, "Executive", promptConfig.getExecutiveSummarySystemMessage(),
                                                 promptConfig.getExecutiveSummaryJsonSchema(), writer, model);
                                 testPromptType(service, "Technical",
                                                 promptConfig.getDetailedTechnicalSummarySystemMessage(),
-                                                promptConfig.getDetailedTechnicalSummaryJsonSchema(), writer,
+                                                promptConfig.getDetailedTechnicalSummaryJsonSchema().getContent(),
+                                                writer,
                                                 model);
                                 testPromptType(service, "Creative", promptConfig.getCreativeSummarySystemMessage(),
                                                 promptConfig.getCreativeSummaryJsonSchema(), writer, model);
