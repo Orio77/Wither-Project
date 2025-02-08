@@ -27,4 +27,9 @@ public class PageSummaryModel {
     public PageSummaryModel(String content) {
         this.content = content;
     }
+
+    public void addPage(PageModel page) {
+        this.page = page;
+        page.setSummary(this);
+    }
 }

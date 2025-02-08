@@ -2,17 +2,20 @@ package com.Orio.wither_project.pdf.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.Orio.wither_project.pdf.summary.model.ChapterSummaryModel;
 
 @Data
 @Entity
+@EqualsAndHashCode(exclude = { "pages", "doc" })
 public class ChapterModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +38,19 @@ public class ChapterModel {
     private int chapterNumber;
 
     @JsonBackReference
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToOne()
     @JoinColumn(name = "book_id")
     private DocumentModel doc;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<PageModel> pages;
+
+    public void addPages(List<PageModel> pages) {
+        if (this.pages == null) {
+            this.pages = new ArrayList<>();
+        }
+        this.pages.addAll(pages);
+        pages.forEach(page -> page.setChapter(this));
+    }
 }

@@ -9,6 +9,7 @@ import lombok.ToString;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.Orio.wither_project.pdf.summary.model.BookSummaryModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +34,6 @@ public class DocumentModel {
 
     @NotBlank
     @Size(max = 255)
-    @Column()
     private String title; // TODO Make Unique
 
     @NotBlank
@@ -42,6 +42,14 @@ public class DocumentModel {
 
     @JsonManagedReference
     @ToString.Exclude
-    @OneToMany(mappedBy = "doc", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "doc", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<ChapterModel> chapters;
+
+    public void addChapters(List<ChapterModel> chapters) {
+        if (this.chapters == null) {
+            this.chapters = new ArrayList<>();
+        }
+        this.chapters.addAll(chapters);
+        chapters.forEach(chapter -> chapter.setDoc(this));
+    }
 }
