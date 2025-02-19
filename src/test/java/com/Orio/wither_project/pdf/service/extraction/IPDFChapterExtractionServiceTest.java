@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.pdf.model.ChapterModel;
-import com.Orio.wither_project.pdf.model.PageModel;
+import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.service.extraction.IPDFChapterExtractionService;
 
 @SpringBootTest
 @ActiveProfiles("test")

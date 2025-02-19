@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.Orio.wither_project.gather.storage.sql.service.ISQLPDFService;
-import com.Orio.wither_project.pdf.model.DocumentModel;
 import com.Orio.wither_project.repository.ISQLPDFDocumentRepo;
+import com.Orio.wither_project.summary.model.DocumentModel;
 
 import lombok.RequiredArgsConstructor;
 

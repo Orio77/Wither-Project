@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.Orio.wither_project.pdf.model.DocumentModel;
 import com.Orio.wither_project.pdf.repository.entity.FileEntity;
-import com.Orio.wither_project.pdf.service.conversion.IPDFConversionService;
+import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
 
 @SpringBootTest
 class PDFConversionServiceTest {

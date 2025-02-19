@@ -17,7 +17,7 @@ import com.Orio.wither_project.pdf.repository.entity.FileEntity;
 class FileRepoTest {
 
     @Autowired
-    private FileRepo fileRepo;
+    private FilePDFRepo fileRepo;
 
     private FileEntity testFile;
 

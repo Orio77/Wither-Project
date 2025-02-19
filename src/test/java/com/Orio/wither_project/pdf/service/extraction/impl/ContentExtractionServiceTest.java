@@ -20,10 +20,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.Orio.wither_project.pdf.model.ChapterModel;
-import com.Orio.wither_project.pdf.model.PageModel;
-import com.Orio.wither_project.pdf.service.extraction.IPDFChapterExtractionService;
 import com.Orio.wither_project.pdf.util.TestUtils;
+import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.service.extraction.IPDFChapterExtractionService;
+import com.Orio.wither_project.summary.service.extraction.impl.BasicContentExtractionService;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("BasicContentExtractionService Tests")

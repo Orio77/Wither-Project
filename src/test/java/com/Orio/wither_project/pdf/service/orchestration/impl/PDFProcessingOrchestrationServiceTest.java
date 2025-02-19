@@ -20,16 +20,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.Orio.wither_project.pdf.model.ChapterModel;
-import com.Orio.wither_project.pdf.model.DocumentModel;
-import com.Orio.wither_project.pdf.model.PageModel;
 import com.Orio.wither_project.pdf.repository.entity.FileEntity;
-import com.Orio.wither_project.pdf.service.conversion.impl.BasicPDFConversionService;
-import com.Orio.wither_project.pdf.service.extraction.impl.ApachePDFBoxMetaDataExtractionService;
-import com.Orio.wither_project.pdf.service.extraction.impl.BasicContentExtractionService;
-import com.Orio.wither_project.pdf.service.storage.impl.SQLDocumentService;
-import com.Orio.wither_project.pdf.summary.service.impl.OllamaSummaryGenerationService;
 import com.Orio.wither_project.pdf.util.TestUtils;
+import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.service.conversion.impl.BasicPDFConversionService;
+import com.Orio.wither_project.summary.service.extraction.impl.ApachePDFBoxMetaDataExtractionService;
+import com.Orio.wither_project.summary.service.extraction.impl.BasicContentExtractionService;
+import com.Orio.wither_project.summary.service.orchestration.impl.BasicPDFProcessingOrchestrationService;
+import com.Orio.wither_project.summary.service.storage.impl.SQLDocumentService;
+import com.Orio.wither_project.summary.summary.service.impl.OllamaSummaryGenerationService;
 
 @SpringBootTest
 @ActiveProfiles("test")

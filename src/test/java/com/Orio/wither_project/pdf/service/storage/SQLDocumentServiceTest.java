@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.pdf.model.ChapterModel;
-import com.Orio.wither_project.pdf.model.DocumentModel;
-import com.Orio.wither_project.pdf.model.PageModel;
-import com.Orio.wither_project.pdf.repository.ChapterRepo;
-import com.Orio.wither_project.pdf.repository.PDFRepo;
-import com.Orio.wither_project.pdf.repository.PageRepo;
-import com.Orio.wither_project.pdf.service.storage.impl.SQLDocumentService;
+import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.repository.ChapterRepo;
+import com.Orio.wither_project.summary.repository.PDFRepo;
+import com.Orio.wither_project.summary.repository.PageRepo;
+import com.Orio.wither_project.summary.service.storage.impl.SQLDocumentService;
 
 @SpringBootTest
 @ActiveProfiles("test")

@@ -18,13 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.config.TestTextConfiguration;
-import com.Orio.wither_project.pdf.model.DocumentModel;
-import com.Orio.wither_project.pdf.model.PageModel;
-import com.Orio.wither_project.pdf.service.conversion.IPDFConversionService;
-import com.Orio.wither_project.pdf.summary.model.PageSummaryModel;
-import com.Orio.wither_project.pdf.summary.model.SummaryType;
-import com.Orio.wither_project.pdf.summary.service.IPDFParallelSummaryGenerationService;
-import com.Orio.wither_project.pdf.summary.service.IPDFSummaryGenerationService;
+import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
+import com.Orio.wither_project.summary.summary.model.PageSummaryModel;
+import com.Orio.wither_project.summary.summary.model.SummaryType;
+import com.Orio.wither_project.summary.summary.service.IPDFParallelSummaryGenerationService;
+import com.Orio.wither_project.summary.summary.service.IPDFSummaryGenerationService;
 
 @SpringBootTest
 @ActiveProfiles("test")

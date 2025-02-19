@@ -3,7 +3,7 @@ package com.Orio.wither_project.gather.storage.sql.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.Orio.wither_project.pdf.model.DocumentModel;
+import com.Orio.wither_project.summary.model.DocumentModel;
 
 public interface ISQLPDFService {
 
