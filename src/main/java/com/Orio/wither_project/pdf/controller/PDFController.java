@@ -53,16 +53,16 @@ public class PDFController {
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE)
-    public FileEntity getFile(@RequestParam(required = true) String name) {
+    public FileEntity getFile(@RequestParam(required = true) String name) { // TODO change to pdf
         logger.info("Received request to get PDF with name: {}", name);
 
         return sqlPDFService.getPDF(name);
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE_ALL)
-    public List<FileEntity> getAllFiles() {
+    public List<FileEntity> getAllFiles() { // TODO change to pdfs
         logger.info("Received request to get all PDFs");
-        return sqlPDFService.getAllPDFs(); // TODO name inconsistency
+        return sqlPDFService.getAllPDFs();
     }
 
 }
