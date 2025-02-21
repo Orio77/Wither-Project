@@ -21,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.config.TestTextConfiguration;
+import com.Orio.wither_project.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.summary.service.storage.impl.SQLDocumentService;
-import com.Orio.wither_project.summary.summary.config.SummaryPromptConfig;
-import com.Orio.wither_project.summary.summary.service.impl.OllamaSummaryGenerationService;
+import com.Orio.wither_project.summary.service.generation.impl.OllamaSummaryGenerationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import au.com.bytecode.opencsv.CSVWriter;

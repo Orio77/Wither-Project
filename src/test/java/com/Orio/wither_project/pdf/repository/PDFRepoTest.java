@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.Orio.wither_project.summary.model.DocumentModel;
-import com.Orio.wither_project.summary.repository.PDFRepo;
+import com.Orio.wither_project.summary.repository.DocumentModelRepo;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -22,7 +22,7 @@ import com.Orio.wither_project.summary.repository.PDFRepo;
 class PDFRepoTest {
 
     @Autowired
-    private PDFRepo pdfRepo;
+    private DocumentModelRepo pdfRepo;
 
     private DocumentModel testDoc;
 

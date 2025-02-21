@@ -1,6 +1,5 @@
 package com.Orio.wither_project.summary.model;
 
-import com.Orio.wither_project.summary.summary.model.PageSummaryModel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;

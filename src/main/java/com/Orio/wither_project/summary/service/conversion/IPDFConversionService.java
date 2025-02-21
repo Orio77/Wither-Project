@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.summary.model.DocumentModel;
 
 public interface IPDFConversionService {

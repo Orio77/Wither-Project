@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.pdf.repository.FilePDFRepo;
+import com.Orio.wither_project.pdf.repository.PDFRepo;
 import com.Orio.wither_project.summary.model.ChapterModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
 import com.Orio.wither_project.summary.model.PageModel;
 import com.Orio.wither_project.summary.repository.ChapterRepo;
-import com.Orio.wither_project.summary.repository.PDFRepo;
+import com.Orio.wither_project.summary.repository.DocumentModelRepo;
 import com.Orio.wither_project.summary.repository.PageRepo;
 import com.Orio.wither_project.summary.service.storage.ISQLDocumentService;
 
@@ -26,9 +26,9 @@ public class SQLDocumentService implements ISQLDocumentService {
     private static final Logger logger = LoggerFactory.getLogger(SQLDocumentService.class);
 
     private final ChapterRepo chapterRepo;
-    private final FilePDFRepo fileRepo;
+    private final PDFRepo fileRepo;
     private final PageRepo pageRepo;
-    private final PDFRepo pdfRepo;
+    private final DocumentModelRepo pdfRepo;
 
     @Override
     public boolean savePages(List<PageModel> pages) {

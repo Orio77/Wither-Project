@@ -15,7 +15,9 @@ public class PDFTestConfig {
 
     @Bean
     PDDocument testPDDocument() throws IOException {
-        try (InputStream pdfInputStream = getClass().getClassLoader().getResourceAsStream("test.pdf")) {
+        try (InputStream pdfInputStream = getClass().getClassLoader().getResourceAsStream("test.pdf")) { // TODO extract
+                                                                                                         // to constants
+                                                                                                         // (resources)
             if (pdfInputStream != null) {
                 return Loader.loadPDF(pdfInputStream.readAllBytes());
             }

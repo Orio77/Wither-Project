@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -17,7 +17,7 @@ import com.Orio.wither_project.pdf.repository.entity.FileEntity;
 class FileRepoTest {
 
     @Autowired
-    private FilePDFRepo fileRepo;
+    private PDFRepo fileRepo;
 
     private FileEntity testFile;
 

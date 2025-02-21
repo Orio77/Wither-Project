@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Orio.wither_project.constants.ApiPaths;
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.pdf.service.storage.ISQLPDFService;
 import com.Orio.wither_project.summary.model.DocumentModel;
 import com.Orio.wither_project.summary.model.dto.ProcessRequestDTO;

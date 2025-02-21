@@ -2,7 +2,7 @@ package com.Orio.wither_project.summary.service.orchestration;
 
 import java.io.IOException;
 
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.summary.model.DocumentModel;
 
 public interface IPDFProcessingOrchestrationService {

@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.Orio.wither_project.pdf.repository.FilePDFRepo;
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
+import com.Orio.wither_project.pdf.repository.PDFRepo;
 import com.Orio.wither_project.pdf.service.storage.ISQLPDFService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class SQLPDFService implements ISQLPDFService {
 
     private static final Logger logger = LoggerFactory.getLogger(SQLPDFService.class);
 
-    private final FilePDFRepo fileRepo;
+    private final PDFRepo fileRepo;
 
     @Override
     public boolean savePDF(MultipartFile pdf) {

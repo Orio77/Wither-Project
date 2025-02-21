@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 
-import com.Orio.wither_project.summary.summary.model.BookSummaryModel;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class DocumentModel { // TODO Make Unique
 
     @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
-    private BookSummaryModel summary; // TODO Resolve name inconsistency
+    private DocumentSummaryModel summary; // TODO Resolve name inconsistency
 
     @Column(name = "file_name")
     private String fileName;

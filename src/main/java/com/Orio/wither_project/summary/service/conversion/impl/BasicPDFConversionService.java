@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.summary.model.ChapterModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
 import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;

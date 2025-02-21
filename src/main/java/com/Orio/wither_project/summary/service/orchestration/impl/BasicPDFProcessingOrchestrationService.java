@@ -11,20 +11,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.Orio.wither_project.pdf.repository.entity.FileEntity;
+import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.summary.exception.PDFProcessingException;
 import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.ChapterSummaryModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.DocumentSummaryModel;
 import com.Orio.wither_project.summary.model.PageModel;
+import com.Orio.wither_project.summary.model.PageSummaryModel;
 import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
 import com.Orio.wither_project.summary.service.extraction.IPDFContentExtractionService;
 import com.Orio.wither_project.summary.service.extraction.IPDFMetaDataExtractionService;
+import com.Orio.wither_project.summary.service.generation.IPDFSummaryGenerationService;
 import com.Orio.wither_project.summary.service.orchestration.IPDFProcessingOrchestrationService;
 import com.Orio.wither_project.summary.service.storage.ISQLDocumentService;
-import com.Orio.wither_project.summary.summary.model.BookSummaryModel;
-import com.Orio.wither_project.summary.summary.model.ChapterSummaryModel;
-import com.Orio.wither_project.summary.summary.model.PageSummaryModel;
-import com.Orio.wither_project.summary.summary.service.IPDFSummaryGenerationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -163,7 +163,7 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
                 .map(ChapterSummaryModel::getContent)
                 .collect(Collectors.joining("\n\n\n\n"));
         String bookSummary = summaryGenerationService.summarizeDocument(chapterSummaries);
-        BookSummaryModel bookSummaryModel = new BookSummaryModel(bookSummary);
+        DocumentSummaryModel bookSummaryModel = new DocumentSummaryModel(bookSummary);
         model.setSummary(bookSummaryModel);
         bookSummaryModel.setBook(model);
 
