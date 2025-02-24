@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class DocumentModel { // TODO Make Unique
+public class DocumentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class DocumentModel { // TODO Make Unique
 
     @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
-    private DocumentSummaryModel summary; // TODO Resolve name inconsistency
+    private DocumentSummaryModel summary;
 
     @Column(name = "file_name")
     private String fileName;
@@ -33,7 +33,8 @@ public class DocumentModel { // TODO Make Unique
 
     @NotBlank
     @Size(max = 255)
-    private String title; // TODO Make Unique
+    @Column(unique = true)
+    private String title;
 
     @NotBlank
     @Size(max = 255)

@@ -28,7 +28,7 @@ public class PDFController {
     private final ISQLPDFService sqlPDFService;
 
     @PostMapping(value = ApiPaths.BASE + ApiPaths.PDF_UPLOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> upload(@RequestParam("pdf") MultipartFile pdf) {
+    public ResponseEntity<String> upload(@RequestParam("pdf") MultipartFile pdf, @RequestParam("name") String name) {
         logger.info("Received request to upload PDF: {}", pdf.getOriginalFilename());
 
         if (pdf.isEmpty()) {
@@ -37,7 +37,7 @@ public class PDFController {
         }
 
         try {
-            boolean saved = sqlPDFService.savePDF(pdf);
+            boolean saved = sqlPDFService.savePDF(pdf, name);
             if (saved) {
                 logger.info("File uploaded successfully");
                 return ResponseEntity.ok("File uploaded successfully");
@@ -53,14 +53,14 @@ public class PDFController {
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE)
-    public FileEntity getFile(@RequestParam(required = true) String name) { // TODO change to pdf
+    public FileEntity getPDF(@RequestParam(required = true) String name) {
         logger.info("Received request to get PDF with name: {}", name);
 
         return sqlPDFService.getPDF(name);
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE_ALL)
-    public List<FileEntity> getAllFiles() { // TODO change to pdfs
+    public List<FileEntity> getAllPDFs() {
         logger.info("Received request to get all PDFs");
         return sqlPDFService.getAllPDFs();
     }

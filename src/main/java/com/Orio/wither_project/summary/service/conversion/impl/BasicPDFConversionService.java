@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.Orio.wither_project.pdf.model.entity.FileEntity;
+import com.Orio.wither_project.summary.config.SummaryConstantsConfig;
 import com.Orio.wither_project.summary.model.ChapterModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
 import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
@@ -23,39 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class BasicPDFConversionService implements IPDFConversionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BasicPDFConversionService.class);
-    private static final String FILENAME_METADATA_KEY = "FileName";
 
     private final IPDFContentExtractionService contentExtractionService;
-
-    @Override
-    public DocumentModel convertToDocumentModel(PDDocument pddoc) {
-        logger.info("Starting PDF document conversion to DocumentModel");
-        if (pddoc == null) {
-            throw new IllegalArgumentException("PDDocument cannot be null");
-        }
-
-        PDDocumentInformation info = pddoc.getDocumentInformation();
-        if (info == null) {
-            info = new PDDocumentInformation();
-        }
-
-        String author = info.getAuthor();
-        String title = info.getTitle();
-        String fileName = info.getCustomMetadataValue(FILENAME_METADATA_KEY);
-
-        logger.debug("Extracted metadata - Author: {}, Title: {}, FileName: {}", author, title, fileName);
-
-        DocumentModel doc = new DocumentModel();
-        doc.setAuthor(author);
-        doc.setTitle(title);
-        doc.setFileName(fileName);
-
-        List<ChapterModel> chapters = contentExtractionService.getChapters(pddoc);
-        doc.setChapters(chapters);
-
-        logger.info("PDF document conversion completed successfully");
-        return doc;
-    }
+    private final SummaryConstantsConfig constantsConfig;
 
     @Override
     public PDDocument convertToPdDocument(FileEntity file) throws IOException {
@@ -72,8 +43,10 @@ public class BasicPDFConversionService implements IPDFConversionService {
         try {
             PDDocument document = Loader.loadPDF(data);
             String name = file.getName();
+            String fileName = file.getFileName();
             PDDocumentInformation info = new PDDocumentInformation();
-            info.setCustomMetadataValue(FILENAME_METADATA_KEY, name);
+            info.setTitle(name);
+            info.setCustomMetadataValue(constantsConfig.getFileName(), fileName);
             document.setDocumentInformation(info);
 
             logger.info("Successfully converted file to PDDocument");
@@ -82,6 +55,36 @@ public class BasicPDFConversionService implements IPDFConversionService {
             logger.error("Failed to convert file to PDDocument: {}", e.getMessage());
             throw new IOException("Failed to convert file to PDDocument", e);
         }
+    }
+
+    @Override
+    public DocumentModel convertToDocumentModel(PDDocument pddoc) {
+        logger.info("Starting PDF document conversion to DocumentModel");
+        if (pddoc == null) {
+            throw new IllegalArgumentException("PDDocument cannot be null");
+        }
+
+        PDDocumentInformation info = pddoc.getDocumentInformation();
+        if (info == null) {
+            info = new PDDocumentInformation();
+        }
+
+        String author = info.getAuthor();
+        String title = info.getTitle();
+        String fileName = info.getCustomMetadataValue(constantsConfig.getFileName());
+
+        logger.debug("Extracted metadata - Author: {}, Title: {}, FileName: {}", author, title, fileName);
+
+        DocumentModel doc = new DocumentModel();
+        doc.setAuthor(author);
+        doc.setTitle(title);
+        doc.setFileName(fileName);
+
+        List<ChapterModel> chapters = contentExtractionService.getChapters(pddoc);
+        doc.setChapters(chapters);
+
+        logger.info("PDF document conversion completed successfully");
+        return doc;
     }
 
 }

@@ -24,10 +24,11 @@ public class SQLPDFService implements ISQLPDFService {
     private final PDFRepo fileRepo;
 
     @Override
-    public boolean savePDF(MultipartFile pdf) {
+    public boolean savePDF(MultipartFile pdf, String name) {
         try {
             FileEntity fileEntity = new FileEntity();
-            fileEntity.setName(pdf.getOriginalFilename());
+            fileEntity.setFileName(pdf.getOriginalFilename());
+            fileEntity.setName(name);
             fileEntity.setContentType(pdf.getContentType());
             fileEntity.setData(pdf.getBytes());
             return fileRepo.saveAndFlush(fileEntity) != null;

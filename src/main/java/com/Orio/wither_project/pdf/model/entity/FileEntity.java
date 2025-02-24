@@ -14,6 +14,8 @@ public class FileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String fileName;
     private String name;
     private String contentType;
     @Column(columnDefinition = "bytea")

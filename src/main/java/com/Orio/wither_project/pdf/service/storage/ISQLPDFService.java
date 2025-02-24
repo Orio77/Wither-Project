@@ -8,7 +8,7 @@ import com.Orio.wither_project.pdf.model.entity.FileEntity;
 
 public interface ISQLPDFService {
 
-    public boolean savePDF(MultipartFile pdf);
+    public boolean savePDF(MultipartFile pdf, String name);
 
     public FileEntity getPDF(String name);
 
