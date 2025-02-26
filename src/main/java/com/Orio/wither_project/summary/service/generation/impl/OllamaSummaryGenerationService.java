@@ -12,12 +12,19 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.Orio.wither_project.socket.summary.model.ProgressCallback;
 import com.Orio.wither_project.summary.config.SummaryConstantsConfig;
 import com.Orio.wither_project.summary.config.SummaryPromptConfig;
+import com.Orio.wither_project.summary.exception.InvalidResponseException;
+import com.Orio.wither_project.summary.exception.ModelNotAvailableException;
+import com.Orio.wither_project.summary.exception.SummaryParsingException;
 import com.Orio.wither_project.summary.model.ChapterModel;
 import com.Orio.wither_project.summary.model.ChapterSummaryModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
@@ -36,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OllamaSummaryGenerationService implements IPDFSummaryGenerationService {
     private static final Logger logger = LoggerFactory.getLogger(OllamaSummaryGenerationService.class);
+    private static final int MAX_RETRY_ATTEMPTS = 3;
 
     private final OllamaChatModel ollamaChatModel;
     private final SummaryPromptConfig promptConfig;
@@ -43,6 +51,8 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     private final ObjectMapper objectMapper;
 
     @Override
+    @Retryable(value = { ResourceAccessException.class,
+            ModelNotAvailableException.class }, maxAttempts = MAX_RETRY_ATTEMPTS, backoff = @Backoff(delay = 1000, multiplier = 2))
     public String summarize(String text, SummaryType type) {
         logger.info("Starting summary generation for type: {}", type);
         if (text == null || text.trim().isEmpty()) {
@@ -54,7 +64,25 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         return summarize(text, instruction);
     }
 
+    @Recover
+    public String summarizeFallback(Exception e, String text, SummaryType type) {
+        logger.error("All retry attempts failed for summarization: {}", e.getMessage(), e);
+        if (text != null && text.length() > 100) {
+            // Return a truncated version of the original text as a fallback
+            return "Summary generation failed. Original text (truncated): " +
+                    text.substring(0, 100) + "...";
+        }
+        return "Summary generation failed: " + e.getMessage();
+    }
+
+    /**
+     * Generate summary for text with specific instruction
+     * 
+     * @throws RuntimeException if summary generation fails
+     */
     @Override
+    @Retryable(value = { ResourceAccessException.class,
+            ModelNotAvailableException.class }, maxAttempts = MAX_RETRY_ATTEMPTS, backoff = @Backoff(delay = 1000, multiplier = 2))
     public String summarize(String text, String instruction) {
         logger.info("Starting text summarization with custom instruction");
         logger.debug("Text length: {} characters", text.length());
@@ -73,28 +101,54 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             logger.debug("Sending request to Ollama model");
             ChatResponse response = ollamaChatModel.call(prompt);
 
-            if (response != null && response.getResult() != null) {
-                String jsonResponse = response.getResult().getOutput().getContent();
-                logger.debug("Received JSON response: {}", jsonResponse);
-
-                try {
-                    SummaryResponse summaryResponse = objectMapper.readValue(jsonResponse, SummaryResponse.class);
-                    String summary = summaryResponse.getSummary();
-                    logger.info("Summary extracted successfully. Length: {} characters", summary.length());
-                    return summary;
-                } catch (JsonProcessingException e) {
-                    logger.error("Failed to parse JSON response: {}", e.getMessage());
-                    return "Unable to parse summary from model response.";
-                }
-            } else {
-                logger.warn("Received null response or result from Ollama model");
-                return "Unable to generate summary: no response from model.";
+            if (response == null) {
+                logger.error("Received null response from Ollama model");
+                throw new ModelNotAvailableException("Ollama model returned null response");
             }
 
+            if (response.getResult() == null) {
+                logger.error("Ollama model result is null");
+                throw new InvalidResponseException("Ollama model returned null result");
+            }
+
+            String jsonResponse = response.getResult().getOutput().getContent();
+            if (jsonResponse == null || jsonResponse.trim().isEmpty()) {
+                logger.error("Ollama model returned empty content");
+                throw new InvalidResponseException("Ollama model returned empty content");
+            }
+
+            logger.debug("Received JSON response: {}", jsonResponse);
+
+            try {
+                SummaryResponse summaryResponse = objectMapper.readValue(jsonResponse, SummaryResponse.class);
+                if (summaryResponse == null || summaryResponse.getSummary() == null) {
+                    throw new SummaryParsingException("Failed to parse summary from JSON response: null value");
+                }
+
+                String summary = summaryResponse.getSummary();
+                logger.info("Summary extracted successfully. Length: {} characters", summary.length());
+                return summary;
+            } catch (JsonProcessingException e) {
+                logger.error("Failed to parse JSON response: {}", e.getMessage());
+                throw new SummaryParsingException("Failed to parse summary from model response: " + jsonResponse, e);
+            }
+        } catch (ModelNotAvailableException | InvalidResponseException | SummaryParsingException e) {
+            // Let these be caught by @Retryable
+            throw e;
         } catch (Exception e) {
-            logger.error("Failed to generate summary: {}", e.getMessage(), e);
-            return String.format("Error during summary generation: %s", e.getMessage());
+            logger.error("Unexpected error during summary generation: {}", e.getMessage(), e);
+            throw new RuntimeException("Error during summary generation", e);
         }
+    }
+
+    @Recover
+    public String summarizeFallback(Exception e, String text, String instruction) {
+        logger.error("All retry attempts failed for custom summarization: {}", e.getMessage(), e);
+        if (text != null && text.length() > 100) {
+            return "Summary generation failed. Original text (truncated): " +
+                    text.substring(0, 100) + "...";
+        }
+        return "Summary generation failed: " + e.getMessage();
     }
 
     private String getInstructionForType(SummaryType type) {
@@ -238,17 +292,44 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
         logger.info("Generating page summaries sequentially for {} pages", pages.size());
         List<PageSummaryModel> summaries = new ArrayList<>();
+        List<Integer> failedPages = new ArrayList<>();
 
         for (int j = 0; j < pages.size(); j++) {
             PageModel page = pages.get(j);
-            String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
-            String summaryText = (text.equals("No content for this page")) ? text : summarize(text, SummaryType.PAGE);
+            try {
+                String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
+                String summaryText;
 
-            PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
-            summaryModel.addPage(page);
+                if (text.equals("No content for this page")) {
+                    summaryText = text;
+                } else {
+                    try {
+                        summaryText = summarize(text, SummaryType.PAGE);
+                    } catch (Exception e) {
+                        logger.error("Failed to generate summary for page {}: {}", j, e.getMessage());
+                        failedPages.add(j);
+                        summaryText = "Summary generation failed: " + e.getMessage();
+                    }
+                }
 
-            summaries.add(summaryModel);
+                PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
+                summaryModel.addPage(page);
+                summaries.add(summaryModel);
+            } catch (Exception e) {
+                logger.error("Critical error processing page {}: {}", j, e.getMessage(), e);
+                failedPages.add(j);
+                // Create an error summary to preserve the processing flow
+                PageSummaryModel errorSummary = new PageSummaryModel("Error: " + e.getMessage());
+                errorSummary.addPage(page);
+                summaries.add(errorSummary);
+            }
         }
+
+        if (!failedPages.isEmpty()) {
+            logger.warn("Failed to generate summaries for {} pages: {}",
+                    failedPages.size(), failedPages);
+        }
+
         return summaries;
     }
 
@@ -278,8 +359,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
                 summaries.add(summaryModel);
             } catch (Exception e) {
                 logger.error("Error processing chapter summary: {}", e.getMessage(), e);
-                summaries.add(createEmptySummary(chapter, "Error processing chapter: " + e.getMessage(),
-                        ChapterSummaryModel::new, ChapterSummaryModel::addChapter));
+                throw new RuntimeException("Failed to generate chapter summary", e);
             }
         }
 
@@ -307,8 +387,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             return summaryModel;
         } catch (Exception e) {
             logger.error("Error processing document summary: {}", e.getMessage(), e);
-            return createEmptySummary(model, "Error processing document: " + e.getMessage(),
-                    DocumentSummaryModel::new, DocumentSummaryModel::addDocument);
+            throw new RuntimeException("Failed to generate document summary", e);
         }
     }
 
@@ -338,21 +417,31 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     }
 
     /**
-     * Generate progressive summary with progress tracking
+     * Generate progressive summary with progress tracking and error handling
      */
     private String generateProgressiveSummary(String text, SummaryType type, ProgressCallback progressCallback) {
         logger.debug("Starting progressive {} summary generation", type);
         List<String> parts = splitTextIntoParts(text, determineGroupSize(type));
         int totalParts = parts.size();
         AtomicInteger processedParts = new AtomicInteger(0);
+        AtomicInteger failedParts = new AtomicInteger(0);
 
         if (parts.isEmpty()) {
             return "No content available for summarization";
         }
 
         // Process first part
-        String initialSummary = getInitialSummary(parts.get(0), type);
-        updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+        String initialSummary;
+        try {
+            initialSummary = getInitialSummary(parts.get(0), type);
+            updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+        } catch (Exception e) {
+            logger.error("Failed to generate initial summary: {}", e.getMessage(), e);
+            failedParts.incrementAndGet();
+            initialSummary = "Failed to generate initial summary: " + e.getMessage() + "\n\nOriginal text (truncated): "
+                    +
+                    (parts.get(0).length() > 100 ? parts.get(0).substring(0, 100) + "..." : parts.get(0));
+        }
         parts.remove(0);
 
         if (parts.isEmpty()) {
@@ -362,15 +451,34 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         // Process remaining parts
         StringBuilder currentSummary = new StringBuilder(initialSummary);
         for (String part : parts) {
-            String instruction = switch (type) {
-                case CHAPTER -> String.format(promptConfig.getChapterExpand(), currentSummary);
-                case BOOK -> String.format(promptConfig.getBookExpand(), currentSummary);
-                default -> String.format(promptConfig.getDefaultExpand(), currentSummary);
-            };
+            try {
+                String instruction = switch (type) {
+                    case CHAPTER -> String.format(promptConfig.getChapterExpand(), currentSummary);
+                    case BOOK -> String.format(promptConfig.getBookExpand(), currentSummary);
+                    default -> String.format(promptConfig.getDefaultExpand(), currentSummary);
+                };
 
-            String newSummary = summarize(part, instruction);
-            currentSummary.append("\n\n").append(newSummary);
-            updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+                String newSummary = summarize(part, instruction);
+                currentSummary.append("\n\n").append(newSummary);
+            } catch (Exception e) {
+                logger.error("Failed to generate summary part: {}", e.getMessage(), e);
+                failedParts.incrementAndGet();
+                currentSummary.append("\n\n[Failed to generate summary: ")
+                        .append(e.getMessage())
+                        .append("]");
+            } finally {
+                updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+            }
+        }
+
+        if (failedParts.get() > 0) {
+            logger.warn("Failed to generate {} out of {} summary parts",
+                    failedParts.get(), totalParts);
+            currentSummary.append("\n\n[Note: ")
+                    .append(failedParts.get())
+                    .append(" out of ")
+                    .append(totalParts)
+                    .append(" summary parts failed to generate.]");
         }
 
         return currentSummary.toString();
@@ -378,7 +486,10 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
 
     private void updateProgress(int current, int total, ProgressCallback progressCallback) {
         if (progressCallback != null) {
+            // Ensure progress value is consistently between 0 and 1
             double progress = (double) current / total;
+            // Make sure progress stays within valid range
+            progress = Math.max(0.0, Math.min(1.0, progress));
             progressCallback.onProgress(progress);
             logger.debug("Updated progress: {}/{} ({}%)", current, total, Math.round(progress * 100));
         }

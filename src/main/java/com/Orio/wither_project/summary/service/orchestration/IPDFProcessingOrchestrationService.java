@@ -18,6 +18,8 @@ public interface IPDFProcessingOrchestrationService {
                 setSummaries(doc);
     }
 
+    boolean continueProcessingPDF(FileEntity file) throws IOException;
+
     DocumentModel convert(FileEntity file) throws IOException;
 
     boolean setMetadata(DocumentModel model);
@@ -25,6 +27,12 @@ public interface IPDFProcessingOrchestrationService {
     boolean setContents(DocumentModel model);
 
     boolean setSummaries(DocumentModel model);
+
+    boolean setPageSummaries(DocumentModel model);
+
+    boolean setChapterSummaries(DocumentModel model);
+
+    boolean setDocumentSummary(DocumentModel model);
 
     void save(DocumentModel model);
 }

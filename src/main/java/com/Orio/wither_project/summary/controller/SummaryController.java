@@ -18,8 +18,10 @@ import com.Orio.wither_project.constants.ApiPaths;
 import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.pdf.service.storage.ISQLPDFService;
 import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.ProcessingProgressModel;
 import com.Orio.wither_project.summary.model.dto.ProcessRequestDTO;
 import com.Orio.wither_project.summary.service.orchestration.IPDFProcessingOrchestrationService;
+import com.Orio.wither_project.summary.service.progress.ProcessingProgressService;
 import com.Orio.wither_project.summary.service.storage.ISQLDocumentService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,10 +35,12 @@ public class SummaryController {
     private final ISQLDocumentService sqlDocumentService;
     private final ISQLPDFService sqlPDFService;
     private final IPDFProcessingOrchestrationService processingService;
+    private final ProcessingProgressService processingProgressService;
 
     @PostMapping(ApiPaths.BASE + ApiPaths.PDF_PROCESS)
     public ResponseEntity<String> process(@RequestBody ProcessRequestDTO request) {
-        logger.info("Received request to process PDF with name: {}", request.getName());
+        logger.info("Received request to process PDF with name: {}, restart: {}",
+                request.getName(), request.isRestart());
         try {
             FileEntity file = sqlPDFService.getPDF(request.getName());
             if (file == null) {
@@ -44,7 +48,12 @@ public class SummaryController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
             }
 
-            boolean success = processingService.processPDF(file);
+            if (request.isRestart()) {
+                processingProgressService.resetProgress(request.getName());
+                logger.info("Reset processing progress for file: {}", request.getName());
+            }
+
+            boolean success = processingService.continueProcessingPDF(file);
 
             if (success) {
                 logger.info("PDF processed successfully");
@@ -83,6 +92,15 @@ public class SummaryController {
         sqlDocumentService.deleteDoc(name);
         logger.info("Document deleted successfully: {}", name);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(ApiPaths.BASE + ApiPaths.PDF_PROGRESS)
+    public ResponseEntity<ProcessingProgressModel> getProcessingProgress(@RequestParam String name) {
+        logger.info("Received request to get processing progress for: {}", name);
+
+        return processingProgressService.getProgress(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
