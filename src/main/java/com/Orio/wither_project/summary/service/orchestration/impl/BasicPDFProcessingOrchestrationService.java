@@ -2,6 +2,9 @@ package com.Orio.wither_project.summary.service.orchestration.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -12,19 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.Orio.wither_project.pdf.model.entity.FileEntity;
+import com.Orio.wither_project.socket.summary.model.ProgressCallback;
+import com.Orio.wither_project.socket.summary.service.SummaryProgressService;
 import com.Orio.wither_project.summary.exception.PDFProcessingException;
 import com.Orio.wither_project.summary.model.ChapterModel;
-import com.Orio.wither_project.summary.model.ChapterSummaryModel;
 import com.Orio.wither_project.summary.model.DocumentModel;
-import com.Orio.wither_project.summary.model.DocumentSummaryModel;
 import com.Orio.wither_project.summary.model.PageModel;
-import com.Orio.wither_project.summary.model.PageSummaryModel;
 import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
 import com.Orio.wither_project.summary.service.extraction.IPDFContentExtractionService;
 import com.Orio.wither_project.summary.service.extraction.IPDFMetaDataExtractionService;
 import com.Orio.wither_project.summary.service.generation.IPDFSummaryGenerationService;
 import com.Orio.wither_project.summary.service.orchestration.IPDFProcessingOrchestrationService;
 import com.Orio.wither_project.summary.service.storage.ISQLDocumentService;
+import com.google.common.collect.Lists;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,11 +37,12 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
 
     private static final Logger logger = LoggerFactory.getLogger(BasicPDFProcessingOrchestrationService.class);
 
-    private final ISQLDocumentService pdfSavingService;
+    private final ISQLDocumentService sqlDocumentService;
     private final IPDFMetaDataExtractionService metaDataExtractionService;
     private final IPDFSummaryGenerationService summaryGenerationService;
     private final IPDFContentExtractionService contentExtractionService;
     private final IPDFConversionService conversionService;
+    private final SummaryProgressService progressService;
 
     @Override
     public DocumentModel convert(FileEntity file) throws PDFProcessingException {
@@ -80,19 +84,19 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
         Assert.notNull(model, "Document model cannot be null");
         Assert.notNull(model.getChapters(), "Chapters cannot be null");
         logger.info("Saving document: {}", model.getFileName());
-        pdfSavingService.saveDoc(model);
+        sqlDocumentService.saveDoc(model);
         logger.info("Document saved successfully: {}", model.getFileName());
 
         logger.info("Saving chapters for document: {}", model.getFileName());
         List<ChapterModel> chapters = model.getChapters();
-        pdfSavingService.saveChapters(chapters);
+        sqlDocumentService.saveChapters(chapters);
         logger.info("{} Chapters saved successfully for document: {}", chapters.size(), model.getFileName());
 
         AtomicInteger totalPageCount = new AtomicInteger(0);
 
         chapters.forEach(chapter -> {
             logger.info("Saving pages for chapter: {}", chapter.getTitle());
-            pdfSavingService.savePages(chapter.getPages());
+            sqlDocumentService.savePages(chapter.getPages());
             totalPageCount.addAndGet(chapter.getPages().size());
             logger.info("{} Pages saved successfully for chapter: {}", chapter.getPages().size(), chapter.getTitle());
         });
@@ -114,9 +118,7 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
 
             generateAndSavePageSummaries(extractPages(chapters));
             generateAndSaveChapterSummaries(chapters);
-            generateAndSaveBookSummary(model, chapters);
-
-            pdfSavingService.saveDoc(model);
+            generateAndSaveBookSummary(model);
 
             logger.info("Summaries set successfully for document: {}", model.getFileName());
             return true;
@@ -135,38 +137,99 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
     private void generateAndSavePageSummaries(List<PageModel> pages) {
         logger.debug("Generating and saving page summaries");
 
-        summaryGenerationService.generatePageSummaries(pages);
+        final int BATCH_SIZE = 5;
+        final int totalPages = pages.size();
+        AtomicInteger processedPages = new AtomicInteger(0);
 
-        logger.debug("Page summaries generated and saved successfully");
+        List<List<PageModel>> batches = Lists.partition(pages, BATCH_SIZE);
+
+        @SuppressWarnings("unchecked")
+        CompletableFuture<Void>[] futures = batches.stream()
+                .map(batch -> CompletableFuture.runAsync(() -> {
+                    summaryGenerationService.generatePageSummaries(batch);
+                    sqlDocumentService.savePages(batch);
+
+                    int currentProgress = processedPages.addAndGet(batch.size());
+                    double progress = (double) currentProgress / totalPages;
+                    progressService.updateProgress(progress);
+
+                    logger.debug("Processed batch of {} pages. Progress: {}/{}",
+                            batch.size(), currentProgress, totalPages);
+                }, ForkJoinPool.commonPool()))
+                .toArray(CompletableFuture[]::new);
+
+        try {
+            CompletableFuture.allOf(futures).get();
+            logger.debug("Page summaries generated and saved successfully");
+        } catch (InterruptedException | ExecutionException e) {
+            Thread.currentThread().interrupt();
+            throw new PDFProcessingException("Failed to generate page summaries", e);
+        }
     }
+
+    // private void generateAndSaveChapterSummariesOld(List<ChapterModel> chapters)
+    // {
+    // logger.info("Generating and saving chapter summaries");
+    // chapters.forEach(chapter -> {
+    // String pageSummaries = chapter.getPages().stream()
+    // .map(PageModel::getSummary)
+    // .map(PageSummaryModel::getContent)
+    // .collect(Collectors.joining(constantsConfig.getSplitRegex()));
+    // String chapterSummary =
+    // summaryGenerationService.summarizeChapter(pageSummaries);
+    // ChapterSummaryModel chapterSummaryModel = new
+    // ChapterSummaryModel(chapterSummary);
+    // chapterSummaryModel.setChapter(chapter);
+    // chapter.setSummary(chapterSummaryModel);
+    // });
+
+    // logger.info("Chapter summaries generated and saved successfully");
+    // }
 
     private void generateAndSaveChapterSummaries(List<ChapterModel> chapters) {
         logger.info("Generating and saving chapter summaries");
-        chapters.forEach(chapter -> {
-            String pageSummaries = chapter.getPages().stream()
-                    .map(PageModel::getSummary)
-                    .map(PageSummaryModel::getContent)
-                    .collect(Collectors.joining("\n\n\n\n"));
-            String chapterSummary = summaryGenerationService.summarizeChapter(pageSummaries);
-            ChapterSummaryModel chapterSummaryModel = new ChapterSummaryModel(chapterSummary);
-            chapterSummaryModel.setChapter(chapter);
-            chapter.setSummary(chapterSummaryModel);
-        });
 
+        ProgressCallback progressCallback = (progress) -> {
+            progressService.updateProgress(progress);
+            logger.debug("Chapter summary progress: {}", progress);
+        };
+
+        summaryGenerationService.generateChapterSummaries(chapters, progressCallback);
+
+        sqlDocumentService.saveChapters(chapters);
         logger.info("Chapter summaries generated and saved successfully");
     }
 
-    private void generateAndSaveBookSummary(DocumentModel model, List<ChapterModel> chapters) {
-        logger.info("Generating and saving book summary for document: {}", model.getFileName());
-        String chapterSummaries = chapters.stream()
-                .map(ChapterModel::getSummary)
-                .map(ChapterSummaryModel::getContent)
-                .collect(Collectors.joining("\n\n\n\n"));
-        String bookSummary = summaryGenerationService.summarizeDocument(chapterSummaries);
-        DocumentSummaryModel bookSummaryModel = new DocumentSummaryModel(bookSummary);
-        model.setSummary(bookSummaryModel);
-        bookSummaryModel.setBook(model);
+    // private void generateAndSaveBookSummaryOld(DocumentModel model,
+    // List<ChapterModel> chapters) {
+    // logger.info("Generating and saving book summary for document: {}",
+    // model.getFileName());
+    // String chapterSummaries = chapters.stream()
+    // .map(ChapterModel::getSummary)
+    // .map(ChapterSummaryModel::getContent)
+    // .collect(Collectors.joining(constantsConfig.getSplitRegex()));
+    // String bookSummary =
+    // summaryGenerationService.summarizeDocument(chapterSummaries);
+    // DocumentSummaryModel bookSummaryModel = new
+    // DocumentSummaryModel(bookSummary);
+    // model.setSummary(bookSummaryModel);
+    // bookSummaryModel.setBook(model);
 
+    // logger.info("Book summary generated and saved successfully for document: {}",
+    // model.getFileName());
+    // }
+
+    private void generateAndSaveBookSummary(DocumentModel model) {
+        logger.info("Generating and saving book summary for document: {}", model.getFileName());
+
+        ProgressCallback progressCallback = (progress) -> {
+            progressService.updateProgress(progress);
+            logger.debug("Book summary progress: {}", progress);
+        };
+
+        summaryGenerationService.generateDocumentSummary(model, progressCallback);
+
+        sqlDocumentService.saveDoc(model);
         logger.info("Book summary generated and saved successfully for document: {}", model.getFileName());
     }
 }

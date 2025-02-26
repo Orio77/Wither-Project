@@ -11,4 +11,7 @@ public class SummaryConstantsConfig {
 
     @Value("${wither.summary.metadata.pdf.filename}")
     private String fileName;
+
+    @Value("${wither.summary.constants.regex.split}")
+    private String splitRegex;
 }

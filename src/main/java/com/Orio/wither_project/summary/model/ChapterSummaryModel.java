@@ -26,4 +26,9 @@ public class ChapterSummaryModel {
         public ChapterSummaryModel(String content) {
                 this.content = content;
         }
+
+        public void addChapter(ChapterModel chapter) {
+                this.chapter = chapter;
+                chapter.setSummary(this);
+        }
 }

@@ -19,6 +19,7 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.stereotype.Service;
 
+import com.Orio.wither_project.summary.config.SummaryConstantsConfig;
 import com.Orio.wither_project.summary.config.SummaryPromptConfig;
 import com.Orio.wither_project.summary.model.ChapterModel;
 import com.Orio.wither_project.summary.model.ChapterSummaryModel;
@@ -38,6 +39,7 @@ public class OllamaParallelSummaryGenerationService implements IPDFParallelSumma
 
     private final OllamaChatModel ollamaChatModel;
     private final SummaryPromptConfig promptConfig;
+    private final SummaryConstantsConfig constantsConfig;
 
     // Thread pool configuration
     private static final int BATCH_SIZE = 10;
@@ -160,7 +162,7 @@ public class OllamaParallelSummaryGenerationService implements IPDFParallelSumma
                 try {
                     String text = chapter.getPages().stream()
                             .map(p -> p.getSummary().getContent())
-                            .collect(Collectors.joining("\n\n\n\n"));
+                            .collect(Collectors.joining(constantsConfig.getSplitRegex()));
                     String summaryText = parallelSummarize(text, promptConfig.getChapter());
                     ChapterSummaryModel summaryModel = new ChapterSummaryModel(summaryText);
                     summaryModel.setChapter(chapter);
@@ -181,7 +183,7 @@ public class OllamaParallelSummaryGenerationService implements IPDFParallelSumma
     public DocumentSummaryModel generateBookSummary(DocumentModel doc) {
         String fullText = doc.getChapters().stream()
                 .map(ch -> ch.getSummary().getContent())
-                .collect(Collectors.joining("\n\n\n\n"));
+                .collect(Collectors.joining(constantsConfig.getSplitRegex()));
         String bookSummaryText = parallelSummarize(fullText, promptConfig.getBook());
         DocumentSummaryModel bookSummary = new DocumentSummaryModel(bookSummaryText);
         bookSummary.setBook(doc);

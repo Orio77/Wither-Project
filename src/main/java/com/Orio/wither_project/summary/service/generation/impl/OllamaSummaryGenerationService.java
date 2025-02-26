@@ -3,6 +3,7 @@ package com.Orio.wither_project.summary.service.generation.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,17 +12,21 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
-import com.Orio.wither_project.socket.summary.model.SummaryProgressDTO;
+import com.Orio.wither_project.socket.summary.model.ProgressCallback;
+import com.Orio.wither_project.summary.config.SummaryConstantsConfig;
 import com.Orio.wither_project.summary.config.SummaryPromptConfig;
+import com.Orio.wither_project.summary.model.ChapterModel;
+import com.Orio.wither_project.summary.model.ChapterSummaryModel;
+import com.Orio.wither_project.summary.model.DocumentModel;
+import com.Orio.wither_project.summary.model.DocumentSummaryModel;
 import com.Orio.wither_project.summary.model.PageModel;
 import com.Orio.wither_project.summary.model.PageSummaryModel;
 import com.Orio.wither_project.summary.model.SummaryResponse;
 import com.Orio.wither_project.summary.model.SummaryType;
 import com.Orio.wither_project.summary.service.generation.IPDFSummaryGenerationService;
-import com.Orio.wither_project.summary.service.storage.ISQLDocumentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,23 +34,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class OllamaSummaryGenerationService implements IPDFSummaryGenerationService { // TODO make multithreaded in
-                                                                                      // another class
-    private static final int MAX_RETRIES = 3;
-    private static final long WAIT_TIME_MS = 20000; // 20 seconds
-    private static final String SUMMARIZATION_FAILED_MESSAGE = "Failed to generate a summary. See the log for details";
-
+public class OllamaSummaryGenerationService implements IPDFSummaryGenerationService {
     private static final Logger logger = LoggerFactory.getLogger(OllamaSummaryGenerationService.class);
 
     private final OllamaChatModel ollamaChatModel;
-
     private final SummaryPromptConfig promptConfig;
-
-    private final SimpMessagingTemplate messagingTemplate;
-
+    private final SummaryConstantsConfig constantsConfig;
     private final ObjectMapper objectMapper;
-
-    private final ISQLDocumentService sqlDocumentService;
 
     @Override
     public String summarize(String text, SummaryType type) {
@@ -61,48 +56,6 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
 
     @Override
     public String summarize(String text, String instruction) {
-        int attempts = 0;
-
-        while (attempts < MAX_RETRIES) {
-            try {
-                logger.info("Attempt {} of {} to generate summary", attempts + 1, MAX_RETRIES);
-                return summarize(text, instruction, "this argument is to be removed"); // TODO
-            } catch (Exception e) {
-                attempts++;
-                logger.warn("Attempt {} failed, reason: {}", attempts, e.getMessage());
-
-                if (attempts < MAX_RETRIES) {
-                    try {
-                        logger.info("Waiting {} seconds before next retry...", WAIT_TIME_MS / 1000);
-                        Thread.sleep(WAIT_TIME_MS);
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                        throw new RuntimeException("Retry interrupted", ie);
-                    }
-                }
-            }
-        }
-
-        logger.error("All {} retry attempts failed", MAX_RETRIES);
-        return SUMMARIZATION_FAILED_MESSAGE;
-    }
-
-    // !RETRY
-    // ! Delete the method above and uncomment this one
-    // @Override
-    // public String summarize(String text, String instruction) {
-    // try {
-    // logger.info("Attempting to generate summary");
-    // return summarize(text, instruction, promptConfig.getSummaryJsonSchema());
-    // } catch (Exception e) {
-    // logger.error("Failed to generate summary after multiple retries: {}",
-    // e.getMessage(), e);
-    // return SUMMARIZATION_FAILED_MESSAGE;
-    // }
-    // }
-
-    @Override
-    public String summarize(String text, String instruction, String responseFormat) {
         logger.info("Starting text summarization with custom instruction");
         logger.debug("Text length: {} characters", text.length());
         logger.debug("Instruction: {}", instruction);
@@ -180,7 +133,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     }
 
     private List<String> splitTextIntoParts(String text, int groupSize) {
-        String[] parts = text.split("\n\n\n\n"); // TODO Extract to constant
+        String[] parts = text.split(constantsConfig.getSplitRegex());
         logger.debug("Initial split resulted in {} raw parts", parts.length);
 
         if (parts.length == 0) {
@@ -284,33 +237,150 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
     @Override
     public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
         logger.info("Generating page summaries sequentially for {} pages", pages.size());
-        AtomicInteger i = new AtomicInteger(0);
         List<PageSummaryModel> summaries = new ArrayList<>();
-        List<PageModel> pagesToSave = new ArrayList<>();
-        int totalPages = pages.size();
 
         for (int j = 0; j < pages.size(); j++) {
             PageModel page = pages.get(j);
-            final int curPage = i.incrementAndGet();
             String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
-            String summaryText = summarize(text, SummaryType.PAGE);
+            String summaryText = (text.equals("No content for this page")) ? text : summarize(text, SummaryType.PAGE);
 
             PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
             summaryModel.addPage(page);
-            pagesToSave.add(page);
-
-            if ((j + 1) % 5 == 0 || j == pages.size() - 1) {
-                sqlDocumentService.savePages(pagesToSave);
-                pagesToSave.clear();
-            }
-
-            SummaryProgressDTO progressUpdate = new SummaryProgressDTO(curPage, totalPages);
-            logger.info("Messaging template: " + messagingTemplate);
-            logger.info("Sending progress update: {}", progressUpdate);
-            messagingTemplate.convertAndSend("/topic/progress", progressUpdate);
 
             summaries.add(summaryModel);
         }
         return summaries;
+    }
+
+    @Override
+    public List<ChapterSummaryModel> generateChapterSummaries(List<ChapterModel> chapters,
+            ProgressCallback progressCallback) {
+        Assert.notNull(chapters, "Chapters list cannot be null");
+        Assert.notNull(progressCallback, "Progress callback cannot be null");
+        logger.info("Generating chapter summaries progressively for {} chapters", chapters.size());
+        List<ChapterSummaryModel> summaries = new ArrayList<>();
+
+        for (ChapterModel chapter : chapters) {
+            logger.debug("Processing chapter: {}", chapter.getTitle());
+            String text = collectSummaries(chapter.getPages(), PageModel::getSummary,
+                    summary -> summary.getContent());
+
+            if (text.trim().isEmpty()) {
+                summaries.add(createEmptySummary(chapter, "No content for this chapter",
+                        ChapterSummaryModel::new, ChapterSummaryModel::addChapter));
+                continue;
+            }
+
+            try {
+                String summary = generateProgressiveSummary(text, SummaryType.CHAPTER, progressCallback);
+                ChapterSummaryModel summaryModel = new ChapterSummaryModel(summary);
+                summaryModel.addChapter(chapter);
+                summaries.add(summaryModel);
+            } catch (Exception e) {
+                logger.error("Error processing chapter summary: {}", e.getMessage(), e);
+                summaries.add(createEmptySummary(chapter, "Error processing chapter: " + e.getMessage(),
+                        ChapterSummaryModel::new, ChapterSummaryModel::addChapter));
+            }
+        }
+
+        return summaries;
+    }
+
+    @Override
+    public DocumentSummaryModel generateDocumentSummary(DocumentModel model, ProgressCallback progressCallback) {
+        Assert.notNull(model, "Document model cannot be null");
+        Assert.notNull(progressCallback, "Progress callback cannot be null");
+        logger.info("Generating document summary for document: {}", model.getTitle());
+
+        String chapterSummaries = collectSummaries(model.getChapters(), ChapterModel::getSummary,
+                summary -> summary.getContent());
+
+        if (chapterSummaries.trim().isEmpty()) {
+            return createEmptySummary(model, "No content for this document",
+                    DocumentSummaryModel::new, DocumentSummaryModel::addDocument);
+        }
+
+        try {
+            String summary = generateProgressiveSummary(chapterSummaries, SummaryType.BOOK, progressCallback);
+            DocumentSummaryModel summaryModel = new DocumentSummaryModel(summary);
+            summaryModel.addDocument(model);
+            return summaryModel;
+        } catch (Exception e) {
+            logger.error("Error processing document summary: {}", e.getMessage(), e);
+            return createEmptySummary(model, "Error processing document: " + e.getMessage(),
+                    DocumentSummaryModel::new, DocumentSummaryModel::addDocument);
+        }
+    }
+
+    // Generic methods to eliminate redundancy
+
+    /**
+     * Generic method to collect summaries from a list of models
+     */
+    private <T, S> String collectSummaries(List<T> items, java.util.function.Function<T, S> getSummary,
+            java.util.function.Function<S, String> getContent) {
+        return items.stream()
+                .map(getSummary)
+                .filter(summary -> summary != null)
+                .map(getContent)
+                .collect(Collectors.joining(constantsConfig.getSplitRegex()));
+    }
+
+    /**
+     * Generic method to create an empty summary
+     */
+    private <T, S> S createEmptySummary(T model, String message,
+            java.util.function.Function<String, S> constructor,
+            java.util.function.BiConsumer<S, T> addModel) {
+        S emptySummary = constructor.apply(message);
+        addModel.accept(emptySummary, model);
+        return emptySummary;
+    }
+
+    /**
+     * Generate progressive summary with progress tracking
+     */
+    private String generateProgressiveSummary(String text, SummaryType type, ProgressCallback progressCallback) {
+        logger.debug("Starting progressive {} summary generation", type);
+        List<String> parts = splitTextIntoParts(text, determineGroupSize(type));
+        int totalParts = parts.size();
+        AtomicInteger processedParts = new AtomicInteger(0);
+
+        if (parts.isEmpty()) {
+            return "No content available for summarization";
+        }
+
+        // Process first part
+        String initialSummary = getInitialSummary(parts.get(0), type);
+        updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+        parts.remove(0);
+
+        if (parts.isEmpty()) {
+            return initialSummary;
+        }
+
+        // Process remaining parts
+        StringBuilder currentSummary = new StringBuilder(initialSummary);
+        for (String part : parts) {
+            String instruction = switch (type) {
+                case CHAPTER -> String.format(promptConfig.getChapterExpand(), currentSummary);
+                case BOOK -> String.format(promptConfig.getBookExpand(), currentSummary);
+                default -> String.format(promptConfig.getDefaultExpand(), currentSummary);
+            };
+
+            String newSummary = summarize(part, instruction);
+            currentSummary.append("\n\n").append(newSummary);
+            updateProgress(processedParts.incrementAndGet(), totalParts, progressCallback);
+        }
+
+        return currentSummary.toString();
+    }
+
+    private void updateProgress(int current, int total, ProgressCallback progressCallback) {
+        if (progressCallback != null) {
+            double progress = (double) current / total;
+            progressCallback.onProgress(progress);
+            logger.debug("Updated progress: {}/{} ({}%)", current, total, Math.round(progress * 100));
+        }
     }
 }

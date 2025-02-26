@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SummaryProgressDTO {
-    private int currentPage;
-    private int totalPages;
+    private double progress;
 }

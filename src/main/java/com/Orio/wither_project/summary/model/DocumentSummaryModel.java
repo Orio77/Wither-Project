@@ -20,9 +20,14 @@ public class DocumentSummaryModel {
         @JsonBackReference
         @OneToOne
         @JoinColumn(name = "book_id")
-        private DocumentModel book;
+        private DocumentModel book; // TODO change to document
 
         public DocumentSummaryModel(String content) {
                 this.content = content;
+        }
+
+        public void addDocument(DocumentModel book) {
+                this.book = book;
+                book.setSummary(this);
         }
 }
