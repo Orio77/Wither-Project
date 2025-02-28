@@ -39,11 +39,21 @@ public class BasicPDFConversionService implements IPDFConversionService {
             throw new IllegalArgumentException("File data cannot be null or empty");
         }
 
-        logger.info("Converting file {} to PDDocument", file.getName());
+        String fileName = file.getFileName();
+        if (fileName == null || fileName.trim().isEmpty()) {
+            fileName = file.getName(); // Fallback to name if fileName is not available
+            logger.warn("File fileName is empty, using name: {}", fileName);
+        }
+
+        String name = file.getName();
+        if (name == null || name.trim().isEmpty()) {
+            name = fileName; // Fallback to fileName if name is not available
+            logger.warn("File name is empty, using fileName: {}", name);
+        }
+
+        logger.info("Converting file {} to PDDocument", name);
         try {
             PDDocument document = Loader.loadPDF(data);
-            String name = file.getName();
-            String fileName = file.getFileName();
             PDDocumentInformation info = new PDDocumentInformation();
             info.setTitle(name);
             info.setCustomMetadataValue(constantsConfig.getFileName(), fileName);

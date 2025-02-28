@@ -40,6 +40,9 @@ public class DocumentModel {
     @Size(max = 255)
     private String author;
 
+    @Column(name = "summary_completion_percentage")
+    private Double summaryCompletionPercentage = 0.0;
+
     @JsonManagedReference
     @ToString.Exclude
     @OneToMany(mappedBy = "doc", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

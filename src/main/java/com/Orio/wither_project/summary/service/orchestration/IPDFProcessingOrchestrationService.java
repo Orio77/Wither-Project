@@ -7,15 +7,20 @@ import com.Orio.wither_project.summary.model.DocumentModel;
 
 public interface IPDFProcessingOrchestrationService {
     default boolean processPDF(FileEntity file) throws IOException {
+        if (file == null || file.getFileName() == null || file.getFileName().trim().isEmpty()) {
+            return false;
+        }
+
         DocumentModel doc = convert(file);
         if (doc == null)
             return false;
 
+        boolean metadataSet = setMetadata(doc);
+        boolean contentsSet = setContents(doc);
         save(doc);
+        boolean summariesSet = setSummaries(doc);
 
-        return setMetadata(doc) &&
-                setContents(doc) &&
-                setSummaries(doc);
+        return metadataSet && contentsSet && summariesSet;
     }
 
     DocumentModel convert(FileEntity file) throws IOException;

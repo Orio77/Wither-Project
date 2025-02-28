@@ -38,7 +38,7 @@ public class SummaryController {
     public ResponseEntity<String> process(@RequestBody ProcessRequestDTO request) {
         logger.info("Received request to process PDF with name: {}", request.getName());
         try {
-            FileEntity file = sqlPDFService.getPDF(request.getName());
+            FileEntity file = sqlPDFService.getPDFByName(request.getName());
             if (file == null) {
                 logger.error("File not found with name: {}", request.getName());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");

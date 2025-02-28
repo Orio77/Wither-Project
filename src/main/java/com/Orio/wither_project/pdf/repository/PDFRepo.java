@@ -9,8 +9,12 @@ import jakarta.transaction.Transactional;
 
 @Repository
 public interface PDFRepo extends JpaRepository<FileEntity, Long> {
+
     FileEntity findByName(String name);
+
+    FileEntity findByFileName(String fileName);
 
     @Transactional
     long deleteByName(String name);
+
 }

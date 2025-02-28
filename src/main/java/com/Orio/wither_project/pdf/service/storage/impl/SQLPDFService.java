@@ -39,7 +39,7 @@ public class SQLPDFService implements ISQLPDFService {
     }
 
     @Override
-    public FileEntity getPDF(String name) {
+    public FileEntity getPDFByName(String name) {
         logger.info("Retrieving PDF file: {}", name);
         try {
             FileEntity fileEntity = fileRepo.findByName(name);
@@ -50,6 +50,22 @@ public class SQLPDFService implements ISQLPDFService {
             return fileEntity;
         } catch (Exception e) {
             logger.error("Error retrieving PDF file: {}", name, e);
+            return null;
+        }
+    }
+
+    @Override
+    public FileEntity getPDFByFileName(String fileName) {
+        logger.info("Retrieving PDF file by fileName: {}", fileName);
+        try {
+            FileEntity fileEntity = fileRepo.findByFileName(fileName);
+            if (fileEntity == null) {
+                logger.warn("PDF file not found with fileName: {}", fileName);
+                return null;
+            }
+            return fileEntity;
+        } catch (Exception e) {
+            logger.error("Error retrieving PDF file with fileName: {}", fileName, e);
             return null;
         }
     }

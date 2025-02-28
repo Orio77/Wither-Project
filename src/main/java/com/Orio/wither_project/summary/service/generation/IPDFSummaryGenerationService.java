@@ -19,6 +19,8 @@ public interface IPDFSummaryGenerationService {
 
     String summarizeProgressively(String text, SummaryType type);
 
+    PageSummaryModel generatePageSummary(PageModel page);
+
     List<PageSummaryModel> generatePageSummaries(List<PageModel> pages);
 
     List<ChapterSummaryModel> generateChapterSummaries(List<ChapterModel> chapters, ProgressCallback progressCallback);

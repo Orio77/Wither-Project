@@ -56,7 +56,7 @@ public class PDFController {
     public FileEntity getPDF(@RequestParam(required = true) String name) {
         logger.info("Received request to get PDF with name: {}", name);
 
-        return sqlPDFService.getPDF(name);
+        return sqlPDFService.getPDFByName(name);
     }
 
     @GetMapping(ApiPaths.BASE + ApiPaths.PDF_GET_FILE_ALL)

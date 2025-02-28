@@ -30,6 +30,13 @@ public class SQLDocumentService implements ISQLDocumentService {
     private final PageRepo pageRepo;
     private final DocumentModelRepo pdfRepo;
 
+    public boolean savePage(PageModel page) {
+        logger.info("Saving page: {}", page);
+        boolean result = pageRepo.saveAndFlush(page) != null;
+        logger.info("Page saved: {}", result);
+        return result;
+    }
+
     @Override
     public boolean savePages(List<PageModel> pages) {
         logger.info("Saving {} pages", pages.size());
@@ -51,6 +58,18 @@ public class SQLDocumentService implements ISQLDocumentService {
         }
     }
 
+    public List<PageModel> getUnprocessedPagesByChapter(String chapterTitle) {
+        logger.info("Retrieving unprocessed pages for chapter: {}", chapterTitle);
+        try {
+            List<PageModel> pages = pageRepo.findByChapterTitleAndSummaryIdIsNullOrderByPageNumber(chapterTitle);
+            logger.info("Found {} unprocessed pages for chapter: {}", pages.size(), chapterTitle);
+            return pages;
+        } catch (Exception e) {
+            logger.error("Error retrieving unprocessed pages for chapter: {}", chapterTitle, e);
+            return null;
+        }
+    }
+
     @Override
     public boolean saveChapters(List<ChapterModel> chapters) {
         logger.info("Saving {} chapters", chapters.size());
@@ -68,6 +87,19 @@ public class SQLDocumentService implements ISQLDocumentService {
             return chapters;
         } catch (Exception e) {
             logger.error("Error retrieving chapters for document: {}", documentTitle, e);
+            return null;
+        }
+    }
+
+    public List<ChapterModel> getUnprocessedChaptersByDocument(String documentTitle) {
+        logger.info("Retrieving unprocessed chapters for document: {}", documentTitle);
+        try {
+            List<ChapterModel> chapters = chapterRepo
+                    .findUnsummarizedChapters(documentTitle);
+            logger.info("Found {} unprocessed chapters for document: {}", chapters.size(), documentTitle);
+            return chapters;
+        } catch (Exception e) {
+            logger.error("Error retrieving unprocessed chapters for document: {}", documentTitle, e);
             return null;
         }
     }

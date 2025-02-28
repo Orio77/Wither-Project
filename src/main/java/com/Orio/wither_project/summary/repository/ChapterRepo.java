@@ -14,4 +14,7 @@ public interface ChapterRepo extends JpaRepository<ChapterModel, Long> { // Need
 
     @Query("SELECT c FROM ChapterModel c WHERE c.doc.title = :documentTitle")
     List<ChapterModel> findByDocumentTitle(@Param("documentTitle") String documentTitle);
+
+    @Query("SELECT c FROM ChapterModel c WHERE c.doc.title = :documentTitle AND c.summary IS NULL ORDER BY c.chapterNumber")
+    List<ChapterModel> findUnsummarizedChapters(@Param("documentTitle") String documentTitle);
 }

@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface PageRepo extends JpaRepository<PageModel, Long> {
     List<PageModel> findByChapterTitleOrderByPageNumber(String chapterTitle);
+
+    List<PageModel> findByChapterTitleAndSummaryIdIsNullOrderByPageNumber(String chapterTitle);
 }

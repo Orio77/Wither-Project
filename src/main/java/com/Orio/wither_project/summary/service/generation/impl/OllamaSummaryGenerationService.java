@@ -47,7 +47,7 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         logger.info("Starting summary generation for type: {}", type);
         if (text == null || text.trim().isEmpty()) {
             logger.warn("Received empty or null text for summarization");
-            return "No text provided for summarization.";
+            return null;
         }
         String instruction = getInstructionForType(type);
         logger.debug("Using instruction for type {}: {}", type, instruction);
@@ -84,16 +84,16 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
                     return summary;
                 } catch (JsonProcessingException e) {
                     logger.error("Failed to parse JSON response: {}", e.getMessage());
-                    return "Unable to parse summary from model response.";
+                    return null;
                 }
             } else {
                 logger.warn("Received null response or result from Ollama model");
-                return "Unable to generate summary: no response from model.";
+                return null;
             }
 
         } catch (Exception e) {
             logger.error("Failed to generate summary: {}", e.getMessage(), e);
-            return String.format("Error during summary generation: %s", e.getMessage());
+            return null;
         }
     }
 
@@ -201,8 +201,34 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         };
         logger.debug("Using initial instruction: {}", instruction);
 
-        String summary = summarize(firstPart, instruction);
-        logger.debug("Generated initial summary of {} characters", summary.length());
+        String summary = null;
+        int attempts = 0;
+
+        while (summary == null || summary.trim().isEmpty()) {
+            attempts++;
+            logger.debug("Initial summary generation attempt #{}", attempts);
+
+            try {
+                summary = summarize(firstPart, instruction);
+
+                if (summary == null || summary.trim().isEmpty()) {
+                    logger.warn("Initial summary generation attempt #{} failed: empty or null summary", attempts);
+                    Thread.sleep(1000); // Wait 1 second between attempts
+                } else {
+                    logger.info("Successfully generated initial summary on attempt #{}. Length: {} characters",
+                            attempts, summary.length());
+                }
+            } catch (Exception e) {
+                logger.error("Error during initial summary generation attempt #{}: {}", attempts, e.getMessage(), e);
+                try {
+                    Thread.sleep(2000); // Wait 2 seconds after an exception
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    logger.warn("Retry sleep interrupted", ie);
+                }
+            }
+        }
+
         return summary;
     }
 
@@ -234,6 +260,17 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         return currentSummary.toString();
     }
 
+    public PageSummaryModel generatePageSummary(PageModel page) {
+        logger.info("Generating summary for page: {}", page.getId());
+        String text = (page.getContent().trim().isEmpty()) ? "No content for this page" : page.getContent();
+        String summaryText = (text.equals("No content for this page")) ? text : summarize(text, SummaryType.PAGE);
+
+        PageSummaryModel summaryModel = new PageSummaryModel(summaryText);
+        summaryModel.addPage(page);
+
+        return summaryModel;
+    }
+
     @Override
     public List<PageSummaryModel> generatePageSummaries(List<PageModel> pages) {
         logger.info("Generating page summaries sequentially for {} pages", pages.size());
@@ -260,6 +297,10 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
         logger.info("Generating chapter summaries progressively for {} chapters", chapters.size());
         List<ChapterSummaryModel> summaries = new ArrayList<>();
 
+        // Calculate total operations for more accurate progress tracking
+        int totalOperations = calculateTotalChapterOperations(chapters);
+        AtomicInteger completedOperations = new AtomicInteger(0);
+
         for (ChapterModel chapter : chapters) {
             logger.debug("Processing chapter: {}", chapter.getTitle());
             String text = collectSummaries(chapter.getPages(), PageModel::getSummary,
@@ -272,10 +313,20 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             }
 
             try {
-                String summary = generateProgressiveSummary(text, SummaryType.CHAPTER, progressCallback);
+                // Create a chapter-specific progress callback that maps to overall progress
+                ProgressCallback chapterCallback = progress -> {
+                    double overallProgress = (double) (completedOperations.get()
+                            + (progress * estimateChapterOperations(text))) / totalOperations;
+                    progressCallback.onProgress(overallProgress);
+                };
+
+                String summary = generateProgressiveSummary(text, SummaryType.CHAPTER, chapterCallback);
                 ChapterSummaryModel summaryModel = new ChapterSummaryModel(summary);
                 summaryModel.addChapter(chapter);
                 summaries.add(summaryModel);
+
+                // Update completed operations
+                completedOperations.addAndGet(estimateChapterOperations(text));
             } catch (Exception e) {
                 logger.error("Error processing chapter summary: {}", e.getMessage(), e);
                 summaries.add(createEmptySummary(chapter, "Error processing chapter: " + e.getMessage(),
@@ -382,5 +433,31 @@ public class OllamaSummaryGenerationService implements IPDFSummaryGenerationServ
             progressCallback.onProgress(progress);
             logger.debug("Updated progress: {}/{} ({}%)", current, total, Math.round(progress * 100));
         }
+    }
+
+    // New helper methods for operation calculation
+
+    /**
+     * Calculates the total number of operations for all chapters
+     */
+    private int calculateTotalChapterOperations(List<ChapterModel> chapters) {
+        return chapters.stream()
+                .mapToInt(chapter -> {
+                    String text = collectSummaries(chapter.getPages(), PageModel::getSummary,
+                            summary -> summary.getContent());
+                    return estimateChapterOperations(text);
+                })
+                .sum();
+    }
+
+    /**
+     * Estimates the number of operations needed for a chapter based on text length
+     */
+    private int estimateChapterOperations(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return 0;
+        }
+        List<String> parts = splitTextIntoParts(text, determineGroupSize(SummaryType.CHAPTER));
+        return parts.size();
     }
 }

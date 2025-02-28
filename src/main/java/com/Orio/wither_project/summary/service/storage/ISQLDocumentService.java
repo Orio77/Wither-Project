@@ -7,21 +7,25 @@ import com.Orio.wither_project.summary.model.DocumentModel;
 import com.Orio.wither_project.summary.model.PageModel;
 
 public interface ISQLDocumentService {
+    boolean savePage(PageModel page);
 
-    public boolean savePages(List<PageModel> pages);
+    boolean savePages(List<PageModel> pages);
 
-    public List<PageModel> getPages(String chapterTitle);
+    List<PageModel> getPages(String chapterTitle);
 
-    public boolean saveChapters(List<ChapterModel> chapters);
+    List<PageModel> getUnprocessedPagesByChapter(String chapterTitle);
 
-    public List<ChapterModel> getChapters(String documentTitle);
+    boolean saveChapters(List<ChapterModel> chapters);
 
-    public boolean saveDoc(DocumentModel documentModel);
+    List<ChapterModel> getChapters(String documentTitle);
 
-    public DocumentModel getDocument(String title);
+    List<ChapterModel> getUnprocessedChaptersByDocument(String documentTitle);
 
-    void deleteDoc(String title);
+    boolean saveDoc(DocumentModel documentModel);
+
+    DocumentModel getDocument(String title);
 
     List<DocumentModel> getAllDocs();
 
+    void deleteDoc(String title);
 }
