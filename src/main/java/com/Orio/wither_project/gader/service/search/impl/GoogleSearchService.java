@@ -38,8 +38,7 @@ public class GoogleSearchService implements ISearchService {
 
     @Override
     public SearchResult search(String query) {
-        SearchResult result = new SearchResult();
-        result.setQuery(query);
+        SearchResult result = SearchResult.builder().query(query).build();
 
         try {
             // Construct the request URL with query parameters
@@ -89,9 +88,10 @@ public class GoogleSearchService implements ISearchService {
                         String title = (String) item.get("title");
                         String link = (String) item.get("link");
 
-                        SearchResult.Item resultItem = new SearchResult.Item();
-                        resultItem.setTitle(title);
-                        resultItem.setLink(link);
+                        SearchResult.Item resultItem = SearchResult.Item.builder()
+                                .title(title)
+                                .link(link)
+                                .build();
 
                         result.addItem(resultItem);
                     } catch (Exception e) {

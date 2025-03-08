@@ -18,7 +18,9 @@ public class BasicSearchService implements ISearchService {
     @Override
     public SearchResult search(String query) {
         logger.info("Searching for query: {}", query);
-        return new SearchResult();
+        return SearchResult.builder()
+                .query(query)
+                .build();
     }
 
 }
