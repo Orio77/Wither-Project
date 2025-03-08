@@ -27,12 +27,12 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GoogleSearchService implements IWebSearchService {
+public class GoogleSearchServiceOld implements IWebSearchService {
 
     private final GoogleSearchConfig googleSearchConfig;
     private final RestTemplate restTemplate;
 
-    private static final Logger logger = getLogger(GoogleSearchService.class);
+    private static final Logger logger = getLogger(GoogleSearchServiceOld.class);
 
     private static final String NO_ITEMS_FOUND = "No items found in the response";
     private static final String QUERY_RECEIVED = "Received query for searching websites: {}";

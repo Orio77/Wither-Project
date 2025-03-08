@@ -10,13 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.exception.RateLimitReachedException;
 import com.Orio.wither_project.exception.WebSearchException;
-import com.Orio.wither_project.gather.acquisition.web.search.impl.GoogleSearchService;
+import com.Orio.wither_project.gather.acquisition.web.search.impl.GoogleSearchServiceOld;
 
 @SpringBootTest
 public class GoogleSearchServiceTest {
 
     @Autowired
-    private GoogleSearchService googleSearchService;
+    private GoogleSearchServiceOld googleSearchService;
 
     @Test
     public void testGetLinks() throws WebSearchException {

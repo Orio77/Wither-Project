@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class GoogleSearchConfig {
 
-    @Value("${google.api.key}")
+    @Value("${google.search.api.key}")
     private String apiKey;
     @Value("${google.search.engine.id}")
     private String searchEngineId;
