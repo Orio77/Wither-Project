@@ -11,7 +11,7 @@ import lombok.Data;
 public class SearchResult {
     private String query;
     @Builder.Default
-    private List<Item> items = new ArrayList<>();
+    private List<SearchItem> items = new ArrayList<>();
     @Builder.Default
     private List<Exception> errors = new ArrayList<>();
 
@@ -19,7 +19,7 @@ public class SearchResult {
         errors.add(error);
     }
 
-    public void addItem(Item item) {
+    public void addSearchItem(SearchItem item) {
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -28,12 +28,8 @@ public class SearchResult {
 
     @Data
     @Builder
-    public static class Item {
+    public static class SearchItem {
         private String title;
         private String link;
-        private String content;
-        private String description;
-        private String author;
-        private String publishDate;
     }
 }

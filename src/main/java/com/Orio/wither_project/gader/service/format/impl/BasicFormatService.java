@@ -29,9 +29,8 @@ public class BasicFormatService implements IFormatService {
 
     @Override
     public DataModel format(ScrapeResult scrapeResult) {
-        logger.info("Formatting scrape result " + scrapeResult);
-        // Add logic for formatting scrapeResult
-        return new DataModel();
+        return DataModel.builder().query(scrapeResult.getQuery()).items(scrapeResult.getItems())
+                .errors(scrapeResult.getErrors()).build();
     }
 
     @Override

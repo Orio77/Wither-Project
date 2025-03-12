@@ -3,8 +3,6 @@ package com.Orio.wither_project.gader.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Orio.wither_project.gader.model.SearchResult.Item;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +11,7 @@ import lombok.Data;
 public class ScrapeResult {
     private String query;
     @Builder.Default
-    private List<Item> items = new ArrayList<>();
+    private List<ScrapeItem> items = new ArrayList<>();
     @Builder.Default
     private List<Exception> errors = new ArrayList<>();
 
@@ -21,10 +19,23 @@ public class ScrapeResult {
         errors.add(error);
     }
 
-    public void addItem(Item item) {
+    public void addItem(ScrapeItem item) {
         if (items == null) {
             items = new ArrayList<>();
         }
         items.add(item);
+    }
+
+    @Data
+    @Builder
+    public static class ScrapeItem {
+        private String title;
+        private String link;
+        private String content;
+        private String description;
+        private String author;
+        private String publishDate;
+        private Exception error;
+
     }
 }

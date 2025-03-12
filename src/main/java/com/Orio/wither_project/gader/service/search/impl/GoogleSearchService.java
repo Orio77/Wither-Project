@@ -88,12 +88,12 @@ public class GoogleSearchService implements ISearchService {
                         String title = (String) item.get("title");
                         String link = (String) item.get("link");
 
-                        SearchResult.Item resultItem = SearchResult.Item.builder()
+                        SearchResult.SearchItem resultItem = SearchResult.SearchItem.builder()
                                 .title(title)
                                 .link(link)
                                 .build();
 
-                        result.addItem(resultItem);
+                        result.addSearchItem(resultItem);
                     } catch (Exception e) {
                         log.warn("Error processing search item: {}", e.getMessage());
                         result.addError(new SearchResponseParsingException(

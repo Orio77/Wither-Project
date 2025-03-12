@@ -19,7 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 import com.Orio.wither_project.gader.config.ScrapeLinkConfig;
 import com.Orio.wither_project.gader.model.DataSource;
 import com.Orio.wither_project.gader.model.ScrapeResult;
-import com.Orio.wither_project.gader.model.SearchResult.Item;
+import com.Orio.wither_project.gader.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gader.model.SearchResult.SearchItem;
 import com.Orio.wither_project.gader.service.scrape.IScrapeService;
 
 @SpringBootTest
@@ -75,11 +76,11 @@ class ScrapeServiceTest {
         assertNotEquals(0, linkConfig.getTestUrls().size(), "Test URLs list should not be empty");
 
         // Arrange
-        List<Item> items = new ArrayList<>();
+        List<SearchItem> items = new ArrayList<>();
 
         // Create items from configured test URLs
         for (String url : linkConfig.getTestUrls()) {
-            Item item = Item.builder()
+            SearchItem item = SearchItem.builder()
                     .link(url)
                     .build();
             items.add(item);
@@ -98,7 +99,7 @@ class ScrapeServiceTest {
         assertFalse(result.getItems().isEmpty(), "At least some URLs should be successfully scraped");
 
         // Check that each scraped item has content
-        for (Item item : result.getItems()) {
+        for (ScrapeItem item : result.getItems()) {
             assertNotNull(item.getContent(), "Content should be extracted");
             assertFalse(item.getContent().isEmpty(), "Content should not be empty");
             assertNotNull(item.getTitle(), "Title should be extracted");
@@ -108,15 +109,15 @@ class ScrapeServiceTest {
     @Test
     void testScrapeWithInvalidUrls() {
         // Arrange
-        List<Item> items = new ArrayList<>();
+        List<SearchItem> items = new ArrayList<>();
 
         // Add some invalid URLs
-        Item item1 = Item.builder()
+        SearchItem item1 = SearchItem.builder()
                 .link("http://this-is-an-invalid-url-that-should-not-exist.com/test")
                 .build();
         items.add(item1);
 
-        Item item2 = Item.builder()
+        SearchItem item2 = SearchItem.builder()
                 .link("not-even-a-valid-url")
                 .build();
         items.add(item2);

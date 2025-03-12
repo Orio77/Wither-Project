@@ -49,7 +49,7 @@ class SearchServiceTest {
         }
 
         // Verify first item has title and link
-        SearchResult.Item firstItem = result.getItems().get(0);
+        SearchResult.SearchItem firstItem = result.getItems().get(0);
         assertNotNull(firstItem.getTitle(), "Title should not be null");
         assertNotNull(firstItem.getLink(), "Link should not be null");
         assertFalse(firstItem.getTitle().isEmpty(), "Title should not be empty");

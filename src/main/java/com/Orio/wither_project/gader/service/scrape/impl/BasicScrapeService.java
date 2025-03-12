@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 import com.Orio.wither_project.gader.config.ScrapeConfig;
 import com.Orio.wither_project.gader.model.DataSource;
 import com.Orio.wither_project.gader.model.ScrapeResult;
-import com.Orio.wither_project.gader.model.SearchResult.Item;
+import com.Orio.wither_project.gader.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gader.model.SearchResult.SearchItem;
 import com.Orio.wither_project.gader.service.scrape.IScrapeService;
 
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class BasicScrapeService implements IScrapeService {
         try {
             log.debug("Submitting scrape tasks to executor");
             List<CompletableFuture<ScrapeItem>> futures = dataSource.getItems().stream()
-                    .map(item -> CompletableFuture.supplyAsync(() -> scrapeItem(item), executor))
+                    .map(searchItem -> CompletableFuture.supplyAsync(() -> scrapeItem(searchItem), executor))
                     .collect(Collectors.toList());
 
             // Wait for all futures to complete
@@ -94,7 +95,7 @@ public class BasicScrapeService implements IScrapeService {
                         ScrapeItem scrapeItem = future.get();
                         if (scrapeItem != null) {
                             if (scrapeItem.getError() == null) {
-                                result.addItem(scrapeItem.getItem());
+                                result.addItem(scrapeItem);
                                 successCount++;
                             } else {
                                 result.addError(scrapeItem.getError());
@@ -129,13 +130,12 @@ public class BasicScrapeService implements IScrapeService {
         return result;
     }
 
-    private ScrapeItem scrapeItem(Item item) {
+    private ScrapeItem scrapeItem(SearchItem searchItem) {
         Instant startTime = Instant.now();
-        String url = item.getLink();
+        String url = searchItem.getLink();
         log.info("Starting to scrape content from: {}", url);
 
-        ScrapeItem result = new ScrapeItem();
-        result.setItem(item);
+        ScrapeItem scrapeItem = ScrapeItem.builder().link(url).title(searchItem.getTitle()).build();
 
         // Implement retry logic with exponential backoff
         for (int attempt = 0; attempt < config.getMaxRetries(); attempt++) {
@@ -161,7 +161,7 @@ public class BasicScrapeService implements IScrapeService {
                 // Extract useful content from the page
                 log.debug("Extracting content from {}", url);
                 Instant extractStartTime = Instant.now();
-                extractContent(doc, item);
+                extractContent(doc, scrapeItem);
                 Duration extractDuration = Duration.between(extractStartTime, Instant.now());
 
                 Duration totalDuration = Duration.between(startTime, Instant.now());
@@ -172,14 +172,14 @@ public class BasicScrapeService implements IScrapeService {
                         extractDuration.toMillis());
 
                 // Log content statistics
-                logContentStatistics(item);
+                logContentStatistics(scrapeItem);
 
-                return result;
+                return scrapeItem;
             } catch (IOException e) {
                 if (attempt == config.getMaxRetries() - 1) {
                     log.error("Failed to scrape content from: {} after {} attempts. Error: {}",
                             url, config.getMaxRetries(), e.getMessage(), e);
-                    result.setError(e);
+                    scrapeItem.setError(e);
                 } else {
                     log.warn("Attempt {}/{} failed for URL: {}. Error: {}",
                             attempt + 1, config.getMaxRetries(), url, e.getMessage());
@@ -187,21 +187,21 @@ public class BasicScrapeService implements IScrapeService {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.error("Scraping interrupted for URL: {}", url, e);
-                result.setError(e);
-                return result;
+                scrapeItem.setError(e);
+                return scrapeItem;
             } catch (Exception e) {
                 log.error("Unexpected error while scraping URL: {}. Error: {}", url, e.getMessage(), e);
-                result.setError(e);
-                return result;
+                scrapeItem.setError(e);
+                return scrapeItem;
             }
         }
 
         Duration duration = Duration.between(startTime, Instant.now());
         log.warn("Failed to scrape {} after {}ms and {} attempts", url, duration.toMillis(), config.getMaxRetries());
-        return result;
+        return scrapeItem;
     }
 
-    private void extractContent(Document doc, Item item) {
+    private void extractContent(Document doc, ScrapeItem item) {
         log.debug("Extracting title from document");
         // Extract page title
         String title = doc.title();
@@ -328,7 +328,7 @@ public class BasicScrapeService implements IScrapeService {
         return "";
     }
 
-    private void logContentStatistics(Item item) {
+    private void logContentStatistics(ScrapeItem item) {
         StringBuilder stats = new StringBuilder("Content statistics for ").append(item.getLink()).append(":");
         stats.append(" title=").append(item.getTitle() != null ? item.getTitle().length() : 0).append("chars");
         stats.append(" description=").append(item.getDescription() != null ? item.getDescription().length() : 0)
@@ -360,27 +360,6 @@ public class BasicScrapeService implements IScrapeService {
             log.warn("Shutdown of scraper thread pool was interrupted", ie);
             executor.shutdownNow();
             Thread.currentThread().interrupt();
-        }
-    }
-
-    private static class ScrapeItem {
-        private Item item;
-        private Exception error;
-
-        public Item getItem() {
-            return item;
-        }
-
-        public void setItem(Item item) {
-            this.item = item;
-        }
-
-        public Exception getError() {
-            return error;
-        }
-
-        public void setError(Exception error) {
-            this.error = error;
         }
     }
 }
