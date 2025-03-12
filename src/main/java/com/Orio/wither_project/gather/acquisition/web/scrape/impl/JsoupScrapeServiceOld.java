@@ -20,9 +20,9 @@ import com.Orio.wither_project.model.DataModel;
 import com.Orio.wither_project.util.FileUtil;
 
 @Service
-public class JsoupScrapeService implements IScrapeService {
+public class JsoupScrapeServiceOld implements IScrapeService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsoupScrapeService.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsoupScrapeServiceOld.class);
 
     @Value("${webscraping.filename}")
     private String fileName;

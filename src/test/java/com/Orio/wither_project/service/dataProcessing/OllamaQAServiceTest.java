@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.config.OllamaConfig;
-import com.Orio.wither_project.gather.acquisition.web.scrape.impl.JsoupScrapeService;
+import com.Orio.wither_project.gather.acquisition.web.scrape.impl.JsoupScrapeServiceOld;
 import com.Orio.wither_project.gather.processing.qa.impl.OllamaQAService;
 import com.Orio.wither_project.gather.storage.sql.service.impl.PostgreSQLDataModelService;
 import com.Orio.wither_project.model.DataModel;
@@ -24,7 +24,7 @@ public class OllamaQAServiceTest {
     private OllamaQAService ollamaQAService;
     private static List<DataModel> dataList;
     @Autowired
-    private JsoupScrapeService jsoupScrapeService;
+    private JsoupScrapeServiceOld jsoupScrapeService;
     @Autowired
     private OllamaConfig config;
     @Autowired

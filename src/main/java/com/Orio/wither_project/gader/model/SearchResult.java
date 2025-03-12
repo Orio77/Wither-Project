@@ -31,5 +31,9 @@ public class SearchResult {
     public static class Item {
         private String title;
         private String link;
+        private String content;
+        private String description;
+        private String author;
+        private String publishDate;
     }
 }

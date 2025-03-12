@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.Orio.wither_project.gather.acquisition.web.scrape.impl.JsoupScrapeService;
+import com.Orio.wither_project.gather.acquisition.web.scrape.impl.JsoupScrapeServiceOld;
 import com.Orio.wither_project.model.DataModel;
 
 @SpringBootTest
-public class JsoupScrapeServiceTest {
+public class JsoupScrapeServiceTestOld {
 
     @Autowired
-    private JsoupScrapeService jsoupScrapeService;
+    private JsoupScrapeServiceOld jsoupScrapeService;
 
     @Test
     public void testScrapeWithValidLinks() {

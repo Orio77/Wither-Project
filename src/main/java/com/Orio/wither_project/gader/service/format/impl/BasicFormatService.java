@@ -23,8 +23,8 @@ public class BasicFormatService implements IFormatService {
     @Override
     public DataSource format(SearchResult searchResult) {
         logger.info("Formatting search result " + searchResult);
-        // Add logic for formatting searchResult
-        return new DataSource();
+        return DataSource.builder().query(searchResult.getQuery()).items(searchResult.getItems())
+                .errors(searchResult.getErrors()).build();
     }
 
     @Override
