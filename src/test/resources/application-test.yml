@@ -17,6 +17,15 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:7b-qwen-distill-q4_K_M
+        options:
+          temperature: 0.4
+          top_p: 0.9
+          max_tokens: 2000
 
 custom:
   ai:
@@ -27,3 +36,8 @@ custom:
         - llama3.1:8b
         - qwen2:latest
         - qwen2:7b-instruct
+
+logging:
+  level:
+    com.Orio.wither_project: DEBUG
+    org.springframework.ai: INFO

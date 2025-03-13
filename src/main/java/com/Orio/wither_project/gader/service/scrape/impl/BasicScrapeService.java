@@ -256,6 +256,7 @@ public class BasicScrapeService implements IScrapeService {
                 // Clean up the content - remove scripts, styles, etc.
                 elements.select("script, style, .comments, .comment, nav, .sidebar, .footer, .header, .navigation")
                         .remove();
+                log.debug("Found content: {}", elements.text());
                 return elements.text();
             }
         }
@@ -275,16 +276,14 @@ public class BasicScrapeService implements IScrapeService {
 
         if (bestElement != null && maxParagraphs > 2) {
             log.debug("Found content container with {} paragraphs", maxParagraphs);
+            log.debug("Found content: {}", bestElement.text());
             return bestElement.text();
         }
 
         log.debug("Using fallback content extraction: Body text");
         // Fallback: Use the body content (limited length)
         String bodyText = doc.body().text();
-        if (bodyText.length() > 1000) {
-            log.debug("Limiting body text content to 1000 characters");
-            return bodyText.substring(0, 1000) + "...";
-        }
+        log.debug("Found content: {}", bodyText);
         return bodyText;
     }
 

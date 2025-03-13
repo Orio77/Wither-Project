@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class GatherEndpointService {
     private final ISourceAggregationService sourceCollectorService;
     private final List<IDataSource> dataSources;
-    private final IAIQAService aiQAService;
+    // private final IAIQAService aiQAService;
     private final ISQLDataModelService sqlService;
     private final IVectorStoreService vectorDbService;
 
@@ -30,15 +30,15 @@ public class GatherEndpointService {
     public List<DataModel> gatherData(String query) {
         logger.info("Gathering data for query: {}", query);
         List<DataModel> data = sourceCollectorService.collectData(dataSources, query);
-        processData(data);
+        // processData(data);
         saveData(data);
         return data;
     }
 
-    private void processData(List<DataModel> data) {
-        aiQAService.generateQuestions(data);
-        aiQAService.generateAnswers(data);
-    }
+    // private void processData(List<DataModel> data) {
+    // aiQAService.generateQuestions(data);
+    // aiQAService.generateAnswers(data);
+    // }
 
     private void saveData(List<DataModel> data) {
         sqlService.save(data);

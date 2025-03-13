@@ -1,17 +1,18 @@
 package com.Orio.wither_project.gader.service.format;
 
-import com.Orio.wither_project.gader.model.DataModel;
-import com.Orio.wither_project.gader.model.DataSource;
-import com.Orio.wither_project.gader.model.InformationPiece;
-import com.Orio.wither_project.gader.model.ProcessResult;
-import com.Orio.wither_project.gader.model.ScrapeResult;
-import com.Orio.wither_project.gader.model.SearchResult;
+import java.util.List;
+import com.Orio.wither_project.gader.model.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.ai.chat.model.ChatResponse;
 
 public interface IFormatService {
-
     DataSource format(SearchResult searchResult);
 
     DataModel format(ScrapeResult scrapeResult);
 
     InformationPiece format(ProcessResult processResult);
+
+    List<ScrapedTextBatch> formatPartsToProcess(List<ScrapeResult.ScrapeItem> items);
+
+    List<QAModel> formatQAModels(ChatResponse response, String text) throws JsonProcessingException;
 }

@@ -9,14 +9,12 @@ import com.Orio.wither_project.gader.model.SearchResult;
 
 public interface IWitherOrchestrationService {
 
-    default InformationPiece orchestrate(String query) {
+    default void orchestrate(String query) {
         SearchResult searchResult = search(query);
         DataSource dataSource = format(searchResult);
         ScrapeResult scrapeResult = scrape(dataSource);
         DataModel dataModel = format(scrapeResult);
-        ProcessResult processResult = process(dataModel);
-        InformationPiece informationPiece = format(processResult);
-        return save(informationPiece);
+        processAndSave(dataModel);
     }
 
     SearchResult search(String query);
@@ -32,5 +30,7 @@ public interface IWitherOrchestrationService {
     InformationPiece format(ProcessResult processResult);
 
     InformationPiece save(InformationPiece informationPiece);
+
+    void processAndSave(DataModel dataModel);
 
 }

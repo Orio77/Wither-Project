@@ -11,7 +11,6 @@ import com.Orio.wither_project.gader.model.SearchResult;
 import com.Orio.wither_project.gader.service.format.IFormatService;
 import com.Orio.wither_project.gader.service.orchestration.IWitherOrchestrationService;
 import com.Orio.wither_project.gader.service.persist.IPersistenceService;
-import com.Orio.wither_project.gader.service.process.IProcessService;
 import com.Orio.wither_project.gader.service.scrape.IScrapeService;
 import com.Orio.wither_project.gader.service.search.ISearchService;
 
@@ -19,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BasicWitherOrchestrationService implements IWitherOrchestrationService {
+public class WitherOrchestrationService implements IWitherOrchestrationService {
 
     private final ISearchService searchService;
     private final IScrapeService scrapeService;
     private final IFormatService formatService;
-    private final IProcessService processService;
     private final IPersistenceService persistenceService;
+    private final ProcessingOrchestrationService processingOrchestrationService;
 
     @Override
     public SearchResult search(String query) {
@@ -49,7 +48,7 @@ public class BasicWitherOrchestrationService implements IWitherOrchestrationServ
 
     @Override
     public ProcessResult process(DataModel dataModel) {
-        return processService.process(dataModel);
+        return null;
     }
 
     @Override
@@ -60,6 +59,11 @@ public class BasicWitherOrchestrationService implements IWitherOrchestrationServ
     @Override
     public InformationPiece save(InformationPiece informationPiece) {
         return persistenceService.save(informationPiece);
+    }
+
+    @Override
+    public void processAndSave(DataModel dataModel) {
+        processingOrchestrationService.orchestrate(dataModel);
     }
 
 }

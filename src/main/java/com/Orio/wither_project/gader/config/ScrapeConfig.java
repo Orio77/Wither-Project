@@ -16,7 +16,7 @@ public class ScrapeConfig {
         private final int timeoutSeconds = 10;
 
         /**
-         * Maximum number of threads to use for scraping
+         * Maximum number of threads to use for scraping TODO extract to properties
          */
         private final int threadPoolSize = 10;
 

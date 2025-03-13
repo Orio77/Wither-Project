@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SummaryProgressService {
     private static final Logger logger = LoggerFactory.getLogger(SummaryProgressService.class);
-    private static final String PROGRESS_TOPIC = "/topic/progress";
+    private static final String PROGRESS_TOPIC = "/topic/progress/summary";
 
     private final SimpMessagingTemplate messagingTemplate;
 
