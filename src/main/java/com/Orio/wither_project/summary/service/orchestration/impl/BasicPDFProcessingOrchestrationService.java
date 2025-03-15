@@ -429,16 +429,6 @@ public class BasicPDFProcessingOrchestrationService implements IPDFProcessingOrc
         }
     }
 
-    // The saveBatchWithProgress method is no longer needed since we're handling
-    // each page individually
-
-    private void saveBatchWithProgress(List<PageModel> batch, DocumentModel model) {
-        batch.forEach(page -> {
-            sqlDocumentService.savePage(page);
-            updateProgressForOperation(1, model); // Each page is 1 operation
-        });
-    }
-
     private void updateProgressForOperation(int operationsCompleted, DocumentModel model) {
         int current = completedOperations.addAndGet(operationsCompleted);
         double progress = (double) current / totalOperations;
