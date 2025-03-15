@@ -1,9 +1,10 @@
 package com.Orio.wither_project.gader.model;
 
-import com.Orio.wither_project.gader.model.ScrapeResult.ScrapeItem;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.Orio.wither_project.gather.model.DataModel;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 
 /**
  * Factory class to create test data models

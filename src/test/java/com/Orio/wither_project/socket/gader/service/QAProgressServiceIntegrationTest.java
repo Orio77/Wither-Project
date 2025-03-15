@@ -27,7 +27,7 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.Orio.wither_project.gader.model.QAModel;
+import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.socket.gader.model.QAProgressDTO;
 import com.Orio.wither_project.socket.gader.service.impl.QAProgressService;
 

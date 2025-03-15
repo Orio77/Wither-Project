@@ -15,9 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.Orio.wither_project.constants.ApiPaths;
-import com.Orio.wither_project.gader.model.InformationPiece;
-import com.Orio.wither_project.gader.model.dto.QueryRequest;
-import com.Orio.wither_project.gader.service.orchestration.IWitherOrchestrationService;
+import com.Orio.wither_project.gather.controller.GatherController;
+import com.Orio.wither_project.gather.model.InformationPiece;
+import com.Orio.wither_project.gather.model.dto.QueryRequest;
+import com.Orio.wither_project.gather.service.orchestration.IWitherOrchestrationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)

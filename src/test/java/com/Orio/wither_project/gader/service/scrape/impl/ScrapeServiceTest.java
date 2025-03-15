@@ -17,11 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.gader.config.ScrapeLinkConfig;
-import com.Orio.wither_project.gader.model.DataSource;
-import com.Orio.wither_project.gader.model.ScrapeResult;
-import com.Orio.wither_project.gader.model.ScrapeResult.ScrapeItem;
-import com.Orio.wither_project.gader.model.SearchResult.SearchItem;
-import com.Orio.wither_project.gader.service.scrape.IScrapeService;
+import com.Orio.wither_project.gather.model.DataSource;
+import com.Orio.wither_project.gather.model.ScrapeResult;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gather.model.SearchResult.SearchItem;
+import com.Orio.wither_project.gather.service.scrape.IScrapeService;
 
 @SpringBootTest
 @ActiveProfiles("test")

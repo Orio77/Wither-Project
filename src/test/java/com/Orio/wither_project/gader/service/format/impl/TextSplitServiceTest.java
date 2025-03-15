@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.gader.config.ProcessingConfig;
-import com.Orio.wither_project.gader.model.ContentWithSource;
-import com.Orio.wither_project.gader.model.ScrapedTextBatch;
-import com.Orio.wither_project.gader.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gather.config.ProcessingConfig;
+import com.Orio.wither_project.gather.model.ContentWithSource;
+import com.Orio.wither_project.gather.model.ScrapedTextBatch;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gather.service.format.impl.TextSplitService;
 
 @SpringBootTest
 @ActiveProfiles("test")

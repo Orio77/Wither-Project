@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.gader.model.SearchResult;
-import com.Orio.wither_project.gader.service.search.ISearchService;
+import com.Orio.wither_project.gather.model.SearchResult;
+import com.Orio.wither_project.gather.service.search.ISearchService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,7 +85,7 @@ class SearchServiceTest {
         } else {
             // If there are errors, at least one should be NoSearchResultsException
             boolean hasNoResultsException = result.getErrors().stream()
-                    .anyMatch(e -> e instanceof com.Orio.wither_project.gader.exception.NoSearchResultsException);
+                    .anyMatch(e -> e instanceof com.Orio.wither_project.gather.exception.NoSearchResultsException);
             assertTrue(hasNoResultsException, "Should have NoSearchResultsException");
             log.info("Uncommon search returned expected NoSearchResultsException");
         }

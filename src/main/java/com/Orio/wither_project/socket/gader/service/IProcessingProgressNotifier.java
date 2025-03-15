@@ -1,6 +1,6 @@
 package com.Orio.wither_project.socket.gader.service;
 
-import com.Orio.wither_project.gader.model.QAModel;
+import com.Orio.wither_project.gather.model.QAModel;
 
 /**
  * Interface for notifying of processing progress

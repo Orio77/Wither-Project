@@ -2,7 +2,7 @@ package com.Orio.wither_project.socket.gader.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gader.model.QAModel;
+import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.socket.gader.service.IProcessingProgressNotifier;
 
 import lombok.RequiredArgsConstructor;

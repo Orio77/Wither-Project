@@ -7,7 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import com.Orio.wither_project.gader.exception.AnswerNotFoundException;
+import com.Orio.wither_project.gather.exception.AnswerNotFoundException;
+import com.Orio.wither_project.gather.service.format.impl.TextSearchService;
 
 class TextSearchServiceTest {
 
