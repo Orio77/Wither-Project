@@ -100,17 +100,32 @@ public class ProcessingOrchestrationService {
     private List<QAModel> processContent(String content, String source) {
         try {
             log.debug("Processing content of size: {}", content.length());
+
+            // Extract QA models
             List<QAModel> results = qaService.extract(content);
 
+            // Set source only if not already set
             results.forEach(qaModel -> {
-                qaModel.setSource(source);
-                log.debug("Source {} set for QA model", source);
+                if (qaModel.getSource() == null || qaModel.getSource().isEmpty()) {
+                    qaModel.setSource(source);
+                    log.debug("Source {} set for QA model", source);
+                }
             });
 
-            // Notify about each QA result
-            results.forEach(qaModel -> progressNotifier.notifyQAResult(qaModel));
-            repo.saveAll(results);
-            neo4jVectorService.save(results.stream().map(QAModel::getQuestion).toList());
+            // Batch save all results in one operation
+            if (!results.isEmpty()) {
+                // First save to repository
+                List<QAModel> savedResults = repo.saveAll(results);
+
+                // Then save questions to vector service
+                List<String> questions = savedResults.stream()
+                        .map(QAModel::getQuestion)
+                        .toList();
+                neo4jVectorService.save(questions);
+
+                // Notify about results after successful persistence
+                savedResults.forEach(progressNotifier::notifyQAResult);
+            }
 
             return results;
         } catch (Exception e) {

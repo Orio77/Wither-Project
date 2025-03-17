@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.controller;
+package com.Orio.wither_project.gather.controller;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

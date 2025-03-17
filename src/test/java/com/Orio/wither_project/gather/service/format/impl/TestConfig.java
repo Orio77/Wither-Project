@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.service.format.impl;
+package com.Orio.wither_project.gather.service.format.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

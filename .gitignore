@@ -7,6 +7,9 @@ target/
 /src/main/resources/logback.xml
 logs/
 *.log
+*.yml
+*.properties
+/src/test/resources
 .github
 
 

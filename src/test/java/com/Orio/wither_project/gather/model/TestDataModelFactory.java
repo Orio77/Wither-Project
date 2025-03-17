@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.model;
+package com.Orio.wither_project.gather.model;
 
 import java.util.ArrayList;
 import java.util.List;

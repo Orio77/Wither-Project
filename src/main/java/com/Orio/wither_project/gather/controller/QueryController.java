@@ -38,13 +38,16 @@ public class QueryController {
 
         try {
             List<String> questions = neo4jVectorService.getQuestions(query);
+            log.info("Found {} questions for query: {}", questions.size(), query);
             List<QAModel> results = qaModelRepo.findByQuestionIn(questions);
+            log.info("Found {} results for query: {}", results.size(), query);
 
             if (results.isEmpty()) {
                 log.info("No results found for query: {}", query);
                 return ResponseEntity.ok(Collections.emptyList());
             }
 
+            log.info("Successfully retrieved results for query: {}", query);
             return ResponseEntity.ok(results);
         } catch (Exception e) {
             log.error("Error processing query: {}", query, e);

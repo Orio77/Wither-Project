@@ -30,6 +30,9 @@ public class Neo4jVectorService {
     }
 
     public void save(List<String> questions) {
-        questions.forEach(q -> vectorStore.add(questions.stream().map(Document::new).toList()));
+        List<Document> documents = questions.stream()
+                .map(Document::new)
+                .toList();
+        vectorStore.add(documents);
     }
 }

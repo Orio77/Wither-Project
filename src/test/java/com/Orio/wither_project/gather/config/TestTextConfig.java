@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.config;
+package com.Orio.wither_project.gather.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

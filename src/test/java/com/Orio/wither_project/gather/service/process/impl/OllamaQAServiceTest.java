@@ -1,6 +1,7 @@
-package com.Orio.wither_project.gader.service.process.impl;
+package com.Orio.wither_project.gather.service.process.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
@@ -9,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.gader.config.TestTextConfig;
+import com.Orio.wither_project.gather.config.TestTextConfig;
 import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.gather.service.process.impl.OllamaQAService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @SpringBootTest

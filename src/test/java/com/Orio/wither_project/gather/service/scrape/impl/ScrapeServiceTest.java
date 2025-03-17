@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.service.scrape.impl;
+package com.Orio.wither_project.gather.service.scrape.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.gader.config.ScrapeLinkConfig;
+import com.Orio.wither_project.gather.config.ScrapeLinkConfig;
 import com.Orio.wither_project.gather.model.DataSource;
 import com.Orio.wither_project.gather.model.ScrapeResult;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;

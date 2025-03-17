@@ -1,4 +1,4 @@
-package com.Orio.wither_project.gader.config;
+package com.Orio.wither_project.gather.config;
 
 import java.util.List;
 
