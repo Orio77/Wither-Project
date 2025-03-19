@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.gather.service.format.impl.QAModelExtractionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
@@ -307,6 +306,37 @@ public class QAModelExtractionServiceTest {
       // Assert
       assertThat(results).hasSize(1);
       assertThat(results.get(0).getQuestion()).isEqualTo("What animal jumps over the dog?");
+    }
+
+    @Test
+    @DisplayName("Should extract QA models from response with think tags")
+    public void shouldExtractQAModelsFromResponseWithThinkTags() throws Exception {
+      // Arrange
+      String responseJson = """
+          Some preliminary text
+          <think>
+          Some thinking here
+          </think>
+          ```json
+          {
+            "qaPairs": [
+              {
+                "question": "What animal jumps over the dog?",
+                "first_three_words_of_an_answer": "The quick brown",
+                "last_three_words_of_an_answer": "the lazy dog."
+              }
+            ]
+          }```
+          """;
+      ChatResponse chatResponse = createChatResponse(responseJson);
+
+      // Act
+      List<QAModel> results = qaModelExtractionService.extractQAModels(chatResponse, testText);
+
+      // Assert
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getQuestion()).isEqualTo("What animal jumps over the dog?");
+      assertThat(results.get(0).getAnswer()).isEqualTo("The quick brown fox jumps over the lazy dog.");
     }
   }
 

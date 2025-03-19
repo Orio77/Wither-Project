@@ -26,6 +26,8 @@ public class QAModelExtractionService {
     private static final String FIRST_WORDS_PATH = "first_three_words_of_an_answer";
     private static final String LAST_WORDS_PATH = "last_three_words_of_an_answer";
     private static final String QUESTION_PATH = "question";
+    private static final String THINK_TAG = "</think>";
+    private static final String JSON_TAG = "```json";
 
     private final ObjectMapper objectMapper;
     private final TextSearchService textSearchService;
@@ -47,6 +49,9 @@ public class QAModelExtractionService {
 
         List<QAModel> qaModels = new ArrayList<>();
         String responseContent = extractResponseContent(response);
+        if (responseContent.contains(THINK_TAG)) {
+            responseContent = extractReasoningResponseContent(responseContent);
+        }
 
         try {
             JsonNode rootNode = objectMapper.readTree(responseContent);
@@ -72,6 +77,28 @@ public class QAModelExtractionService {
         String content = response.getResult().getOutput().getContent();
         log.debug("Parsing content: {}", truncateForLogging(content));
         return content;
+    }
+
+    private String extractReasoningResponseContent(String content) {
+        log.debug("Parsing reasoning content: {}", truncateForLogging(content));
+
+        int thinkTagIndex = content.indexOf(THINK_TAG);
+        if (thinkTagIndex == -1) {
+            log.debug("No thinking tag found, returning original content");
+            return content;
+        }
+
+        // Extract content after the thinking tag
+        String extractedContent = content.substring(thinkTagIndex + THINK_TAG.length()).trim();
+
+        // Handle JSON code blocks if present
+        if (extractedContent.contains(JSON_TAG)) {
+            log.debug("JSON code block detected, cleaning format");
+            extractedContent = extractedContent.replace(JSON_TAG, "");
+            extractedContent = extractedContent.replace("```", "");
+        }
+
+        return extractedContent;
     }
 
     /**
