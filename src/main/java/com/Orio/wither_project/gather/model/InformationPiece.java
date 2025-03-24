@@ -19,19 +19,25 @@ public class InformationPiece {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String query;
 
+    @Column(columnDefinition = "TEXT")
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String link;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String author;
 
+    @Column(columnDefinition = "TEXT")
     private String publishDate;
 
     @Transient

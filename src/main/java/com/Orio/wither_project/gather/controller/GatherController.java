@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Orio.wither_project.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.dto.QueryRequest;
+import com.Orio.wither_project.gather.service.orchestration.INewWitherOrchestrationService;
 import com.Orio.wither_project.gather.service.orchestration.IWitherOrchestrationService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class GatherController {
     private static final Logger logger = LoggerFactory.getLogger(GatherController.class);
 
     private final IWitherOrchestrationService witherOrchestrationService;
+    private final INewWitherOrchestrationService newWitherOrchestrationService;
 
     /**
      * Processes a query and returns gathered information.
@@ -65,6 +67,8 @@ public class GatherController {
         }
     }
 
+    @PostMapping(value = "/v2"
+            + ApiPaths.GATHER, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> gatherData(@RequestBody QueryRequest request) {
         // Check if request is null
         if (request == null) {
@@ -82,7 +86,7 @@ public class GatherController {
         logger.info("Processing gather request with query: {}", query);
 
         try {
-            witherOrchestrationService.orchestrate(query);
+            newWitherOrchestrationService.gather(query);
             return ResponseEntity.ok().build();
         } catch (NullPointerException e) {
             logger.error("Null pointer exception processing gather request", e);

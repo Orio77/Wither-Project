@@ -12,7 +12,7 @@ public interface INewWitherOrchestrationService {
         DataModel res = gatherData(query);
         DataModel accepted = sendAndWait(res);
         List<InformationPiece> info = format(accepted);
-        save(accepted);
+        save(info);
 
         return info;
     }
@@ -30,17 +30,11 @@ public interface INewWitherOrchestrationService {
 
     DataModel gatherData(String query);
 
-    DataModel sendAndWait(DataModel dataModels);
-
-    // @Override
-    // public List<DataModel> sendAndWait(List<DataModel> dataModels) {
-    // log.info("Sending {} data models for user review", dataModels.size());
-    // return dataModelReviewService.sendForReviewAndWait(dataModels);
-    // }
+    DataModel sendAndWait(DataModel dataModel);
 
     List<InformationPiece> format(DataModel dataModels);
 
-    void save(List<DataModel> dataModels);
+    void save(List<InformationPiece> dataModels);
 
     DataModel getDataModel(Long id);
 

@@ -3,8 +3,10 @@ package com.Orio.wither_project.gather.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -28,6 +30,8 @@ public class ScrapeResult {
 
     @Data
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ScrapeItem {
         private String title;
         private String link;

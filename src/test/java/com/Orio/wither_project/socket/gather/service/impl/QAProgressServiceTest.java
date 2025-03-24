@@ -1,4 +1,4 @@
-package com.Orio.wither_project.socket.gader.service;
+package com.Orio.wither_project.socket.gather.service.impl;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -13,7 +13,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
-import com.Orio.wither_project.socket.gather.service.impl.QAProgressService;
 
 @ExtendWith(MockitoExtension.class)
 class QAProgressServiceTest {

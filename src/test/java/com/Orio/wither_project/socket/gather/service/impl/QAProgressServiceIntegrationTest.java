@@ -1,4 +1,4 @@
-package com.Orio.wither_project.socket.gader.service;
+package com.Orio.wither_project.socket.gather.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,7 +29,6 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
-import com.Orio.wither_project.socket.gather.service.impl.QAProgressService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -12,9 +12,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.exception.InvalidQueryException;
 import com.Orio.wither_project.gather.model.DataModel;
+import com.Orio.wither_project.gather.repository.InformationPieceRepo;
 import com.Orio.wither_project.gather.service.format.IFormatService;
 import com.Orio.wither_project.gather.service.scrape.IScrapeService;
 import com.Orio.wither_project.gather.service.search.ISearchService;
+import com.Orio.wither_project.socket.gather.service.impl.ScrapeItemReviewService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +34,18 @@ public class NewWitherOrchestrationServiceIntegrationTest {
     @Autowired
     private IScrapeService scrapeService;
 
+    @Autowired
+    private ScrapeItemReviewService scrapeItemReviewService;
+
+    @Autowired
+    private InformationPieceRepo informationPieceRepo;
+
     private NewWitherOrchestrationService orchestrationService;
 
     @BeforeEach
     void setUp() {
-        orchestrationService = new NewWitherOrchestrationService(searchService, formatService, scrapeService);
+        orchestrationService = new NewWitherOrchestrationService(searchService, formatService, scrapeService,
+                scrapeItemReviewService, informationPieceRepo);
     }
 
     @Test

@@ -25,15 +25,16 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.Orio.wither_project.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.DataModel;
-import com.Orio.wither_project.gather.model.dto.DataModelReviewResultDTO;
-import com.Orio.wither_project.socket.gather.service.impl.DataModelReviewService;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
+import com.Orio.wither_project.gather.model.dto.ScrapeItemReviewResultDTO;
+import com.Orio.wither_project.socket.gather.service.impl.ScrapeItemReviewService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class DataModelReviewControllerIntegrationTest {
+public class ScrapeItemReviewControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -42,7 +43,7 @@ public class DataModelReviewControllerIntegrationTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private DataModelReviewService dataModelReviewService;
+    private ScrapeItemReviewService scrapeItemReviewService;
 
     @Test
     public void testCompleteReviewEndpoint() throws InterruptedException, ExecutionException {
@@ -50,8 +51,8 @@ public class DataModelReviewControllerIntegrationTest {
 
         // Create test data and review ID
         String reviewId = UUID.randomUUID().toString();
-        List<DataModel> acceptedModels = createTestDataModels(2);
-        log.debug("Created test review with ID: {} and {} accepted models", reviewId, acceptedModels.size());
+        List<ScrapeItem> acceptedItems = createTestScrapeItems(2);
+        log.debug("Created test review with ID: {} and {} accepted items", reviewId, acceptedItems.size());
 
         // Create a CompletableFuture that will be completed when the service processes
         // the response
@@ -62,9 +63,9 @@ public class DataModelReviewControllerIntegrationTest {
         injectPendingReview(reviewId, reviewProcessed);
 
         // Create the review result DTO
-        DataModelReviewResultDTO resultDTO = new DataModelReviewResultDTO();
+        ScrapeItemReviewResultDTO resultDTO = new ScrapeItemReviewResultDTO();
         resultDTO.setReviewId(reviewId);
-        resultDTO.setAcceptedModels(acceptedModels);
+        resultDTO.setAcceptedScrapeItems(acceptedItems);
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
@@ -96,10 +97,10 @@ public class DataModelReviewControllerIntegrationTest {
 
     private void injectPendingReview(String reviewId, CompletableFuture<Boolean> reviewProcessed) {
         log.debug("Injecting pending review with ID: {}", reviewId);
-        // Create a CompletableFuture for the models that will capture when it's
+        // Create a CompletableFuture for the items that will capture when it's
         // completed
-        CompletableFuture<List<DataModel>> modelsFuture = new CompletableFuture<>();
-        modelsFuture.thenRun(() -> {
+        CompletableFuture<List<DataModel>> itemsFuture = new CompletableFuture<>();
+        itemsFuture.thenRun(() -> {
             log.debug("Review completed, notifying test");
             reviewProcessed.complete(true);
         });
@@ -107,13 +108,13 @@ public class DataModelReviewControllerIntegrationTest {
         // Use reflection to access the private pendingReviews map and insert our test
         // future
         try {
-            java.lang.reflect.Field pendingReviewsField = DataModelReviewService.class
+            java.lang.reflect.Field pendingReviewsField = ScrapeItemReviewService.class
                     .getDeclaredField("pendingReviews");
             pendingReviewsField.setAccessible(true);
             @SuppressWarnings("unchecked")
             java.util.Map<String, CompletableFuture<List<DataModel>>> pendingReviews = (java.util.Map<String, CompletableFuture<List<DataModel>>>) pendingReviewsField
-                    .get(dataModelReviewService);
-            pendingReviews.put(reviewId, modelsFuture);
+                    .get(scrapeItemReviewService);
+            pendingReviews.put(reviewId, itemsFuture);
             log.debug("Successfully injected pending review");
         } catch (Exception e) {
             log.error("Failed to inject pending review", e);
@@ -121,14 +122,14 @@ public class DataModelReviewControllerIntegrationTest {
         }
     }
 
-    private List<DataModel> createTestDataModels(int count) {
-        log.debug("Creating {} test data models", count);
-        List<DataModel> models = new ArrayList<>();
+    private List<ScrapeItem> createTestScrapeItems(int count) {
+        log.debug("Creating {} test data items", count);
+        List<ScrapeItem> items = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            DataModel model = DataModel.builder().query("Test Model " + i).build();
+            ScrapeItem item = ScrapeItem.builder().title("Test title " + i).link("Test link " + i).build();
             // Set other required fields as needed
-            models.add(model);
+            items.add(item);
         }
-        return models;
+        return items;
     }
 }
