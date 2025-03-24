@@ -36,6 +36,7 @@ public class GoogleSearchService implements ISearchService {
     @Value("${google.search.api.url:https://www.googleapis.com/customsearch/v1}")
     private String apiUrl;
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public SearchResult search(String query) {
         SearchResult result = SearchResult.builder().query(query).build();

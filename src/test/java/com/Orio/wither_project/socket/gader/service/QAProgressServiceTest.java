@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.socket.gader.model.QAProgressDTO;
-import com.Orio.wither_project.socket.gader.service.impl.QAProgressService;
+import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
+import com.Orio.wither_project.socket.gather.service.impl.QAProgressService;
 
 @ExtendWith(MockitoExtension.class)
 class QAProgressServiceTest {

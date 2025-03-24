@@ -1,4 +1,4 @@
-package com.Orio.wither_project.socket.gader.service;
+package com.Orio.wither_project.socket.gather.service;
 
 import com.Orio.wither_project.gather.model.QAModel;
 

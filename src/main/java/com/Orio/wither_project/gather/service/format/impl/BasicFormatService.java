@@ -1,6 +1,8 @@
 package com.Orio.wither_project.gather.service.format.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,9 @@ import com.Orio.wither_project.gather.model.InformationPiece;
 import com.Orio.wither_project.gather.model.ProcessResult;
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.gather.model.ScrapeResult;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 import com.Orio.wither_project.gather.model.ScrapedTextBatch;
 import com.Orio.wither_project.gather.model.SearchResult;
-import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 import com.Orio.wither_project.gather.service.format.IFormatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -51,7 +53,39 @@ public class BasicFormatService implements IFormatService {
     public InformationPiece format(ProcessResult processResult) {
         log.info("Formatting process result " + processResult);
         // Add logic for formatting processResult
-        return new InformationPiece();
+        return InformationPiece.builder().build();
+    }
+
+    @Override
+    public List<InformationPiece> format(DataModel dataModel) {
+        log.info("Formatting data model with query: {}", dataModel.getQuery());
+
+        List<ScrapeItem> items = dataModel.getItems();
+        List<InformationPiece> res = new ArrayList<>();
+
+        if (items == null || items.isEmpty()) {
+            log.warn("No items found in data model for query: {}", dataModel.getQuery());
+            return res;
+        }
+
+        log.debug("Processing {} items from data model", items.size());
+        items.forEach(item -> {
+            log.trace("Creating information piece for item with title: {}", item.getTitle());
+            InformationPiece piece = InformationPiece.builder()
+                    .query(dataModel.getQuery())
+                    .error(dataModel.getErrors())
+                    .author(item.getAuthor())
+                    .content(item.getContent())
+                    .description(item.getDescription())
+                    .link(item.getLink())
+                    .publishDate(item.getPublishDate())
+                    .title(item.getTitle())
+                    .build();
+            res.add(piece);
+        });
+
+        log.info("Formatted {} information pieces from data model", res.size());
+        return res;
     }
 
     @Override

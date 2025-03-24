@@ -1,0 +1,17 @@
+package com.Orio.wither_project.gather.model.dto;
+
+import java.util.List;
+
+import com.Orio.wither_project.gather.model.DataModel;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DataModelReviewRequestDTO {
+    private String reviewId;
+    private List<DataModel> models;
+}

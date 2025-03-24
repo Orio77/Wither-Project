@@ -64,4 +64,32 @@ public class GatherController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    public ResponseEntity<Void> gatherData(@RequestBody QueryRequest request) {
+        // Check if request is null
+        if (request == null) {
+            logger.warn("Received null request");
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Check if query is null or empty
+        String query = request.getQuery();
+        if (!StringUtils.hasText(query)) {
+            logger.warn("Received request with empty or null query");
+            return ResponseEntity.badRequest().build();
+        }
+
+        logger.info("Processing gather request with query: {}", query);
+
+        try {
+            witherOrchestrationService.orchestrate(query);
+            return ResponseEntity.ok().build();
+        } catch (NullPointerException e) {
+            logger.error("Null pointer exception processing gather request", e);
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            logger.error("Error processing gather request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

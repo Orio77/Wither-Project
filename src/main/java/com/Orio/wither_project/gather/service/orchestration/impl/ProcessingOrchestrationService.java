@@ -18,7 +18,7 @@ import com.Orio.wither_project.gather.repository.QAModelRepo;
 import com.Orio.wither_project.gather.service.format.IFormatService;
 import com.Orio.wither_project.gather.service.persist.impl.Neo4jVectorService;
 import com.Orio.wither_project.gather.service.process.IQAService;
-import com.Orio.wither_project.socket.gader.service.IProcessingProgressNotifier;
+import com.Orio.wither_project.socket.gather.service.IProcessingProgressNotifier;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

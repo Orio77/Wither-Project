@@ -16,6 +16,9 @@ public final class ApiPaths {
     public static final String PDF_GET_DOC_ALL = PDF_GET_DOC + "/all";
     public static final String PDF_DELETE_DOC = PDF_DELETE + "/doc";
 
+    public static final String REVIEW = "/review";
+    public static final String REVIEW_COMPLETE = REVIEW + "/complete";
+
     private ApiPaths() {
         // Prevent instantiation
     }

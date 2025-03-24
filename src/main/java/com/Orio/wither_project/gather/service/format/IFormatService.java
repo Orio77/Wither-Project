@@ -13,6 +13,8 @@ public interface IFormatService {
 
     InformationPiece format(ProcessResult processResult);
 
+    List<InformationPiece> format(DataModel dataModel);
+
     List<ScrapedTextBatch> formatPartsToProcess(List<ScrapeResult.ScrapeItem> items);
 
     List<QAModel> formatQAModels(ChatResponse response, String text) throws JsonProcessingException;

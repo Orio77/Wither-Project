@@ -1,4 +1,4 @@
-package com.Orio.wither_project.socket.gader.model;
+package com.Orio.wither_project.socket.gather.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

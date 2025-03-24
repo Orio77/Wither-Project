@@ -1,7 +1,9 @@
 package com.Orio.wither_project.gather.service.format.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.Orio.wither_project.gather.model.DataModel;
+import com.Orio.wither_project.gather.model.InformationPiece;
 import com.Orio.wither_project.gather.model.QAModel;
+import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 import com.Orio.wither_project.gather.service.format.IFormatService;
 
 @SpringBootTest
@@ -58,5 +63,46 @@ public class BasicFormatServiceTest {
                                 + "production-grade Spring-based Applications with minimal effort. It provides defaults for code "
                                 + "and annotation configuration to simplify the development of applications";
                 assertEquals(expectedAnswer, result.get(0).getAnswer());
+        }
+
+        @Test
+        public void testFormatDataModelToInformationPiece() {
+                // Setup test data
+                String testQuery = "spring boot tutorial";
+                String testTitle = "Introduction to Spring Boot";
+                String testContent = "Spring Boot makes it easy to create stand-alone applications";
+                String testDescription = "Learn about Spring Boot basics";
+                String testLink = "https://example.com/spring-boot";
+                String testAuthor = "John Doe";
+                String testPublishDate = "2023-05-01";
+
+                ScrapeItem item = ScrapeItem.builder().title(testTitle).content(testContent)
+                                .description(testDescription).link(testLink).publishDate(testPublishDate)
+                                .author(testAuthor).build();
+
+                Exception testError = new RuntimeException("Test error");
+
+                DataModel dataModel = DataModel.builder()
+                                .query(testQuery)
+                                .items(Arrays.asList(item))
+                                .errors(Arrays.asList(testError))
+                                .build();
+
+                // Execute the method
+                List<InformationPiece> result = formatService.format(dataModel);
+
+                // Verify results
+                assertThat(result).isNotNull();
+                assertThat(result.size()).isEqualTo(1);
+
+                InformationPiece piece = result.get(0);
+                assertThat(piece.getQuery()).isEqualTo(testQuery);
+                assertThat(piece.getTitle()).isEqualTo(testTitle);
+                assertThat(piece.getContent()).isEqualTo(testContent);
+                assertThat(piece.getDescription()).isEqualTo(testDescription);
+                assertThat(piece.getLink()).isEqualTo(testLink);
+                assertThat(piece.getAuthor()).isEqualTo(testAuthor);
+                assertThat(piece.getPublishDate()).isEqualTo(testPublishDate);
+                assertThat(piece.getError()).isEqualTo(dataModel.getErrors());
         }
 }

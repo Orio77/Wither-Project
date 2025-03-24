@@ -1,8 +1,11 @@
 package com.Orio.wither_project.gather.controller;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.Orio.wither_project.constants.ApiPaths;
-import com.Orio.wither_project.gather.controller.GatherController;
 import com.Orio.wither_project.gather.model.InformationPiece;
 import com.Orio.wither_project.gather.model.dto.QueryRequest;
 import com.Orio.wither_project.gather.service.orchestration.IWitherOrchestrationService;
@@ -46,7 +48,7 @@ public class GatherControllerTest {
         QueryRequest request = new QueryRequest();
         request.setQuery(queryText);
 
-        InformationPiece mockResponse = new InformationPiece();
+        InformationPiece mockResponse = InformationPiece.builder().build();
         mockResponse.setAuthor("Test content response");
 
         // Execute and verify
@@ -68,7 +70,7 @@ public class GatherControllerTest {
         QueryRequest request = new QueryRequest();
         request.setQuery(queryText);
 
-        InformationPiece mockResponse = new InformationPiece();
+        InformationPiece mockResponse = InformationPiece.builder().build();
         mockResponse.setAuthor("Test content response");
 
         // Execute and verify

@@ -1,10 +1,10 @@
-package com.Orio.wither_project.socket.gader.service.impl;
+package com.Orio.wither_project.socket.gather.service.impl;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.socket.gader.model.QAProgressDTO;
+import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

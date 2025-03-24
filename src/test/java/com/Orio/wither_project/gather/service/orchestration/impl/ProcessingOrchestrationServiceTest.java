@@ -19,7 +19,6 @@ import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 import com.Orio.wither_project.gather.repository.QAModelRepo;
-import com.Orio.wither_project.gather.service.orchestration.impl.ProcessingOrchestrationService;
 
 import lombok.extern.slf4j.Slf4j;
 

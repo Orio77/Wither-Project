@@ -3,7 +3,6 @@ package com.Orio.wither_project.gather.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 
 /**

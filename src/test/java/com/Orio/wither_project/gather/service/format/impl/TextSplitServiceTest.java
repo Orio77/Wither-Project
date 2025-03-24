@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.gather.config.ProcessingConfig;
 import com.Orio.wither_project.gather.model.ContentWithSource;
-import com.Orio.wither_project.gather.model.ScrapedTextBatch;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
-import com.Orio.wither_project.gather.service.format.impl.TextSplitService;
+import com.Orio.wither_project.gather.model.ScrapedTextBatch;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -25,9 +23,6 @@ class TextSplitServiceTest {
 
     @Autowired
     private TextSplitService textSplitService;
-
-    @Autowired
-    private ProcessingConfig config;
 
     // Tests for getContentWithSources method
     @Test
