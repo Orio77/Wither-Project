@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.core.constants.ApiPaths;
 import com.Orio.wither_project.pdf.model.entity.FileEntity;
 import com.Orio.wither_project.pdf.service.storage.ISQLPDFService;
 

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.core.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.dto.ScrapeItemReviewResultDTO;
 import com.Orio.wither_project.socket.gather.service.impl.ScrapeItemReviewService;
 

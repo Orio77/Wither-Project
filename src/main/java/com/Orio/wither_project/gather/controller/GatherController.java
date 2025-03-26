@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.core.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.dto.QueryRequest;
 import com.Orio.wither_project.gather.service.orchestration.INewWitherOrchestrationService;
 import com.Orio.wither_project.gather.service.orchestration.IWitherOrchestrationService;

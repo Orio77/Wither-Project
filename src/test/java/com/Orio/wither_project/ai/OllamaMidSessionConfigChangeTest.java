@@ -11,8 +11,8 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.Orio.wither_project.config.OllamaConfig;
 import com.Orio.wither_project.config.TestTextConfiguration;
+import com.Orio.wither_project.core.config.OllamaConfig;
 
 @SpringBootTest
 public class OllamaMidSessionConfigChangeTest {

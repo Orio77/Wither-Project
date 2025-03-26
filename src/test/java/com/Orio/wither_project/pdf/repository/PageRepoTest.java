@@ -11,10 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.Orio.wither_project.summary.model.ChapterModel;
-import com.Orio.wither_project.summary.model.PageModel;
-import com.Orio.wither_project.summary.repository.ChapterRepo;
-import com.Orio.wither_project.summary.repository.PageRepo;
+import com.Orio.wither_project.process.summary.model.ChapterModel;
+import com.Orio.wither_project.process.summary.model.PageModel;
+import com.Orio.wither_project.process.summary.repository.ChapterRepo;
+import com.Orio.wither_project.process.summary.repository.PageRepo;
 
 @DataJpaTest
 @ActiveProfiles("test")

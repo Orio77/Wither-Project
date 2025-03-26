@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.Orio.wither_project.pdf.model.entity.FileEntity;
-import com.Orio.wither_project.summary.model.DocumentModel;
-import com.Orio.wither_project.summary.service.conversion.IPDFConversionService;
+import com.Orio.wither_project.process.summary.model.DocumentModel;
+import com.Orio.wither_project.process.summary.service.conversion.IPDFConversionService;
 
 @SpringBootTest
 class PDFConversionServiceTest {

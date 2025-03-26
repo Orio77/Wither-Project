@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.exception.InvalidQueryException;
+import com.Orio.wither_project.gather.exception.InvalidQueryException;
 import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.DataSource;
 import com.Orio.wither_project.gather.model.InformationPiece;

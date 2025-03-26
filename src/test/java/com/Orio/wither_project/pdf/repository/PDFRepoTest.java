@@ -13,8 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.Orio.wither_project.summary.model.DocumentModel;
-import com.Orio.wither_project.summary.repository.DocumentModelRepo;
+import com.Orio.wither_project.process.summary.model.DocumentModel;
+import com.Orio.wither_project.process.summary.repository.DocumentModelRepo;
 
 @DataJpaTest
 @ActiveProfiles("test")

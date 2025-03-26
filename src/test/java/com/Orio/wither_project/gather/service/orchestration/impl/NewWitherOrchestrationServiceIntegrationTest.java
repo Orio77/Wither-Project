@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.exception.InvalidQueryException;
+import com.Orio.wither_project.gather.exception.InvalidQueryException;
 import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.repository.InformationPieceRepo;
 import com.Orio.wither_project.gather.service.format.IFormatService;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.config.ProcessingConfig;
+import com.Orio.wither_project.gather.config.QAProcessingConfig;
 import com.Orio.wither_project.gather.model.ContentWithSource;
 import com.Orio.wither_project.gather.model.ScrapedTextBatch;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TextSplitService {
 
-    private final ProcessingConfig config;
+    private final QAProcessingConfig config;
 
     public List<ContentWithSource> getContentWithSources(List<ScrapeItem> items) {
         log.debug("Processing {} scrape items to extract content with sources", items.size());

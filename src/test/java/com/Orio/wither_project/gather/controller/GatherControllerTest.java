@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.core.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.InformationPiece;
 import com.Orio.wither_project.gather.model.dto.QueryRequest;
 import com.Orio.wither_project.gather.service.orchestration.IWitherOrchestrationService;

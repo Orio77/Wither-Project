@@ -6,7 +6,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.config.AIPromptConfig;
+import com.Orio.wither_project.gather.config.AIQAPromptConfig;
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.gather.service.format.IFormatService;
 import com.Orio.wither_project.gather.service.process.IQAService;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OllamaQAService implements IQAService {
 
     private final OllamaChatModel ollamaChatModel;
-    private final AIPromptConfig promptConfig;
+    private final AIQAPromptConfig promptConfig;
     private final IFormatService formatService;
 
     public List<QAModel> extract(String text) throws JsonProcessingException {

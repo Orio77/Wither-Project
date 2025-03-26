@@ -18,8 +18,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.Orio.wither_project.pdf.util.TestUtils;
-import com.Orio.wither_project.summary.model.ChapterModel;
-import com.Orio.wither_project.summary.service.extraction.impl.BasicChapterExtractionService;
+import com.Orio.wither_project.process.summary.model.ChapterModel;
+import com.Orio.wither_project.process.summary.service.extraction.impl.BasicChapterExtractionService;
 
 @DisplayName("BasicChapterExtractionService Tests")
 class ChapterExtractionServiceTest {

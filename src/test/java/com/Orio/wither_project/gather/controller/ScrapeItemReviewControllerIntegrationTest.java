@@ -23,7 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.Orio.wither_project.constants.ApiPaths;
+import com.Orio.wither_project.core.constants.ApiPaths;
 import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.ScrapeResult.ScrapeItem;
 import com.Orio.wither_project.gather.model.dto.ScrapeItemReviewResultDTO;

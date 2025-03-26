@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.config.ProcessingConfig;
+import com.Orio.wither_project.gather.config.QAProcessingConfig;
 import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.QAModel;
 import com.Orio.wither_project.gather.model.ScrapedTextBatch;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProcessingOrchestrationService {
 
     private final IQAService qaService;
-    private final ProcessingConfig config;
+    private final QAProcessingConfig config;
     private final IProcessingProgressNotifier progressNotifier;
     private final IFormatService formatService;
     private final QAModelRepo repo;
