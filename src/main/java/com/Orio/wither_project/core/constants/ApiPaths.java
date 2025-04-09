@@ -4,6 +4,7 @@ public final class ApiPaths {
     public static final String BASE = "/api";
     public static final String GATHER = "/gather";
     public static final String QUERY = "/query";
+    public static final String PROCESS = "/process";
 
     public static final String PDF = "/pdf";
     public static final String PDF_UPLOAD = PDF + "/upload";
@@ -18,6 +19,8 @@ public final class ApiPaths {
 
     public static final String REVIEW = "/review";
     public static final String REVIEW_COMPLETE = REVIEW + "/complete";
+
+    public static final String QA = PROCESS + "/qa";
 
     private ApiPaths() {
         // Prevent instantiation

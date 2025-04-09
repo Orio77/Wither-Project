@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ContentWithSource {
     private String content;
     private String source;
+    private InformationType informationType;
 }

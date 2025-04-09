@@ -18,7 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import com.Orio.wither_project.gather.model.QAModel;
+import com.Orio.wither_project.process.qa.model.QAModel;
+import com.Orio.wither_project.process.qa.service.format.impl.QAModelExtractionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**

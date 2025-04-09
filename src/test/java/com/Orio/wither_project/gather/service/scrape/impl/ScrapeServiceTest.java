@@ -135,4 +135,61 @@ class ScrapeServiceTest {
         assertTrue(result.getItems().isEmpty(), "No items should be successfully scraped");
         assertFalse(result.getErrors().isEmpty(), "Errors should be recorded");
     }
+
+    @Test
+    @Timeout(value = 30, unit = TimeUnit.SECONDS)
+    void testScrapeWithValidUrl() {
+        // Replace this URL with a reliable one for your tests
+        String validUrl = "https://en.wikipedia.org/wiki/Thought";
+
+        // Act
+        ScrapeResult result = scrapeService.scrape(validUrl);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(validUrl, result.getQuery());
+        assertFalse(result.getItems().isEmpty(), "Should have at least one item");
+        assertTrue(result.getErrors().isEmpty(), "Should have no errors");
+
+        // Verify the content of the scraped item
+        ScrapeItem scrapeItem = result.getItems().get(0);
+        assertNotNull(scrapeItem.getContent(), "Content should be extracted");
+        assertFalse(scrapeItem.getContent().isEmpty(), "Content should not be empty");
+        assertNotNull(scrapeItem.getTitle(), "Title should be extracted");
+        assertEquals(validUrl, scrapeItem.getLink(), "Link should match the input URL");
+    }
+
+    @Test
+    void testScrapeWithInvalidUrl() {
+        // Arrange - use an invalid URL that shouldn't exist
+        String invalidUrl = "http://this-is-an-invalid-url-that-should-not-exist-12345.com/test";
+
+        // Act
+        ScrapeResult result = scrapeService.scrape(invalidUrl);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(invalidUrl, result.getQuery());
+        assertTrue(result.getItems().isEmpty(), "Should have no items");
+        assertFalse(result.getErrors().isEmpty(), "Should have at least one error");
+    }
+
+    @Test
+    void testScrapeWithNullOrEmptyUrl() {
+        // Act with null URL
+        ScrapeResult nullResult = scrapeService.scrape((String) null);
+
+        // Assert
+        assertNotNull(nullResult);
+        assertTrue(nullResult.getItems().isEmpty(), "Should have no items");
+        assertFalse(nullResult.getErrors().isEmpty(), "Should have at least one error");
+
+        // Act with empty URL
+        ScrapeResult emptyResult = scrapeService.scrape("");
+
+        // Assert
+        assertNotNull(emptyResult);
+        assertTrue(emptyResult.getItems().isEmpty(), "Should have no items");
+        assertFalse(emptyResult.getErrors().isEmpty(), "Should have at least one error");
+    }
 }

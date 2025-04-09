@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.Orio.wither_project.gather.exception.AnswerNotFoundException;
+import com.Orio.wither_project.process.qa.service.format.impl.ThreeWordTextSearchService;
 
 class TextSearchServiceTest {
 
-    private TextSearchService service;
+    private ThreeWordTextSearchService service;
 
     @BeforeEach
     void setUp() {
-        service = new TextSearchService();
+        service = new ThreeWordTextSearchService();
     }
 
     @Nested

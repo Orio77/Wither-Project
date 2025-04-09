@@ -17,6 +17,13 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  neo4j:
+    uri: ${spring.neo4j.uri}
+    authentication:
+      username: neo4j
+  data:
+    neo4j:
+      database: neo4j
   ai:
     ollama:
       base-url: http://localhost:11434

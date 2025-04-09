@@ -11,20 +11,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
+import com.Orio.wither_project.process.qa.model.QAModel;
+import com.Orio.wither_project.socket.process.model.QAProgressDTO;
+import com.Orio.wither_project.socket.process.service.impl.WebSocketQAProgressNotifier;
 
 @ExtendWith(MockitoExtension.class)
 class QAProgressServiceTest {
 
-    private QAProgressService qaProgressService;
+    private WebSocketQAProgressNotifier qaProgressService;
 
     @Mock
     private SimpMessagingTemplate messagingTemplate;
 
     @BeforeEach
     void setUp() {
-        qaProgressService = new QAProgressService(messagingTemplate);
+        qaProgressService = new WebSocketQAProgressNotifier(messagingTemplate);
     }
 
     @Test

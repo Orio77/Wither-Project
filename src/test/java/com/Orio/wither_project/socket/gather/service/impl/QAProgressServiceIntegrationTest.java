@@ -27,8 +27,9 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.Orio.wither_project.gather.model.QAModel;
-import com.Orio.wither_project.socket.gather.model.QAProgressDTO;
+import com.Orio.wither_project.process.qa.model.QAModel;
+import com.Orio.wither_project.socket.process.model.QAProgressDTO;
+import com.Orio.wither_project.socket.process.service.impl.WebSocketQAProgressNotifier;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,7 @@ public class QAProgressServiceIntegrationTest {
     private int port;
 
     @Autowired
-    private QAProgressService qaProgressService;
+    private WebSocketQAProgressNotifier qaProgressService;
 
     private WebSocketStompClient stompClient;
     private String websocketUrl;

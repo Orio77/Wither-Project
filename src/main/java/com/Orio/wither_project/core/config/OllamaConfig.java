@@ -41,6 +41,28 @@ public class OllamaConfig {
                 .withDefaultOptions(getOllamaOptions().withNumCtx(numCTXLow)).build();
     }
 
+    public OllamaChatModel getCustomModelChatModel(String customModel) {
+        return OllamaChatModel.builder()
+                .withOllamaApi(getOllamaApi())
+                .withDefaultOptions(OllamaOptions.builder()
+                        .withModel(customModel)
+                        .withNumCtx(this.numCTX)
+                        .withTemperature(this.temperature)
+                        .build())
+                .build();
+    }
+
+    public OllamaChatModel getCustomChatModel(String customModel, Integer contextSize, Double temp) {
+        return OllamaChatModel.builder()
+                .withOllamaApi(getOllamaApi())
+                .withDefaultOptions(OllamaOptions.builder()
+                        .withModel(customModel)
+                        .withNumCtx(contextSize != null ? contextSize : this.numCTX)
+                        .withTemperature(temp != null ? temp : this.temperature)
+                        .build())
+                .build();
+    }
+
     @Setter
     @Value("${ollama.text.model}")
     private String model;
