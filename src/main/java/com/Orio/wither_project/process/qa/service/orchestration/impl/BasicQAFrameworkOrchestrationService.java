@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.model.ContentWithSource;
+import com.Orio.wither_project.gather.model.Content;
 import com.Orio.wither_project.gather.model.InformationPiece;
 import com.Orio.wither_project.gather.model.TextBatch;
 import com.Orio.wither_project.gather.service.format.IModelFormatService;
@@ -37,9 +37,9 @@ public class BasicQAFrameworkOrchestrationService implements IQAFrameworkOrchest
     @Override
     public List<TextBatch> split(InformationPiece info) {
         log.info("Splitting information piece: {}", info);
-        ContentWithSource cws = modelFormatService.format(info);
-        log.info("Formatted content with source: {}", cws);
-        return textSplitService.splitContent(cws);
+        Content content = modelFormatService.format(info);
+        log.info("Formatted content with source: {}", content);
+        return textSplitService.splitContent(content);
     }
 
     @Override

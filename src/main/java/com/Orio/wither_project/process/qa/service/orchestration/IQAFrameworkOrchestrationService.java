@@ -15,8 +15,14 @@ public interface IQAFrameworkOrchestrationService {
 
         List<TextBatch> filteredBatches = filter(batches);
 
+        setSources(filteredBatches, data.getSource());
+
         orchestrateGeneration(filteredBatches);
 
+    }
+
+    default void setSources(List<TextBatch> batches, String source) {
+        batches.forEach(batch -> batch.setSource(source));
     }
 
     InformationPiece getData(QAProcessRequestDTO request);

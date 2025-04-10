@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContentWithSource {
+public class Content {
     private String content;
-    private String source;
     private InformationType informationType;
 }

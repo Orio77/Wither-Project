@@ -22,7 +22,8 @@ public class PostgresNeo4jQAPersistenceService implements IQAPersistenceService 
 
     @Override
     public void save(QAModel qaModel) {
-        log.info("Saving QA model with question: '{}'", qaModel.getQuestion());
+        log.info("Saving QA model with question: '{}', answer: '{}'..., and source: '{}'", qaModel.getQuestion(),
+                qaModel.getAnswer().substring(0, 100), qaModel.getSource());
         qaModelRepo.save(qaModel);
         log.debug("QA model saved to PostgreSQL");
 

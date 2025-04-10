@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.model.ContentWithSource;
+import com.Orio.wither_project.gather.model.Content;
 import com.Orio.wither_project.gather.model.DataModel;
 import com.Orio.wither_project.gather.model.DataSource;
 import com.Orio.wither_project.gather.model.InformationPiece;
@@ -74,7 +74,7 @@ public class ModelFormatService implements IModelFormatService {
     }
 
     @Override
-    public ContentWithSource format(InformationPiece item) {
-        return new ContentWithSource(item.getContent(), item.getSource(), item.getInformationType());
+    public Content format(InformationPiece item) {
+        return new Content(item.getContent(), item.getInformationType());
     }
 }

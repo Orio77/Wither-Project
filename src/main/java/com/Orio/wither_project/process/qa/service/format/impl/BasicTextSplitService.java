@@ -3,10 +3,9 @@ package com.Orio.wither_project.process.qa.service.format.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.model.ContentWithSource;
+import com.Orio.wither_project.gather.model.Content;
 import com.Orio.wither_project.gather.model.InformationType;
 import com.Orio.wither_project.gather.model.TextBatch;
 import com.Orio.wither_project.process.qa.config.QAProcessingConfig;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Primary
 @Service
 @RequiredArgsConstructor
 public class BasicTextSplitService implements ITextSplitService {
@@ -24,7 +22,7 @@ public class BasicTextSplitService implements ITextSplitService {
     private final QAProcessingConfig config;
 
     @Override
-    public List<TextBatch> splitContent(List<ContentWithSource> items) {
+    public List<TextBatch> splitContent(List<Content> items) {
         return items.stream()
                 .map(this::splitContent)
                 .flatMap(List::stream)
@@ -32,14 +30,13 @@ public class BasicTextSplitService implements ITextSplitService {
     }
 
     @Override
-    public List<TextBatch> splitContent(ContentWithSource item) {
+    public List<TextBatch> splitContent(Content item) {
         log.debug("Splitting content with source");
 
         String content = item.getContent();
-        String source = item.getSource();
         InformationType informationType = item.getInformationType();
-        log.debug("Content: {}..., Source: {}, Information Type: {}",
-                content.substring(0, Math.min(content.length(), 100)), source, informationType);
+        log.debug("Content: {}..., Information Type: {}",
+                content.substring(0, Math.min(content.length(), 100)), informationType);
 
         int chunkSize = config.getContentPartMaxSize();
         int overlap = config.getContentOverlapCharacters();
@@ -50,8 +47,6 @@ public class BasicTextSplitService implements ITextSplitService {
 
         List<TextBatch> textBatches = createBatches(split, batchSize);
         log.info("Created {} text batches", textBatches.size());
-
-        setSources(textBatches, source);
 
         log.debug("Created text batches: {}", textBatches.size());
         return textBatches;
@@ -149,12 +144,6 @@ public class BasicTextSplitService implements ITextSplitService {
             batches.add(textBatch);
         }
         return batches;
-    }
-
-    private void setSources(List<TextBatch> batches, String source) {
-        for (TextBatch batch : batches) {
-            batch.setSource(source);
-        }
     }
 
 }

@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
-import com.Orio.wither_project.gather.model.ContentWithSource;
+import com.Orio.wither_project.gather.model.Content;
 import com.Orio.wither_project.gather.model.TextBatch;
 import com.Orio.wither_project.gather.service.format.IProcessingFormatService;
 import com.Orio.wither_project.process.qa.model.QAModel;
+import com.Orio.wither_project.process.qa.service.format.ITextSplitService;
 import com.Orio.wither_project.process.qa.service.format.impl.QAModelExtractionService;
-import com.Orio.wither_project.process.qa.service.format.impl.TextSplitService;
 import com.Orio.wither_project.util.AIResponseParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,18 +24,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProcessingFormatService implements IProcessingFormatService {
 
-    private final TextSplitService textSplitterService;
+    private final ITextSplitService textSplitterService;
     private final QAModelExtractionService qaModelExtractorService;
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<TextBatch> formatPartsToProcess(List<ContentWithSource> items) {
+    public List<TextBatch> formatPartsToProcess(List<Content> items) {
         log.info("Formatting {} items into processing parts", items.size());
         return textSplitterService.splitContent(items);
     }
 
     @Override
-    public List<TextBatch> formatPartsToProcess(ContentWithSource item) {
+    public List<TextBatch> formatPartsToProcess(Content item) {
         log.info("Formatting single item into processing parts");
         return textSplitterService.splitContent(List.of(item));
     }
